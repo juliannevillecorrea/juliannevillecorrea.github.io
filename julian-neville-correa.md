@@ -1,6 +1,8 @@
+---
 layout: page
 title: "julian neville correa"
 permalink: https://juliannevillecorrea.github.io/about/contact
+---
 
 male . july 12 1986 .
 i try not to lie ,
