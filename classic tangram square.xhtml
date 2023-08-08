@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <script type='text/javascript' src='http://www.x3dom.org/download/x3dom.js'> </script>
+    <link rel='stylesheet' type='text/css' href='http://www.x3dom.org/download/x3dom.css'></link>
+  </head>
+  <button onclick="document.getElementById('Iso').setAttribute('set_bind','true');">Iso</button>
+  <button onclick="document.getElementById('Front').setAttribute('set_bind','true');">Front</button>
+  <button onclick="document.getElementById('Back').setAttribute('set_bind','true');">Back</button>
+  <button onclick="document.getElementById('Right').setAttribute('set_bind','true');">Right</button>
+  <button onclick="document.getElementById('Left').setAttribute('set_bind','true');">Left</button>
+  <button onclick="document.getElementById('Top').setAttribute('set_bind','true');">Top</button>
+  <button onclick="document.getElementById('Bottom').setAttribute('set_bind','true');">Bottom</button>
+<X3D profile="Immersive" version="3.2" xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance" xsd:noNamespaceSchemaLocation="http://www.web3d.org/specifications/x3d-3.2.xsd" width="1280px"  height="1024px">
+  <head>
+    <meta name="generator" content="FreeCAD"/>
+    <meta name="author" content=""/>
+    <meta name="company" content=""/>
+  </head>
+  <Scene>
+    <Viewpoint id="Iso" centerOfRotation="98.97 113.029 5" position="148.447 63.552 54.4773" orientation="0.742906 0.307722 0.594473 1.21712" description="camera" fieldOfView="0.9"></Viewpoint>
+    <Viewpoint id="Front" centerOfRotation="98.97 113.029 5" position="98.97 27.3321 5" orientation="1 0 0 1.5708" description="camera" fieldOfView="0.9"></Viewpoint>
+    <Viewpoint id="Back" centerOfRotation="98.97 113.029 5" position="98.97 198.726 5" orientation="0 0.707107 0.707107 3.14159" description="camera" fieldOfView="0.9"></Viewpoint>
+    <Viewpoint id="Right" centerOfRotation="98.97 113.029 5" position="184.667 113.029 5" orientation="0.57735 0.57735 0.57735 2.0944" description="camera" fieldOfView="0.9"></Viewpoint>
+    <Viewpoint id="Left" centerOfRotation="98.97 113.029 5" position="13.2729 113.029 5" orientation="-0.57735 0.57735 0.57735 4.18879" description="camera" fieldOfView="0.9"></Viewpoint>
+    <Viewpoint id="Top" centerOfRotation="98.97 113.029 5" position="98.97 113.029 90.6972" orientation="0 0 1 0" description="camera" fieldOfView="0.9"></Viewpoint>
+    <Viewpoint id="Bottom" centerOfRotation="98.97 113.029 5" position="98.97 113.029 -80.6972" orientation="1 0 0 3.14159" description="camera" fieldOfView="0.9"></Viewpoint>
+    <Group>
+      <Group DEF="o0">
+        <Group DEF="o1">
+          <Transform DEF="o2"
+            translation="0 0 0" 
+            rotation="0 0 1  0" 
+            scale="1 1 1" 
+            scaleOrientation="0 0 1  0" 
+            center="0 0 0" >
+            <Group DEF="o3">
+              <Group DEF="o4">
+                <Shape DEF="o5">
+                  <Appearance DEF="o6">
+                    <Material DEF="o7"
+                      emissiveColor="0.098039217 0.098039217 0.098039217" />
+                  </Appearance>
+                  <PointSet DEF="o8">
+                    <Coordinate DEF="o9"
+                      point="123.97003 113.02923 0, 123.97003 113.02923 10, 98.970032 88.029228 10, 98.970032 88.029228 0, 98.970032 88.029228 0, 98.970032 88.029228 10, 73.970032 113.02923 10, 73.970032 113.02923 0, 73.970032 113.02923 0, 73.970032 113.02923 10, 98.970032 138.02924 10, 98.970032 138.02924 0, 98.970032 138.02924 0, 98.970032 138.02924 10, 123.97003 113.02923 10, 123.97003 113.02923 0, 98.970032 138.02924 0, 123.97003 113.02923 0, 73.970032 113.02923 0, 98.970032 88.029228 0, 98.970032 138.02924 10, 123.97003 113.02923 10, 73.970032 113.02923 10, 98.970032 88.029228 10, 123.97003 113.02923 0, 123.97003 113.02923 10, 98.970032 88.029228 0, 98.970032 88.029228 10, 73.970032 113.02923 0, 73.970032 113.02923 10, 98.970032 138.02924 0, 98.970032 138.02924 10" />
+                  </PointSet>
+                </Shape>
+              </Group>
+              <Group DEF="o10">
+                <Shape DEF="o11">
+                  <Appearance DEF="o12">
+                    <Material DEF="o13"
+                      diffuseColor="0.098039217 0.098039217 0.098039217" 
+                      shininess="1" />
+                  </Appearance>
+                  <IndexedLineSet DEF="o14"
+                    coordIndex="0, 1, -1, 3, 2, -1, 0, 3, -1, 1, 2, -1, 7, 6, -1, 4, 7, -1, 5, 6, -1, 11, 10, -1, 8, 11, -1, 9, 10, -1, 12, 15, -1, 13, 14, -1" >
+                    <Coordinate USE="o9" />
+                  </IndexedLineSet>
+                </Shape>
+              </Group>
+              <Group DEF="o15">
+                <Shape DEF="o16">
+                  <Appearance DEF="o17">
+                    <Material DEF="o18"/>
+                  </Appearance>
+                  <IndexedFaceSet DEF="o19"
+                    coordIndex="3, 0, 1, -1, 3, 1, 2, -1, 7, 4, 5, -1, 7, 5, 6, -1, 11, 8, 9, -1, 11, 9, 10, -1, 15, 12, 13, -1, 15, 13, 14, -1, 16, 17, 18, -1, 18, 17, 19, -1, 21, 20, 22, -1, 21, 22, 23, -1" 
+                    ccw="TRUE" 
+                    solid="FALSE" 
+                    convex="TRUE" 
+                    creaseAngle="0.5" >
+                    <Coordinate USE="o9" />
+                  </IndexedFaceSet>
+                </Shape>
+              </Group>
+            </Group>
+          </Transform>
+        </Group>
+      </Group>
+    </Group>
+  </Scene>
+</X3D>
+</html>
