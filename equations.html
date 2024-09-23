@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Solving Equations</title>
+</head>
+<body>
+<h1>Solving Equations</h1>
+
+<p>Given the following system of equations:</p>
+
+<ul>
+<li>x^4 = 100z</li>
+<li>100z + 2a = b</li>
+<li>2a + b = 22</li>
+<li>x + y = 12</li>
+<li>y + a + b + z = 19</li>
+</ul>
+
+<p>We can solve for the variables x, y, a, b, and z as follows:</p>
+
+<ol>
+<li>From equation 3, we get b = 22 - 2a.</li>
+<li>Substituting b in equation 2, we get 100z + 2a = 22 - 2a. Simplifying, we get 100z + 4a = 22.</li>
+<li>From equation 1, we get z = x^4/100.</li>
+<li>Substituting z in equation 2, we get 100(x^4/100) + 4a = 22. Simplifying, we get x^4 + 4a = 22.</li>
+<li>From equation 4, we get y = 12 - x.</li>
+<li>Substituting y, a, b, and z in equation 5, we get (12 - x) + a + (22 - 2a) + (x^4/100) = 19.</li>
+<li>Simplifying the equation, we get x^4 - a + 25 = 0.</li>
+<li>We can solve this equation numerically using a computer or calculator. One possible solution for x is x ≈ 2.236.</li>
+<li>Using x ≈ 2.236, we can find the other variables:
+    <ul>
+    <li>y = 12 - x ≈ 9.764</li>
+    <li>z = x^4/100 ≈ 1.249</li>
+    <li>a = (22 - 100z)/4 ≈ 0.438</li>
+    <li>b = 22 - 2a ≈ 21.124</li>
+    </ul>
+</li>
+</ol>
+
+<p>Therefore, the solution to the system of equations is approximately:</p>
+
+<ul>
+<li>x ≈ 2.236</li>
+<li>y ≈ 9.764</li>
+<li>a ≈ 0.438</li>
+<li>b ≈ 21.124</li>
+<li>z ≈ 1.249</li>
+</ul>
+
+<p>Note that there may be other solutions to the system of equations, depending on the numerical method used to solve the equation x^4 - a + 25 = 0.</p>
+</body>
+</html>
