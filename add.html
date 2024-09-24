@@ -1,115 +1,126 @@
-<!DOCTYPE html><!--[if IE]>  <html class="stl_ie"> <![endif]-->
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>
-		</title>
-		
-	<STYLE>
-.stl_ sup {
-	vertical-align: baseline;
-	position: relative;
-	top: -0.4em;
-}
-.stl_ sub {
-	vertical-align: baseline;
-	position: relative;
-	top: 0.4em;
-}
-.stl_ a:link {text-decoration:none;}
-.stl_ a:visited {text-decoration:none;}
-@media screen and (min-device-pixel-ratio:0), (-webkit-min-device-pixel-ratio:0), (min--moz-device-pixel-ratio: 0) {.stl_view{ font-size:10em; transform:scale(0.1); -moz-transform:scale(0.1); -webkit-transform:scale(0.1); -moz-transform-origin:top left; -webkit-transform-origin:top left; } }
-.stl_layer { }.stl_ie { font-size: 1pt; }
-.stl_ie body { font-size: 12em; }
-@media print{.stl_view {font-size:1em; transform:scale(1);}}
-.stl_grlink { position:relative;width:100%;height:100%;z-index:1000000; }
-.stl_01 {
-	position: absolute;
-	white-space: nowrap;
-}
-.stl_02 {
-	font-size: 1em;
-	line-height: 0.0em;
-	width: 49.58333em;
-	height: 70.08334em;
-	border-style: none;
-	display: block;
-	margin: 0em;
-}
-
-@supports(-ms-ime-align:auto) { .stl_02 {overflow: hidden;}}
-.stl_03 {
-	position: relative;
-}
-.stl_04 {
-	position: absolute;
-	pointer-events: none;
-	clip: rect(12.3599em,15.15564em,48.5412em,11.60383em);
-	width: 100%;
-}
-.stl_05 {
-	position: relative;
-	width: 49.58333em;
-}
-.stl_06 {
-	height: 7.008333em;
-}
-.stl_ie .stl_06 {
-	height: 70.08334em;
-}
-@font-face {
-	font-family:"KNDGEB+cmr10";
-	src:url("data:application/octet-stream;base64,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") format("woff");
-}
-.stl_07 {
-	font-size: 0.83022em;
-	font-family: "KNDGEB+cmr10", "Times New Roman";
-	color: #000000;
-}
-.stl_08 {
-	line-height: 1.844em;
-}
-.stl_09 {
-	letter-spacing: 0em;
-}
-
-.stl_ie .stl_09 {
-	letter-spacing: 0px;
-}
-
-</STYLE>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Addition Practice Worksheets</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .worksheet {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .worksheet h2 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 0;
+        }
+        .problem-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .problem-list li {
+            margin: 10px 0;
+        }
+    </style>
 </head>
-	<body>
-		<div class="stl_ stl_02">
-			<div class="stl_03">
-				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAxkAAARhCAYAAABONUjdAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAN5ElEQVR4nOzXQQ3DMBBFwUAwhIUQBg2zGFqhdXt2pOZgpfJqRnoA/p7sbQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBpIuuFi2ExAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsKo9exduv9gMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArCmyXrgYFgMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACriuwsXMw6FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPB3kZ2Fi1mHAgAA7mnZUbh2sRkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4TMtehWvzTgUAANzxfYQfhfPJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgDoi64WLYTEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADw0wcAAP//keX8RAAAAAZJREFUAwC3+t1c2N9NxgAAAABJRU5ErkJggg==" alt="" class="stl_04" />
-			</div>
-			<div class="stl_view">
-				<div class="stl_05 stl_06">
-					<div class="stl_01" style="left:13.7856em;top:9.9159em;z-index:2;"><span class="stl_07 stl_08 stl_09">35 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:10.9122em;z-index:5;"><span class="stl_07 stl_08 stl_09">25 &nbsp;</span></div>
-					<div class="stl_01" style="left:12.1436em;top:10.9122em;"><span class="stl_07 stl_08 stl_09">+</span></div>
-					<div class="stl_01" style="left:12.1436em;top:16.923em;"><span class="stl_07 stl_08 stl_09">+</span></div>
-					<div class="stl_01" style="left:12.1436em;top:22.9337em;"><span class="stl_07 stl_08 stl_09">+</span></div>
-					<div class="stl_01" style="left:12.1436em;top:28.9445em;"><span class="stl_07 stl_08 stl_09">+</span></div>
-					<div class="stl_01" style="left:12.1436em;top:34.9553em;"><span class="stl_07 stl_08 stl_09">+</span></div>
-					<div class="stl_01" style="left:12.1436em;top:40.9661em;"><span class="stl_07 stl_08 stl_09">+</span></div>
-					<div class="stl_01" style="left:12.1436em;top:46.9769em;"><span class="stl_07 stl_08 stl_09">+</span></div>
-					<div class="stl_01" style="left:13.7856em;top:15.9267em;z-index:8;"><span class="stl_07 stl_08 stl_09">60 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:16.923em;z-index:11;"><span class="stl_07 stl_08 stl_09">90 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:21.9375em;z-index:14;"><span class="stl_07 stl_08 stl_09">12 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:22.9337em;z-index:17;"><span class="stl_07 stl_08 stl_09">23 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:27.9483em;z-index:20;"><span class="stl_07 stl_08 stl_09">78 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:28.9445em;z-index:23;"><span class="stl_07 stl_08 stl_09">22 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:33.9591em;z-index:26;"><span class="stl_07 stl_08 stl_09">59 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:34.9553em;z-index:29;"><span class="stl_07 stl_08 stl_09">97 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:39.9698em;z-index:32;"><span class="stl_07 stl_08 stl_09">34 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:40.9661em;z-index:35;"><span class="stl_07 stl_08 stl_09">42 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:45.9806em;z-index:38;"><span class="stl_07 stl_08 stl_09">29 &nbsp;</span></div>
-					<div class="stl_01" style="left:13.7856em;top:46.9769em;z-index:41;"><span class="stl_07 stl_08 stl_09">11 &nbsp;</span></div>
-					<div class="stl_01" style="left:24.5139em;top:61.3563em;"><span class="stl_07 stl_08 stl_09">1</span></div>
-				</div>
-			</div>
-		</div>
-	</body>
+<body>
+
+    <h1>Addition Practice Worksheets</h1>
+
+    <!-- Worksheet 1: Single-Digit Addition -->
+    <div class="worksheet">
+        <h2>Single-Digit Addition (Level 1)</h2>
+        <ol class="problem-list">
+            <li>1. \( 3 + 5 = \_\_\_\_ \)</li>
+            <li>2. \( 2 + 7 = \_\_\_\_ \)</li>
+            <li>3. \( 4 + 4 = \_\_\_\_ \)</li>
+            <li>4. \( 1 + 6 = \_\_\_\_ \)</li>
+            <li>5. \( 9 + 0 = \_\_\_\_ \)</li>
+        </ol>
+        <h3>Word Problems</h3>
+        <ol class="problem-list">
+            <li>1. You have 3 apples, and your friend gives you 2 more. How many apples do you have in total? ______</li>
+            <li>2. There are 4 birds in a tree, and 3 more birds fly in. How many birds are there now? ______</li>
+        </ol>
+    </div>
+
+    <!-- Worksheet 2: Two-Digit Addition (No Carrying) -->
+    <div class="worksheet">
+        <h2>Two-Digit Addition (No Carrying, Level 2)</h2>
+        <ol class="problem-list">
+            <li>1. \( 21 + 32 = \_\_\_\_ \)</li>
+            <li>2. \( 45 + 12 = \_\_\_\_ \)</li>
+            <li>3. \( 63 + 25 = \_\_\_\_ \)</li>
+            <li>4. \( 34 + 14 = \_\_\_\_ \)</li>
+            <li>5. \( 56 + 21 = \_\_\_\_ \)</li>
+        </ol>
+        <h3>Word Problems</h3>
+        <ol class="problem-list">
+            <li>1. You have 23 marbles, and you win 15 more in a game. How many marbles do you have now? ______</li>
+            <li>2. A farmer has 35 sheep, and buys 24 more sheep. How many sheep does the farmer have? ______</li>
+        </ol>
+    </div>
+
+    <!-- Worksheet 3: Two-Digit Addition (With Carrying) -->
+    <div class="worksheet">
+        <h2>Two-Digit Addition (With Carrying, Level 3)</h2>
+        <ol class="problem-list">
+            <li>1. \( 47 + 26 = \_\_\_\_ \)</li>
+            <li>2. \( 58 + 37 = \_\_\_\_ \)</li>
+            <li>3. \( 29 + 74 = \_\_\_\_ \)</li>
+            <li>4. \( 68 + 45 = \_\_\_\_ \)</li>
+            <li>5. \( 39 + 59 = \_\_\_\_ \)</li>
+        </ol>
+        <h3>Word Problems</h3>
+        <ol class="problem-list">
+            <li>1. You buy 36 candies, and your friend gives you 47 more. How many candies do you have now? ______</li>
+            <li>2. A school library has 58 new books. They order 27 more. How many books are there in total? ______</li>
+        </ol>
+    </div>
+
+    <!-- Worksheet 4: Three-Digit Addition (With Carrying) -->
+    <div class="worksheet">
+        <h2>Three-Digit Addition (With Carrying, Level 4)</h2>
+        <ol class="problem-list">
+            <li>1. \( 123 + 456 = \_\_\_\_ \)</li>
+            <li>2. \( 578 + 249 = \_\_\_\_ \)</li>
+            <li>3. \( 395 + 187 = \_\_\_\_ \)</li>
+            <li>4. \( 821 + 652 = \_\_\_\_ \)</li>
+            <li>5. \( 467 + 732 = \_\_\_\_ \)</li>
+        </ol>
+        <h3>Word Problems</h3>
+        <ol class="problem-list">
+            <li>1. A company has 184 employees. They hire 137 more people. How many employees do they have now? ______</li>
+            <li>2. You collect 349 stickers, and your friend gives you 472 more. How many stickers do you have in total? ______</li>
+        </ol>
+    </div>
+
+    <!-- Worksheet 5: Addition with Missing Numbers -->
+    <div class="worksheet">
+        <h2>Addition with Missing Numbers (Level 5)</h2>
+        <ol class="problem-list">
+            <li>1. \( \_\_\_\_ + 5 = 9 \)</li>
+            <li>2. \( 4 + \_\_\_\_ = 10 \)</li>
+            <li>3. \( 12 + \_\_\_\_ = 20 \)</li>
+            <li>4. \( \_\_\_\_ + 25 = 50 \)</li>
+            <li>5. \( 45 + \_\_\_\_ = 100 \)</li>
+        </ol>
+        <h3>Word Problems</h3>
+        <ol class="problem-list">
+            <li>1. You have some toys. You get 8 more, and now you have 15. How many toys did you start with? ______</li>
+            <li>2. A school has 350 students. After adding some new students, there are now 500. How many new students joined? ______</li>
+        </ol>
+    </div>
+
+</body>
 </html>
