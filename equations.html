@@ -1,105 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Solving Equations</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Problem with Solution</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .problem {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .solution {
+            background-color: #e0f7fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-<h1>Solving Equations</h1>
+    <div class="container">
+        <h1>Novel Calculus Problem and Solution</h1>
+        <div class="problem">
+            <h2>Problem</h2>
+            <p>
+                Evaluate the following integral:
+            </p>
+            <p>
+                \[
+                I = \int_0^1 \frac{\ln(1+x)}{x^2+1} \, dx
+                \]
+            </p>
+        </div>
 
-<p>Given the following system of equations:</p>
-
-<ul>
-<li>x^4 = 100z</li>
-<li>100z + 2a = b</li>
-<li>2a + b = 22</li>
-<li>x + y = 12</li>
-<li>y + a + b + z = 19</li>
-</ul>
-
-<p>We can solve for the variables x, y, a, b, and z as follows:</p>
-
-<ol>
-<li>From equation 3, we get b = 22 - 2a.</li>
-<li>Substituting b in equation 2, we get 100z + 2a = 22 - 2a. Simplifying, we get 100z + 4a = 22.</li>
-<li>From equation 1, we get z = x^4/100.</li>
-<li>Substituting z in equation 2, we get 100(x^4/100) + 4a = 22. Simplifying, we get x^4 + 4a = 22.</li>
-<li>From equation 4, we get y = 12 - x.</li>
-<li>Substituting y, a, b, and z in equation 5, we get (12 - x) + a + (22 - 2a) + (x^4/100) = 19.</li>
-<li>Simplifying the equation, we get x^4 - a + 25 = 0.</li>
-<li>We can solve this equation numerically using a computer or calculator. One possible solution for x is x ≈ 2.236.</li>
-<li>Using x ≈ 2.236, we can find the other variables:
-    <ul>
-    <li>y = 12 - x ≈ 9.764</li>
-    <li>z = x^4/100 ≈ 1.249</li>
-    <li>a = (22 - 100z)/4 ≈ 0.438</li>
-    <li>b = 22 - 2a ≈ 21.124</li>
-    </ul>
-</li>
-</ol>
-
-<p>Therefore, the solution to the system of equations is approximately:</p>
-
-<ul>
-<li>x ≈ 2.236</li>
-<li>y ≈ 9.764</li>
-<li>a ≈ 0.438</li>
-<li>b ≈ 21.124</li>
-<li>z ≈ 1.249</li>
-</ul>
-
-<p>Note that there may be other solutions to the system of equations, depending on the numerical method used to solve the equation x^4 - a + 25 = 0.</p>
-
-
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-  <h2>Simultaneous Equations Problem</h2>
-  <p>Solve the following system of linear equations:</p>
-  <p>$$
-  \begin{aligned}
-  2x + 3y &= 7 \\
-  3x - 4y &= 1
-  \end{aligned}
-  $$</p>
-  <p>**Solution:**</p>
-  <p>...</p> <p>**Therefore, the solution to the system of equations is:**</p>
-  <p>$$
-  x = \frac{34}{17}, \quad y = \frac{19}{17}
-  $$</p>
-
-
-    
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-  <h2>Solving a Quartic Equation</h2>
-  <p>Solve the following quartic equation:</p>
-  <p>$$
-  x^4 - 4x^3 + 8x^2 - 8x + 4 = 0
-  $$</p>
-  <p>**Solution:**</p>
-  <p>1. Group the terms:
-     ```
-     (x^4 - 4x^3) + (8x^2 - 8x) + 4 = 0
-     ```</p>
-  <p>2. Factor out common factors from each group:
-     ```
-     x^3(x - 4) + 8x(x - 1) + 4 = 0
-     ```</p>
-  <p>3. Factor out common terms:
-     ```
-     (x - 4)(x^3 + 8x) + 4 = 0
-     ```</p>
-  <p>4. Factor the cubic term:
-     ```
-     (x - 4)(x(x^2 + 8)) + 4 = 0
-     ```</p>
-  <p>5. The quadratic term `x^2 + 8` has no real roots.</p>
-  <p>**Therefore, the equation has only one real root:**</p>
-  <p>$$
-  x = 4
-  $$</p>
-</body>
-</html>
-
-
+        <div class="solution">
+            <h2>Solution</h2>
+            <p>We begin by using a substitution to simplify the integral. Let’s set:</p>
+            <p>
+                \[
+                u = 1 + x
+                \quad \text{so that} \quad du = dx
+                \]
+            </p>
+            <p>Then the integral becomes:</p>
+            <p>
+                \[
+                I = \int_1^2 \frac{\ln u}{(u-1)^2+1} \, du
+                \]
+            </p>
+            <p>This new form is still non-trivial, but we can attempt a series expansion for the logarithm function. Expanding \( \ln(1+x) \) as a Taylor series around \( x = 0 \):</p>
+            <p>
+                \[
+                \ln(1+x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \cdots
+                \]
+            </p>
+            <p>Substituting this expansion back into the integral:</p>
+            <p>
+                \[
+                I = \int_0^1 \frac{x - \frac{x^2}{2} + \frac{x^3}{3} - \cdots}{x^2+1} \, dx
+                \]
+            </p>
+            <p>Now, we can split this into separate integrals and solve term by term.</p>
+            <p>The first term is:</p>
+            <p>
+                \[
+                I_1 = \int_0^1 \frac{x}{x^2+1} \, dx = \frac{1}{2} \ln 2
+                \]
+            </p>
+            <p>The second term is:</p>
+            <p>
+                \[
+                I_2 = \int_0^1 \frac{x^2}{x^2+1} \, dx = 1 - \ln 2
+                \]
+            </p>
+            <p>Thus, the integral becomes:</p>
+            <p>
+                \[
+                I = \frac{1}{2} \ln 2 - \left( 1 - \ln 2 \right) + \cdots
+                \]
+            </p>
+            <p>As the higher-order terms tend to zero, the final answer is approximately:</p>
+            <p>
+                \[
+                I \approx \frac{1}{2} \ln 2
+                \]
+            </p>
+        </div>
+    </div>
 </body>
 </html>
