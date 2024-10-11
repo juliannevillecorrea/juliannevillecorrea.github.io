@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pressure in Bicycle Tires</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            padding: 20px;
+            color: #333;
+        }
+        h2 {
+            color: #444;
+            margin-bottom: 10px;
+        }
+        h3 {
+            color: #555;
+        }
+        .solution {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .solution p {
+            margin-bottom: 20px;
+        }
+        .solution .math {
+            font-size: 1.2em;
+        }
+        .highlight {
+            background-color: #e7f3fe;
+            padding: 10px;
+            border-left: 4px solid #2196F3;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Real-World Problem: Calculating Pressure for Bicycle Tires</h2>
+
+    <p>We need to calculate the minimum pressure required in the tires of a bicycle to support a combined weight of a cyclist and the bike.</p>
+
+    <h3>Given:</h3>
+    <ul>
+        <li>Cyclist's weight: <b>80 kg</b></li>
+        <li>Bicycle's weight: <b>10 kg</b></li>
+        <li>Total weight: <b>90 kg</b></li>
+        <li>Each tire's contact patch area: <b>5 cm²</b> (or \(0.0005 \, \text{m}^2\))</li>
+        <li>Both tires share the load equally</li>
+    </ul>
+
+    <div class="solution">
+        <h3>Step-by-Step Solution</h3>
+
+        <h4>1. Calculate the total force due to weight:</h4>
+        <p class="math">
+            The force exerted by the cyclist and bike due to gravity is:
+            \[
+            F = m \times g
+            \]
+            where:
+            <ul>
+                <li>\( m = 90 \, \text{kg} \) is the total mass</li>
+                <li>\( g = 9.8 \, \text{m/s}^2 \) is the acceleration due to gravity</li>
+            </ul>
+            Therefore, the force is:
+            \[
+            F = 90 \, \text{kg} \times 9.8 \, \text{m/s}^2 = 882 \, \text{N}
+            \]
+        </p>
+
+        <h4>2. Determine the total contact area of the tires:</h4>
+        <p class="math">
+            The area of one tire's contact patch is \( 0.0005 \, \text{m}^2 \). Since both tires equally share the load, the total contact area is:
+            \[
+            A = 2 \times 0.0005 \, \text{m}^2 = 0.001 \, \text{m}^2
+            \]
+        </p>
+
+        <h4>3. Calculate the required pressure:</h4>
+        <p class="math">
+            We use the pressure formula:
+            \[
+            P = \frac{F}{A}
+            \]
+            Substituting the values for \( F \) and \( A \):
+            \[
+            P = \frac{882 \, \text{N}}{0.001 \, \text{m}^2} = 882,000 \, \text{N/m}^2 = 882 \, \text{kPa}
+            \]
+        </p>
+
+        <h4>4. Convert to psi:</h4>
+        <p class="math">
+            To convert from kilopascals (kPa) to pounds per square inch (psi), we use the conversion:
+            \[
+            1 \, \text{kPa} = 0.145 \, \text{psi}
+            \]
+            Therefore:
+            \[
+            882 \, \text{kPa} \times 0.145 = 127.89 \, \text{psi}
+            \]
+        </p>
+
+        <div class="highlight">
+            <h3>Conclusion:</h3>
+            To support a total weight of <b>90 kg</b>, the tires need a minimum pressure of approximately <b>128 psi</b>.
+        </div>
+    </div>
+
+</body>
+</html>
