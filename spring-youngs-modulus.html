@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Deflection Derivation</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+        }
+        .formula {
+            text-align: center;
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        .result {
+            font-weight: bold;
+            color: #d9534f;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Derivation of Spring Deflection</h1>
+
+<h2>Question</h2>
+<p>
+    Derive an equation for the deflection of a spring in terms of its Young's modulus and dimensions.
+</p>
+
+<h2>Solution</h2>
+
+<p>
+    The deflection of a spring can be derived using Hooke's Law and the properties of materials under stress and strain. The key assumptions are:
+</p>
+<ul>
+    <li>The spring is made from a wire with a circular cross-section.</li>
+    <li>The spring undergoes small deflections (linear elastic behavior).</li>
+</ul>
+
+<h3>Step 1: Hooke’s Law for Springs</h3>
+<p>
+    Hooke's Law states that the force \( F \) applied to the spring is proportional to its deflection \( \delta \):
+</p>
+<div class="formula">
+    \( F = k \delta \)
+</div>
+
+<h3>Step 2: Relation Between Spring Constant and Material Properties</h3>
+<p>
+    The stiffness \( k \) of a helical spring is given by:
+</p>
+<div class="formula">
+    \( k = \frac{G d^4}{8 D^3 n} \)
+</div>
+
+<h3>Step 3: Relating Shear Modulus \( G \) to Young’s Modulus \( E \)</h3>
+<p>
+    The shear modulus \( G \) is related to Young’s modulus \( E \) as:
+</p>
+<div class="formula">
+    \( G = \frac{E}{2(1 + \nu)} \)
+</div>
+
+<h3>Step 4: Deflection \( \delta \) in Terms of Force and Material Properties</h3>
+<p>
+    Substituting the expression for \( k \) into Hooke’s Law:
+</p>
+<div class="formula">
+    \( \delta = \frac{F}{k} = \frac{8 F D^3 n}{G d^4} \)
+</div>
+
+<h3>Step 5: Substitute \( G \) in Terms of \( E \)</h3>
+<p>
+    Therefore, the deflection \( \delta \) is given by:
+</p>
+<div class="formula">
+    \( \delta = \frac{16 F D^3 n (1 + \nu)}{E d^4} \)
+</div>
+
+<h3>Final Equation for Deflection</h3>
+<p>
+    Thus, the deflection \( \delta \) of the spring in terms of the applied force \( F \), the spring's dimensions, and the material's Young's modulus \( E \) is:
+</p>
+<div class="formula result">
+    \( \delta = \frac{16 F D^3 n (1 + \nu)}{E d^4} \)
+</div>
+
+
+
+</body>
+</html>
