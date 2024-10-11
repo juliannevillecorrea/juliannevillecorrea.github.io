@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parachute Surface Area Calculation</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .equation {
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Parachute Surface Area Calculation</h1>
+    <p><strong>Problem Statement:</strong> A parachute is needed to safely land a mobile radar station weighing 1000 kg after it exits an aircraft at a normal altitude, under average weather conditions. Calculate the surface area of the parachute required for safe descent.</p>
+
+    <h2>Solution:</h2>
+
+    <p><strong>Step 1: Weight of the payload:</strong></p>
+    <p>The weight of the mobile radar station is given as:</p>
+    <div class="equation">
+        \( W = m \cdot g = 1000 \, \text{kg} \times 9.81 \, \text{m/s}^2 = 9810 \, \text{N} \)
+    </div>
+
+    <p><strong>Step 2: Terminal velocity and drag force:</strong></p>
+    <p>The drag force \( F_d \) acting on the parachute at terminal velocity is equal to the weight of the payload when the descent reaches a constant speed. The drag force is given by the drag equation:</p>
+    <div class="equation">
+        \( F_d = \frac{1}{2} \cdot C_d \cdot \rho \cdot A \cdot v^2 \)
+    </div>
+    <p>Where:</p>
+    <ul>
+        <li>\( C_d \) = Coefficient of drag for a parachute (typical value: 1.5)</li>
+        <li>\( \rho \) = Air density at normal altitude, \( 1.225 \, \text{kg/m}^3 \)</li>
+        <li>\( A \) = Surface area of the parachute (what we are solving for)</li>
+        <li>\( v \) = Terminal velocity (assume a safe descent speed of \( 5 \, \text{m/s} \))</li>
+    </ul>
+
+    <p><strong>Step 3: Equating the drag force to the weight:</strong></p>
+    <p>At terminal velocity, the drag force equals the weight of the payload:</p>
+    <div class="equation">
+        \( F_d = W \)
+    </div>
+    <p>Substitute the values into the drag equation:</p>
+    <div class="equation">
+        \( 9810 = \frac{1}{2} \cdot 1.5 \cdot 1.225 \cdot A \cdot (5)^2 \)
+    </div>
+
+    <p><strong>Step 4: Solve for the surface area \( A \):</strong></p>
+    <div class="equation">
+        \( 9810 = 0.5 \times 1.5 \times 1.225 \times A \times 25 \)
+    </div>
+    <p>Simplifying the equation:</p>
+    <div class="equation">
+        \( 9810 = 22.97 \times A \)
+    </div>
+    <p>Solving for \( A \):</p>
+    <div class="equation">
+        \( A = \frac{9810}{22.97} \approx 427.09 \, \text{m}^2 \)
+    </div>
+
+    <h2>Summary:</h2>
+    <p>The surface area of the parachute required to safely land the mobile radar station is approximately:</p>
+    <div class="equation">
+        \( A \approx 427.09 \, \text{m}^2 \)
+    </div>
+
+</body>
+</html>
