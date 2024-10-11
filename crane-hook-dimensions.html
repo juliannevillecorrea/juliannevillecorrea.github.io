@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crane Hook Design Calculation</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .equation {
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Crane Hook Design Calculation</h1>
+    <p><strong>Problem Statement:</strong> Design a crane hook to lift an average automobile weighing 1500 kg with a factor of safety of 5. The hook is made of structural steel, having a yield strength of 250 MPa. Calculate the dimensions of the hook’s cross-section assuming two types of sections: rectangular and circular.</p>
+
+    <h2>Solution:</h2>
+
+    <p><strong>Step 1: Calculate the load (\(P\)) due to the weight of the automobile:</strong></p>
+    <p>The weight of the car (\(m\)) is assumed to be 1500 kg. Using the formula \(P = m \cdot g\), where \(g = 9.81 \, \text{m/s}^2\), we get:</p>
+
+    <div class="equation">
+        \( P = 1500 \, \text{kg} \times 9.81 \, \text{m/s}^2 = 14,715 \, \text{N} \)
+    </div>
+
+    <p><strong>Step 2: Determine the allowable stress:</strong></p>
+    <p>Given the yield strength of the steel, \( \sigma_y = 250 \, \text{MPa} \), and a factor of safety (FOS) of 5, the allowable stress is:</p>
+
+    <div class="equation">
+        \( \sigma_{allowed} = \frac{\sigma_y}{FOS} = \frac{250 \, \text{MPa}}{5} = 50 \, \text{MPa} \)
+    </div>
+
+    <p><strong>Step 3: Calculate the required cross-sectional area:</strong></p>
+    <p>The required cross-sectional area can be calculated using the formula \( A = \frac{P}{\sigma_{allowed}} \):</p>
+
+    <div class="equation">
+        \( A = \frac{14,715 \, \text{N}}{50 \times 10^6 \, \text{N/m}^2} = 2.943 \times 10^{-4} \, \text{m}^2 = 294.3 \, \text{mm}^2 \)
+    </div>
+
+    <h3>Rectangular Cross-Section:</h3>
+    <p>Assuming the width-to-height ratio \( b:h = 1:2 \), we can express the area as:</p>
+
+    <div class="equation">
+        \( A = b \cdot h = \frac{h}{2} \cdot h = \frac{h^2}{2} \)
+    </div>
+
+    <p>Solving for \(h\):</p>
+
+    <div class="equation">
+        \( 294.3 = \frac{h^2}{2} \quad \Rightarrow \quad h^2 = 588.6 \quad \Rightarrow \quad h \approx 24.26 \, \text{mm} \)
+    </div>
+
+    <p>Thus, the height \(h \approx 24.26 \, \text{mm}\), and the width \(b = \frac{h}{2} \approx 12.13 \, \text{mm}\).</p>
+
+    <h3>Circular Cross-Section:</h3>
+    <p>For a circular cross-section, the area is given by:</p>
+
+    <div class="equation">
+        \( A = \frac{\pi d^2}{4} \)
+    </div>
+
+    <p>Solving for \(d\):</p>
+
+    <div class="equation">
+        \( 294.3 = \frac{\pi d^2}{4} \quad \Rightarrow \quad d^2 = \frac{4 \cdot 294.3}{\pi} \approx 374.52 \quad \Rightarrow \quad d \approx 19.36 \, \text{mm} \)
+    </div>
+
+    <h2>Summary of Dimensions:</h2>
+    <ul>
+        <li><strong>Rectangular Cross-section:</strong> Width \(b \approx 12.13 \, \text{mm}\), Height \(h \approx 24.26 \, \text{mm}\).</li>
+        <li><strong>Circular Cross-section:</strong> Diameter \(d \approx 19.36 \, \text{mm}\).</li>
+    </ul>
+
+</body>
+</html>
