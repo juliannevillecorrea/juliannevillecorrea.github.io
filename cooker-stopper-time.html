@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pressure Cooker Problem Solution</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+        }
+        .formula {
+            text-align: center;
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        .result {
+            font-weight: bold;
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Pressure Cooker Problem Solution</h1>
+
+<p>
+    We are given the following details:
+</p>
+<ul>
+    <li>Volume of the pressure cooker: <strong>3 liters</strong></li>
+    <li>Pressure inside the cooker: <strong>10 atmospheres</strong></li>
+    <li>Cross-sectional area of the orifice: <strong>4 mm<sup>2</sup></strong></li>
+    <li>Wattage of heat supplied: <strong>300 watts</strong></li>
+    <li>Time after which the cooker whistles: <strong>3 minutes</strong></li>
+</ul>
+
+<p>We are asked to calculate:</p>
+<ol>
+    <li>The weight of the stopper</li>
+    <li>The mass flow rate of steam</li>
+</ol>
+
+<h2>Step 1: Convert Units</h2>
+<p>
+    First, we need to convert the pressure from atmospheres to Pascals and the cross-sectional area from mm² to m².
+</p>
+<div class="formula">
+    \( P = 10 \, \text{atm} = 10 \times 1.013 \times 10^5 \, \text{Pa} = 1.013 \times 10^6 \, \text{Pa} \)
+</div>
+<div class="formula">
+    \( A = 4 \, \text{mm}^2 = 4 \times 10^{-6} \, \text{m}^2 \)
+</div>
+
+<h2>Step 2: Calculate Force on the Stopper</h2>
+<p>
+    The force exerted by the pressure on the stopper is given by:
+</p>
+<div class="formula">
+    \( F = P \times A = 1.013 \times 10^6 \, \text{Pa} \times 4 \times 10^{-6} \, \text{m}^2 = 4.052 \, \text{N} \)
+</div>
+
+<h2>Step 3: Calculate the Weight of the Stopper</h2>
+<p>
+    The weight of the stopper is equal to the force due to pressure. The mass of the stopper can be calculated using \( W = m \times g \), where \( g = 9.81 \, \text{m/s}^2 \):
+</p>
+<div class="formula">
+    \( m = \frac{W}{g} = \frac{4.052}{9.81} \, \text{kg} \approx 0.413 \, \text{kg} \)
+</div>
+<p class="result">
+    Weight of the stopper: <strong>0.413 kg</strong>
+</p>
+
+<h2>Step 4: Calculate Energy Supplied</h2>
+<p>
+    The total energy supplied to the pressure cooker over 3 minutes is:
+</p>
+<div class="formula">
+    \( \text{Energy} = \text{Power} \times \text{Time} = 300 \, \text{W} \times 180 \, \text{s} = 54000 \, \text{J} \)
+</div>
+
+<h2>Step 5: Calculate the Mass of Steam Released</h2>
+<p>
+    The amount of steam generated can be found using the latent heat of vaporization \( L = 2.26 \times 10^6 \, \text{J/kg} \):
+</p>
+<div class="formula">
+    \( m_{\text{steam}} = \frac{\text{Energy}}{L} = \frac{54000}{2.26 \times 10^6} \, \text{kg} \approx 0.0239 \, \text{kg} \)
+</div>
+
+<h2>Step 6: Calculate the Mass Flow Rate</h2>
+<p>
+    The mass flow rate of the steam is:
+</p>
+<div class="formula">
+    \( \dot{m} = \frac{0.0239 \, \text{kg}}{180 \, \text{s}} \approx 1.33 \times 10^{-4} \, \text{kg/s} \)
+</div>
+<p class="result">
+    Mass flow rate of steam: <strong>1.33 × 10<sup>-4</sup> kg/s</strong>
+</p>
+
+</body>
+</html>
