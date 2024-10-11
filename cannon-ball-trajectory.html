@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projectile Motion: Cannonball Trajectory</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+        }
+        .formula {
+            text-align: center;
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        .result {
+            font-weight: bold;
+            color: #d9534f;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Projectile Motion: Cannonball Trajectory</h1>
+
+<h2>Question</h2>
+<p>
+    Trace the curve of the trajectory of a cannonball fired at an angle of \( 30^\circ \) to the horizontal. 
+    Neglect the effect of air resistance. Also, calculate the maximum height and horizontal distance (range) attained by the cannonball.
+</p>
+
+<h2>Solution</h2>
+
+<p>
+    To calculate the trajectory, we will use the equations for projectile motion. The key variables are:
+</p>
+
+<ul>
+    <li>Launch angle \( \theta = 30^\circ \)</li>
+    <li>Initial velocity \( v_0 = 50 \, \text{m/s} \)</li>
+    <li>Acceleration due to gravity \( g = 9.81 \, \text{m/s}^2 \)</li>
+</ul>
+
+<h3>Step 1: Maximum Height</h3>
+<p>
+    The formula for the maximum height attained by a projectile is:
+</p>
+<div class="formula">
+    \( H = \frac{v_0^2 \sin^2(\theta)}{2g} \)
+</div>
+<p>
+    Substituting \( \theta = 30^\circ \) and \( g = 9.81 \, \text{m/s}^2 \):
+</p>
+<div class="formula">
+    \( H = \frac{50^2 \times \sin^2(30^\circ)}{2 \times 9.81} = \frac{50^2 \times \left(\frac{1}{2}\right)^2}{2 \times 9.81} = \frac{50^2}{78.48} \)
+</div>
+<p>
+    Therefore, the maximum height is:
+</p>
+<div class="formula result">
+    \( H = 31.86 \, \text{meters} \)
+</div>
+
+<h3>Step 2: Horizontal Range (Distance)</h3>
+<p>
+    The formula for the range (horizontal distance) is:
+</p>
+<div class="formula">
+    \( R = \frac{v_0^2 \sin(2\theta)}{g} \)
+</div>
+<p>
+    Substituting \( \theta = 30^\circ \) and \( g = 9.81 \, \text{m/s}^2 \):
+</p>
+<div class="formula">
+    \( R = \frac{50^2 \times \sin(60^\circ)}{9.81} = \frac{50^2 \times \frac{\sqrt{3}}{2}}{9.81} = 220.57 \, \text{meters} \)
+</div>
+
+<h3>Step 3: Parametric Equations for the Trajectory</h3>
+<p>
+    The horizontal and vertical positions as a function of time are given by the parametric equations:
+</p>
+<div class="formula">
+    \( x(t) = v_0 \cos(\theta) t \)
+</div>
+<div class="formula">
+    \( y(t) = v_0 \sin(\theta) t - \frac{1}{2} g t^2 \)
+</div>
+
+<h3>Trajectory Plot</h3>
+<canvas id="trajectoryCanvas" width="800" height="400"></canvas>
+
+<script>
+    // Constants
+    const g = 9.81;  // Gravity (m/s^2)
+    const v0 = 50;   // Initial velocity (m/s)
+    const theta = Math.PI / 6;  // Launch angle (30 degrees in radians)
+    
+    // Compute time of flight
+    const t_flight = (2 * v0 * Math.sin(theta)) / g;
+    
+    // Canvas setup
+    const canvas = document.getElementById("trajectoryCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Scale factor for drawing
+    const scaleX = 10;  // Horizontal scale (pixels per meter)
+    const scaleY = 10;  // Vertical scale (pixels per meter)
+
+    // Ground level (shift upwards for canvas)
+    const groundLevel = canvas.height - 50;
+
+    // Function to compute x and y at a given time
+    function getX(t) {
+        return v0 * Math.cos(theta) * t;
+    }
+    
+    function getY(t) {
+        return v0 * Math.sin(theta) * t - 0.5 * g * t ** 2;
+    }
+
+    // Draw trajectory
+    ctx.beginPath();
+    ctx.moveTo(50, groundLevel);  // Starting point
+    
+    const numPoints = 500;  // Number of points in the trajectory
+    for (let i = 0; i <= numPoints; i++) {
+        const t = (i / numPoints) * t_flight;
+        const x = getX(t) * scaleX + 50;  // Shift horizontally
+        const y = groundLevel - (getY(t) * scaleY);  // Shift vertically
+        ctx.lineTo(x, y);
+    }
+    
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Draw ground
+    ctx.beginPath();
+    ctx.moveTo(0, groundLevel);
+    ctx.lineTo(canvas.width, groundLevel);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    
+    // Labels and title
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText("Cannonball Trajectory", canvas.width / 2 - 80, 30);
+    ctx.fillText("Horizontal Distance (m)", canvas.width / 2 - 80, canvas.height - 20);
+</script>
+
+</body>
+</html>
