@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pressure Drop Calculation</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+        }
+        .formula {
+            text-align: center;
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        .result {
+            font-weight: bold;
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Pressure Drop Calculation in a Pipe</h1>
+
+<h2>Question</h2>
+<p>
+    Calculate the drop in pressure head when the cross-section of a pipe through which water is flowing is reduced by 10%. Consider the flow to be laminar.
+</p>
+
+<h2>Solution</h2>
+<p>
+    When the cross-section of a pipe is reduced by 10%, we can calculate the pressure head drop by using Bernoulli’s equation and the continuity equation for steady, laminar flow.
+</p>
+
+<h2>Step 1: Bernoulli’s Equation</h2>
+<p>
+    Bernoulli's equation for a horizontal pipe is:
+</p>
+<div class="formula">
+    \( P_1 + \frac{1}{2} \rho v_1^2 = P_2 + \frac{1}{2} \rho v_2^2 \)
+</div>
+<p>
+    Where:
+</p>
+<ul>
+    <li>\( P_1 \) and \( P_2 \) are the pressures at points 1 and 2, respectively</li>
+    <li>\( v_1 \) and \( v_2 \) are the velocities at points 1 and 2</li>
+    <li>\( \rho \) is the density of the fluid (water in this case)</li>
+</ul>
+
+<h2>Step 2: Continuity Equation</h2>
+<p>
+    The continuity equation relates the flow rates at two points:
+</p>
+<div class="formula">
+    \( A_1 v_1 = A_2 v_2 \)
+</div>
+<p>
+    If the cross-sectional area is reduced by 10%, then:
+</p>
+<div class="formula">
+    \( A_2 = 0.9 A_1 \)
+</div>
+<p>
+    Hence, the velocity at point 2 is:
+</p>
+<div class="formula">
+    \( v_2 = \frac{v_1}{0.9} = \frac{10}{9} v_1 \)
+</div>
+
+<h2>Step 3: Substitute into Bernoulli’s Equation</h2>
+<p>
+    Substituting the velocity relation into Bernoulli’s equation:
+</p>
+<div class="formula">
+    \( P_1 + \frac{1}{2} \rho v_1^2 = P_2 + \frac{1}{2} \rho \left( \frac{10}{9} v_1 \right)^2 \)
+</div>
+<p>
+    Simplifying:
+</p>
+<div class="formula">
+    \( P_1 - P_2 = \frac{1}{2} \rho v_1^2 \left( \frac{100}{81} - 1 \right) \)
+</div>
+<div class="formula">
+    \( P_1 - P_2 = \frac{1}{2} \rho v_1^2 \left( \frac{19}{81} \right) \)
+</div>
+
+<h2>Step 4: Convert Pressure Difference to Pressure Head</h2>
+<p>
+    Pressure head \( h \) is given by:
+</p>
+<div class="formula">
+    \( h = \frac{P_1 - P_2}{\rho g} \)
+</div>
+<p>
+    Substituting the pressure difference:
+</p>
+<div class="formula">
+    \( h = \frac{1}{2} \frac{ \rho v_1^2 \left( \frac{19}{81} \right)}{\rho g} = \frac{v_1^2}{2g} \times \frac{19}{81} \)
+</div>
+
+<h2>Final Expression for Pressure Head Drop</h2>
+<p>
+    The drop in pressure head due to the reduction in cross-sectional area is:
+</p>
+<div class="formula">
+    \( h = \frac{19}{162} \times \frac{v_1^2}{g} \)
+</div>
+<p class="result">
+    This formula gives the pressure head drop as a function of the initial velocity \( v_1 \) and gravitational acceleration \( g \).
+</p>
+
+</body>
+</html>
