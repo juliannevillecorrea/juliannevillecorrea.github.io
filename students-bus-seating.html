@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seating Arrangements</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            margin-bottom: 20px;
+        }
+        .solution {
+            margin-left: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h2>Seating Arrangements in a School Bus</h2>
+
+    <p>
+        The number of ways students can be seated in a school bus depends on several factors:
+        <ul>
+            <li>The number of seats \(n\) in the bus</li>
+            <li>The number of students \(r\)</li>
+            <li>Whether the order of seating matters (permutation) or not (combination)</li>
+            <li>Whether there are more students than seats or vice versa</li>
+        </ul>
+    </p>
+
+    <h3>Case 1: Exactly as many students as seats (\(n = r\))</h3>
+    <p>
+        Let’s assume there are 10 students and 10 seats. The task is to find the number of ways the students can be seated.
+    </p>
+    <div class="solution">
+        Since there are exactly as many students as seats, we use the permutation formula:
+        \[
+        P(n, r) = r! = 10!
+        \]
+        Calculating \(10!\):
+        \[
+        10! = 10 \times 9 \times 8 \times 7 \times 6 \times 5 \times 4 \times 3 \times 2 \times 1 = 3,628,800
+        \]
+        Therefore, the students can be seated in <b>3,628,800</b> ways.
+    </div>
+
+    <h3>Case 2: More seats than students (\(n > r\))</h3>
+    <p>
+        Let’s assume there are 15 seats and 10 students. We want to find the number of ways to seat 10 students in 15 seats.
+    </p>
+    <div class="solution">
+        We use the permutation formula:
+        \[
+        P(n, r) = \frac{n!}{(n - r)!}
+        \]
+        For \(n = 15\) seats and \(r = 10\) students:
+        \[
+        P(15, 10) = \frac{15!}{(15 - 10)!} = \frac{15!}{5!}
+        \]
+        Let's calculate this:
+        \[
+        15! = 15 \times 14 \times 13 \times 12 \times 11 \times 10 \times 9 \times 8 \times 7 \times 6
+        \]
+        \[
+        5! = 5 \times 4 \times 3 \times 2 \times 1 = 120
+        \]
+        So:
+        \[
+        P(15, 10) = \frac{15!}{5!} = \frac{15 \times 14 \times 13 \times 12 \times 11 \times 10 \times 9 \times 8 \times 7 \times 6}{120}
+        \]
+        This equals:
+        \[
+        P(15, 10) = 1,816,214,400
+        \]
+        Therefore, there are <b>1,816,214,400</b> ways to seat 10 students in 15 seats.
+    </div>
+
+    <h3>Case 3: More students than seats (\(n < r\))</h3>
+    <p>
+        Let’s assume there are 8 seats and 10 students. We need to choose 8 students from 10 and then arrange them in the seats.
+    </p>
+    <div class="solution">
+        This is a two-step process:
+        <ol>
+            <li>First, choose which 8 students will sit from the 10. This is a combination:
+                \[
+                \binom{r}{n} = \binom{10}{8} = \frac{10!}{8!(10-8)!} = \frac{10!}{8!2!}
+                \]
+                Simplifying:
+                \[
+                \binom{10}{8} = \frac{10 \times 9}{2 \times 1} = 45
+                \]
+            </li>
+            <li>Now arrange the chosen 8 students in the 8 seats, which is:
+                \[
+                8! = 8 \times 7 \times 6 \times 5 \times 4 \times 3 \times 2 \times 1 = 40,320
+                \]
+            </li>
+        </ol>
+        Therefore, the total number of seating arrangements is:
+        \[
+        \text{Total ways} = 45 \times 8! = 45 \times 40,320 = 1,814,400
+        \]
+        So, there are <b>1,814,400</b> ways to seat 8 students chosen from 10.
+    </div>
+</body>
+</html>
