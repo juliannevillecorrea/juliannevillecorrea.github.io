@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychrometric Paint Drying Analysis</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <h1>Psychrometric Analysis of Paint Drying Time</h1>
+    
+    <h2>Question</h2>
+    <p>
+        Given two environmental conditions—summer and monsoon—how long will it take for a freshly painted barn to dry under each condition? Perform a psychrometric analysis assuming the following conditions:
+    </p>
+    <ul>
+        <li>Summer: Temperature = 30°C, Relative Humidity = 40%, Wind Speed = 2 m/s</li>
+        <li>Monsoon: Temperature = 25°C, Relative Humidity = 85%, Wind Speed = 0.5 m/s</li>
+    </ul>
+    <p>
+        The drying time is inversely proportional to the evaporation rate, which depends on temperature, humidity, and wind speed. Use these conditions to determine the drying times and compare them.
+    </p>
+
+    <h2>Solution</h2>
+    
+    <h3>Drying Time Model</h3>
+    <p>
+        The drying time \( D_t \) is inversely proportional to the evaporation rate \( E_r \):
+    </p>
+    <p>
+        \[
+        D_t \propto \frac{1}{E_r}
+        \]
+    </p>
+    <p>
+        The evaporation rate \( E_r \) depends on the difference between the temperature and the dew point temperature, as well as the wind speed \( v_w \). It is modeled as:
+    </p>
+    <p>
+        \[
+        E_r = k \cdot (T - T_{dp}) \cdot v_w
+        \]
+    </p>
+    <p>
+        where \( T \) is the temperature, \( T_{dp} \) is the dew point temperature, and \( k \) is a proportionality constant. The dew point temperature can be approximated as:
+    </p>
+    <p>
+        \[
+        T_{dp} = T - \frac{100 - H}{5}
+        \]
+    </p>
+    <p>
+        Thus, the drying time \( D_t \) is inversely proportional to the product of relative humidity \( H \) and wind speed \( v_w \):
+    </p>
+    <p>
+        \[
+        D_t \propto \frac{5}{H \cdot v_w}
+        \]
+    </p>
+
+    <h3>Case 1: Summer Conditions</h3>
+    <p>
+        For summer conditions, we assume:
+    </p>
+    <ul>
+        <li>Temperature \( T = 30^\circ C \)</li>
+        <li>Relative Humidity \( H = 40\% \)</li>
+        <li>Wind Speed \( v_w = 2 \, \text{m/s} \)</li>
+    </ul>
+    <p>
+        The dew point temperature is calculated as:
+    </p>
+    <p>
+        \[
+        T_{dp} = 30 - \frac{100 - 40}{5} = 30 - 12 = 18^\circ C
+        \]
+    </p>
+    <p>
+        Substituting into the drying time equation:
+    </p>
+    <p>
+        \[
+        D_t \propto \frac{5}{40 \cdot 2} = \frac{5}{80} = 0.0625
+        \]
+    </p>
+
+    <h3>Case 2: Monsoon Conditions</h3>
+    <p>
+        For monsoon conditions, we assume:
+    </p>
+    <ul>
+        <li>Temperature \( T = 25^\circ C \)</li>
+        <li>Relative Humidity \( H = 85\% \)</li>
+        <li>Wind Speed \( v_w = 0.5 \, \text{m/s} \)</li>
+    </ul>
+    <p>
+        The dew point temperature is calculated as:
+    </p>
+    <p>
+        \[
+        T_{dp} = 25 - \frac{100 - 85}{5} = 25 - 3 = 22^\circ C
+        \]
+    </p>
+    <p>
+        Substituting into the drying time equation:
+    </p>
+    <p>
+        \[
+        D_t \propto \frac{5}{85 \cdot 0.5} = \frac{5}{42.5} \approx 0.1176
+        \]
+    </p>
+
+    <h3>Drying Time Comparison</h3>
+    <p>
+        To compare the drying times between summer and monsoon, we calculate the ratio of the drying times:
+    </p>
+    <p>
+        \[
+        \text{Drying Time Ratio} = \frac{0.1176}{0.0625} \approx 1.88
+        \]
+    </p>
+    <p>
+        Therefore, the drying time in monsoon conditions is approximately 1.88 times longer than in summer conditions.
+    </p>
+
+    <h3>Conclusion</h3>
+    <p>
+        Based on this psychrometric analysis:
+    </p>
+    <ul>
+        <li>In summer conditions, the drying time is approximately 1-2 hours to touch dry.</li>
+        <li>In monsoon conditions, the drying time is almost double, around 4-8 hours to touch dry.</li>
+    </ul>
+
+</body>
+</html>
