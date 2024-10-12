@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tea Cup Cooling Problem</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 5px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tea Cup Cooling Problem</h1>
+
+    <p><strong>Question:</strong></p>
+    <p>How long does it take for a tea cup with a curved surface area of 35 cm², open to air on the top, to cool from 90°C to 30°C in a room at 20°C? Assume the heat transfer coefficient for natural convection in air is 10 W/m²K. Assume the tea has a mass of 200g, and the specific heat capacity of water is 4186 J/kg·K. The top of the tea cup is circular with a radius of 4 cm.</p>
+
+    <p><strong>Solution:</strong></p>
+
+    <h2>Step 1: Energy Loss Calculation (via Newton’s Law of Cooling)</h2>
+
+    <p>The total surface area of the tea cup exposed to air is the sum of the curved surface area and the top surface area, which is given by:</p>
+
+    <p>
+    \[
+    A_{\text{total}} = A + A_{\text{top}} = 0.0035 + \pi r^2 = 0.0035 + 0.00503 = 0.00853 \, \text{m}^2
+    \]
+    </p>
+
+    <p>According to Newton's Law of Cooling, the rate of heat loss is:</p>
+
+    <p>
+    \[
+    q = h A_{\text{total}} (T_{\text{tea}} - T_{\text{room}})
+    \]
+    </p>
+
+    <p>Substituting the known values:</p>
+
+    <p>
+    \[
+    q = 10 \cdot 0.00853 \cdot (T_{\text{tea}} - 20) = 0.0853 \cdot (T_{\text{tea}} - 20) \, \text{W}
+    \]
+    </p>
+
+    <h2>Step 2: Heat Capacity of the Tea</h2>
+
+    <p>The heat energy contained in the tea is given by:</p>
+
+    <p>
+    \[
+    Q = mc(T_{\text{tea}} - T_{\text{room}})
+    \]
+    </p>
+
+    <p>Substituting the values for the mass \(m = 0.2 \, \text{kg}\), specific heat capacity \(c = 4186 \, \text{J/kg} \cdot \text{K}\), and initial temperature \(T_{\text{tea}} = 90^\circ C\), we get:</p>
+
+    <p>
+    \[
+    Q = 0.2 \cdot 4186 \cdot (90 - 20) = 58604 \, \text{J}
+    \]
+    </p>
+
+    <h2>Step 3: Cooling Time Calculation</h2>
+
+    <p>The rate of change of temperature is governed by:</p>
+
+    <p>
+    \[
+    \frac{dT}{dt} = - \frac{h A_{\text{total}}}{mc} (T - T_{\text{room}})
+    \]
+    </p>
+
+    <p>Substituting the values:</p>
+
+    <p>
+    \[
+    \frac{dT}{dt} = - \frac{10 \times 0.00853}{0.2 \times 4186} (T - 20) = -0.0000102 (T - 20)
+    \]
+    </p>
+
+    <h2>Step 4: Solving the Differential Equation</h2>
+
+    <p>The solution to the differential equation is:</p>
+
+    <p>
+    \[
+    T(t) = T_{\text{room}} + (T_0 - T_{\text{room}}) e^{-kt}
+    \]
+    </p>
+
+    <p>Where \(k = 0.0000102 \, \text{s}^{-1}\), and the initial temperature \(T_0 = 90^\circ C\). Therefore:</p>
+
+    <p>
+    \[
+    T(t) = 20 + 70 e^{-0.0000102 t}
+    \]
+    </p>
+
+    <h2>Step 5: Finding the Time to Cool</h2>
+
+    <p>We want to find the time \(t\) when the temperature reaches 30°C. Solving for \(t\):</p>
+
+    <p>
+    \[
+    30 = 20 + 70 e^{-0.0000102 t}
+    \]
+    </p>
+
+    <p>Solving for \(t\):</p>
+
+    <p>
+    \[
+    e^{-0.0000102 t} = \frac{1}{7}
+    \]
+    \[
+    -0.0000102 t = \ln{\frac{1}{7}} = -1.9459
+    \]
+    \[
+    t = \frac{1.9459}{0.0000102} = 190775 \, \text{seconds} \approx 53 \, \text{hours}
+    \]
+    </p>
+
+    <h2>Conclusion</h2>
+
+    <p>It will take approximately 53 hours for the tea to cool from 90°C to 30°C under the given assumptions.</p>
+
+</body>
+</html>
