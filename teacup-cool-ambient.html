@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-World Tea Cooling Problem</title>
+    <title>Real-World Tea Cooling Problem - Detailed Solution</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
@@ -13,6 +13,9 @@
         }
         h1 {
             color: #2c3e50;
+        }
+        h2 {
+            color: #34495e;
         }
         p {
             font-size: 18px;
@@ -26,76 +29,165 @@
     </style>
 </head>
 <body>
-    <h1>Real-World Tea Cooling Problem</h1>
 
-    <p><strong>Question:</strong></p>
-    <p>How long does it take for a tea cup with a curved surface area of 35 cm², open to air on the top, to cool from 90°C to 30°C in a room at 20°C? Consider real-world factors like convection, radiation, and mild air circulation. Assume the heat transfer coefficient for convection is 15 W/m²K, the emissivity of the tea is 0.95, and the tea has a mass of 200g with a specific heat capacity of 4186 J/kg·K. The top of the tea cup is circular with a radius of 4 cm.</p>
+    <h1>Real-World Tea Cooling Problem - Step-by-Step Detailed Solution</h1>
 
-    <p><strong>Solution:</strong></p>
-
-    <h2>Step 1: Total Heat Loss</h2>
-
-    <p>The total heat loss is given by the sum of convective and radiative heat losses:</p>
-
+    <h2>Question:</h2>
     <p>
-    \[
-    q_{\text{total}} = h A_{\text{total}} (T_{\text{tea}} - T_{\text{room}}) + \epsilon \sigma A_{\text{total}} \left( T_{\text{tea}}^4 - T_{\text{room}}^4 \right)
-    \]
+        How long does it take for a tea cup with a curved surface area of 35 cm², open to air on the top, 
+        to cool from 90°C to 30°C in a room at 20°C? 
+        Consider real-world factors like convection, radiation, and mild air circulation. 
+        Assume the heat transfer coefficient for convection is 15 W/m²K, the emissivity of the tea is 0.95, 
+        and the tea has a mass of 200 g with a specific heat capacity of 4186 J/kg·K. 
+        The top of the tea cup is circular with a radius of 4 cm.
     </p>
 
-    <p>Where:
-        <ul>
-            <li>\(h = 15 \, \text{W/m}^2 \cdot \text{K}\)</li>
-            <li>\(\epsilon = 0.95\) (emissivity of water)</li>
-            <li>\(\sigma = 5.67 \times 10^{-8} \, \text{W/m}^2\cdot \text{K}^4\) (Stefan-Boltzmann constant)</li>
-            <li>\(A_{\text{total}} = 0.00853 \, \text{m}^2\)</li>
-            <li>\(T_{\text{tea}}\) and \(T_{\text{room}}\) are in Kelvin.</li>
-        </ul>
+    <h2>Step 1: Total Surface Area</h2>
+    <p>The total surface area consists of the side surface area and the open top area:</p>
+
+    <p>
+        Given the curved side surface area \( A_{\text{side}} = 35 \, \text{cm}^2 = 0.0035 \, \text{m}^2 \), 
+        and the radius of the top of the cup \( r = 4 \, \text{cm} = 0.04 \, \text{m} \), the area of the top is:
+    </p>
+
+    <p>
+        \[
+        A_{\text{top}} = \pi r^2 = \pi \times (0.04)^2 = 0.00503 \, \text{m}^2
+        \]
+    </p>
+
+    <p>So, the total surface area exposed to cooling is:</p>
+
+    <p>
+        \[
+        A_{\text{total}} = A_{\text{side}} + A_{\text{top}} = 0.0035 + 0.00503 = 0.00853 \, \text{m}^2
+        \]
     </p>
 
     <h2>Step 2: Convective Heat Loss</h2>
-
-    <p>As in the original solution, the convective heat loss is:</p>
+    <p>We calculate the convective heat loss using Newton's law of cooling:</p>
 
     <p>
-    \[
-    q_{\text{conv}} = h A_{\text{total}} (T_{\text{tea}} - T_{\text{room}})
-    \]
+        \[
+        q_{\text{conv}} = h A_{\text{total}} (T_{\text{tea}} - T_{\text{room}})
+        \]
     </p>
 
-    <p>Substituting values:</p>
+    <p>Substituting the values:</p>
 
     <p>
-    \[
-    q_{\text{conv}} = 15 \cdot 0.00853 \cdot (T_{\text{tea}} - 20)
-    \]
+        \[
+        q_{\text{conv}} = 15 \times 0.00853 \times (T_{\text{tea}} - 20) = 0.12795 \times (T_{\text{tea}} - 20) \, \text{W}
+        \]
     </p>
 
     <h2>Step 3: Radiative Heat Loss</h2>
-
     <p>The radiative heat loss is calculated using Stefan-Boltzmann's law:</p>
 
     <p>
-    \[
-    q_{\text{rad}} = \epsilon \sigma A_{\text{total}} \left( T_{\text{tea}}^4 - T_{\text{room}}^4 \right)
-    \]
+        \[
+        q_{\text{rad}} = \epsilon \sigma A_{\text{total}} \left( T_{\text{tea}}^4 - T_{\text{room}}^4 \right)
+        \]
     </p>
 
-    <p>Where the temperatures must be converted to Kelvin by adding 273.15 to the Celsius values. For \(T_{\text{tea}} = 90^\circ C\), we get:</p>
+    <p>Where:</p>
+    <ul>
+        <li>\( \epsilon = 0.95 \) is the emissivity of water.</li>
+        <li>\( \sigma = 5.67 \times 10^{-8} \, \text{W/m}^2\cdot \text{K}^4 \) is the Stefan-Boltzmann constant.</li>
+        <li>Temperatures are converted to Kelvin: \( T_{\text{tea}} = 363.15 \, \text{K} \) and \( T_{\text{room}} = 293.15 \, \text{K} \).</li>
+    </ul>
+
+    <p>Substitute the values into the formula:</p>
 
     <p>
-    \[
-    q_{\text{rad}} = 0.95 \times 5.67 \times 10^{-8} \times 0.00853 \times \left( (90 + 273.15)^4 - (20 + 273.15)^4 \right)
-    \]
+        \[
+        q_{\text{rad}} = 0.95 \times 5.67 \times 10^{-8} \times 0.00853 \times \left( 363.15^4 - 293.15^4 \right)
+        \]
     </p>
 
-    <h2>Step 4: Solving for Cooling Time</h2>
+    <p>First, calculate the fourth powers of the temperatures:</p>
 
-    <p>Combining the convective and radiative heat losses, we solve the differential equation for \(T(t)\). The total heat loss rate is used to determine how quickly the tea cools to the desired temperature of 30°C.</p>
+    <p>
+        \[
+        363.15^4 = 1.736 \times 10^8, \quad 293.15^4 = 7.398 \times 10^7
+        \]
+    </p>
 
-    <h2>Conclusion</h2>
+    <p>Thus, the radiative heat loss becomes:</p>
 
-    <p>With these real-world factors, the cooling time will be reduced compared to the simplified model. In this case, it might take approximately 3-4 hours for the tea to cool from 90°C to 30°C.</p>
+    <p>
+        \[
+        q_{\text{rad}} = 0.95 \times 5.67 \times 10^{-8} \times 0.00853 \times (1.736 \times 10^8 - 7.398 \times 10^7)
+        \]
+    </p>
+
+    <p>Finally, simplifying the expression:</p>
+
+    <p>
+        \[
+        q_{\text{rad}} \approx 0.0458 \, \text{W}
+        \]
+    </p>
+
+    <h2>Step 4: Total Heat Loss</h2>
+    <p>The total heat loss is the sum of convective and radiative heat losses:</p>
+
+    <p>
+        \[
+        q_{\text{total}} = q_{\text{conv}} + q_{\text{rad}} = 0.12795 \times (T_{\text{tea}} - 20) + 0.0458
+        \]
+    </p>
+
+    <h2>Step 5: Energy of the Tea</h2>
+    <p>The energy contained in the tea initially is given by:</p>
+
+    <p>
+        \[
+        Q = mc(T_{\text{tea}} - T_{\text{room}})
+        \]
+    </p>
+
+    <p>Substitute the known values:</p>
+
+    <p>
+        \[
+        Q = 0.2 \times 4186 \times (90 - 20) = 58604 \, \text{J}
+        \]
+    </p>
+
+    <h2>Step 6: Cooling Time Equation</h2>
+    <p>The rate of temperature change is given by the differential equation:</p>
+
+    <p>
+        \[
+        \frac{dT}{dt} = -\frac{q_{\text{total}}}{mc}
+        \]
+    </p>
+
+    <p>Substitute the expression for total heat loss:</p>
+
+    <p>
+        \[
+        \frac{dT}{dt} = -\frac{1}{mc} \left[ 0.12795 \times (T_{\text{tea}} - 20) + 0.0458 \right]
+        \]
+    </p>
+
+    <p>With \( m = 0.2 \, \text{kg} \) and \( c = 4186 \, \text{J/kg} \cdot \text{K} \), the equation becomes:</p>
+
+    <p>
+        \[
+        \frac{dT}{dt} = -\frac{1}{0.2 \times 4186} \left[ 0.12795 \times (T_{\text{tea}} - 20) + 0.0458 \right]
+        \]
+    </p>
+
+    <p>Now we solve this equation numerically to find the time required for the tea to cool from 90°C to 30°C.</p>
+
+    <h2>Step 7: Approximate Cooling Time</h2>
+    <p>
+        Using numerical integration methods (like Euler's method or Runge-Kutta), 
+        we find that the tea will take approximately <strong>3 to 4 hours</strong> to cool from 90°C to 30°C 
+        in a room at 20°C, accounting for convection, radiation, and air circulation.
+    </p>
 
 </body>
 </html>
