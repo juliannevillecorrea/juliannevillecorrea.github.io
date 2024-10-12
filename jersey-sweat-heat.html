@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Loss from Sweaty Jersey</title>
+    <script type="text/javascript"
+      src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            color: #FF0000;
+        }
+        h2 {
+            color: #0000FF;
+        }
+        .math {
+            color: #008000;
+            font-size: 1.2em;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        p {
+            font-size: 1.1em;
+        }
+        ul {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Heat Loss from a Sweaty Jersey</h1>
+
+    <h2>Question</h2>
+    <p>
+        A sports jersey is completely drenched with sweat. How much heat will be lost from the sportsman if the jersey dries out while the sportsman wears it? The jersey is made out of 1.5 meters of cloth. Assume unknown variables and provide a mathematical solution.
+    </p>
+
+    <h2>Solution</h2>
+
+    <p>To calculate the heat lost from the sportsman as their jersey dries out, we will use the concept of <strong>latent heat of vaporization</strong>, which is the energy required to evaporate water (sweat) from the jersey.</p>
+
+    <h3>Assumptions</h3>
+    <ul>
+        <li>The jersey is completely soaked, and we assume it holds \( m \, \text{kg} \) of water (sweat).</li>
+        <li>The temperature of the sweat is around body temperature (\( 37^\circ \text{C} \)), meaning evaporation occurs close to this temperature.</li>
+        <li>The latent heat of vaporization of water (\( L_v \)) is approximately \( 2260 \, \text{kJ/kg} \) at \( 37^\circ \text{C} \).</li>
+    </ul>
+
+    <h3>Key Formula</h3>
+    <p>The heat loss \( Q \) due to the evaporation of sweat can be calculated using the formula:</p>
+    <div class="math">
+        \( Q = m \cdot L_v \)
+    </div>
+    <p>where:</p>
+    <ul>
+        <li>\( m \) is the mass of water (in kg).</li>
+        <li>\( L_v \) is the latent heat of vaporization of water.</li>
+    </ul>
+
+    <h3>Estimating the Mass of Water (\( m \))</h3>
+    <p>The jersey is made out of 1.5 meters of cloth. The amount of water the cloth can hold depends on the type of fabric and its absorbency. For this calculation, we assume that the jersey can hold approximately \( 100\% \) of its own weight in water.</p>
+
+    <p>Let’s denote:</p>
+    <ul>
+        <li>\( \rho \): Density of water (\( 1000 \, \text{kg/m}^3 \)).</li>
+        <li>\( A \): Total surface area of the jersey (\( 1.5 \, \text{m}^2 \)).</li>
+        <li>\( t \): Thickness of the jersey (assumed to be \( 0.0015 \, \text{m} \)).</li>
+    </ul>
+
+    <p>The volume of water absorbed by the jersey \( V \) is given by:</p>
+    <div class="math">
+        \( V = A \cdot t \)
+    </div>
+    <p>Substituting the values:</p>
+    <div class="math">
+        \( V = 1.5 \, \text{m}^2 \cdot 0.0015 \, \text{m} = 0.00225 \, \text{m}^3 \)
+    </div>
+
+    <p>The mass of the water held by the jersey is:</p>
+    <div class="math">
+        \( m = \rho \cdot V = 1000 \, \text{kg/m}^3 \cdot 0.00225 \, \text{m}^3 = 2.25 \, \text{kg} \)
+    </div>
+
+    <h3>Heat Loss Calculation</h3>
+    <p>Using the formula for heat loss:</p>
+    <div class="math">
+        \( Q = m \cdot L_v \)
+    </div>
+    <p>Substituting \( m = 2.25 \, \text{kg} \) and \( L_v = 2260 \, \text{kJ/kg} \):</p>
+    <div class="math">
+        \( Q = 2.25 \, \text{kg} \cdot 2260 \, \text{kJ/kg} = 5085 \, \text{kJ} \)
+    </div>
+
+    <h3>Conclusion</h3>
+    <p>The total heat lost from the sportsman as the jersey dries out would be approximately <strong style="color: #FF0000;">5085 kJ</strong>. This significant amount of heat loss highlights why evaporation of sweat is such an effective cooling mechanism for the body.</p>
+
+</body>
+</html>
