@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow of Ink in a Fountain Pen</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        p, ul {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Deriving the Relation Governing Ink Flow in a Fountain Pen</h1>
+
+<p>The flow of ink in a fountain pen is largely governed by the balance between capillary action and the resistive forces due to viscosity. We can derive the relation for the flow rate \( Q \) of ink in terms of the ink’s surface tension \( \gamma \), viscosity \( \eta \), and other parameters of the pen.</p>
+
+<h2>Key Variables</h2>
+<ul>
+    <li><b>\( \gamma \)</b> = Surface tension of the ink (N/m)</li>
+    <li><b>\( \eta \)</b> = Viscosity of the ink (Pa·s)</li>
+    <li><b>\( R \)</b> = Radius of the capillary in the pen (m)</li>
+    <li><b>\( L \)</b> = Length of the capillary (m)</li>
+    <li><b>\( \theta \)</b> = Contact angle of the ink with the pen material</li>
+    <li><b>\( Q \)</b> = Flow rate of ink (m³/s)</li>
+</ul>
+
+<h2>Step 1: Capillary Pressure</h2>
+<p>The capillary pressure difference \( \Delta P \) driving the ink flow is due to the surface tension of the ink and can be given by the Young-Laplace equation:</p>
+
+$$
+\Delta P = \frac{2 \gamma \cos \theta}{R}
+$$
+
+<p>This pressure difference is responsible for pushing the ink through the narrow capillary channel in the pen.</p>
+
+<h2>Step 2: Hagen-Poiseuille Flow for Viscous Resistance</h2>
+<p>The resistive force to the flow of ink is due to the viscosity of the ink moving through the capillary. According to Hagen-Poiseuille’s law, the volumetric flow rate \( Q \) for a fluid through a cylindrical tube is given by:</p>
+
+$$
+Q = \frac{\Delta P \cdot \pi R^4}{8 \eta L}
+$$
+
+<h2>Step 3: Substitute Capillary Pressure</h2>
+<p>Now, substituting \( \Delta P = \frac{2 \gamma \cos \theta}{R} \) from Step 1 into the expression for \( Q \), we get:</p>
+
+$$
+Q = \frac{\left( \frac{2 \gamma \cos \theta}{R} \right) \cdot \pi R^4}{8 \eta L}
+$$
+
+<p>Simplifying the expression:</p>
+
+$$
+Q = \frac{2 \gamma \cos \theta \cdot \pi R^3}{8 \eta L}
+$$
+
+<p>or:</p>
+
+$$
+Q = \frac{\pi \gamma R^3 \cos \theta}{4 \eta L}
+$$
+
+<h2>Final Relation</h2>
+<p>The final relationship governing the flow of ink in a fountain pen as a function of the ink’s viscosity and surface tension is:</p>
+
+$$
+Q = \frac{\pi \gamma R^3 \cos \theta}{4 \eta L}
+$$
+
+<h2>Conclusion</h2>
+<p>This derived relation shows that the flow rate \( Q \) of ink in a fountain pen depends directly on the surface tension \( \gamma \) and inversely on the viscosity \( \eta \). Higher surface tension and a larger capillary radius \( R \) increase the flow rate, while higher viscosity \( \eta \) and capillary length \( L \) reduce it.</p>
+
+</body>
+</html>
