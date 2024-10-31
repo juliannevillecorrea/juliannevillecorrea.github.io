@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correlation of Ink Weight and Font Geometry</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        p, ul {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Correlation Between Ink Weight and Font Geometry</h1>
+
+<p>When text or images are printed on paper, the amount of ink used contributes to the added weight of the paper. This weight depends on the ink density and the geometry and shape of the text and figures, as different fonts and font weights affect how much ink is applied. Here, we’ll derive how this weight increase is related to font geometry, and analyze which fonts may be optimal for saving ink and cost.</p>
+
+<h2>Key Variables</h2>
+<ul>
+    <li><b>\( A \)</b> = Total area covered by ink on the paper (in mm² or in²)</li>
+    <li><b>\( t \)</b> = Average ink thickness on paper (in µm or mm)</li>
+    <li><b>\( \rho \)</b> = Density of the ink (in g/mm³)</li>
+    <li><b>\( W \)</b> = Weight added by the ink (in grams)</li>
+    <li><b>\( C \)</b> = Complexity factor of the font (unitless, represents ink usage per character shape)</li>
+    <li><b>\( N \)</b> = Number of characters</li>
+</ul>
+
+<h2>Step 1: Calculating the Weight Added by Ink</h2>
+<p>The weight \( W \) added by the ink is given by the product of the area covered by ink, the thickness of the ink layer, and the ink density:</p>
+
+$$
+W = A \cdot t \cdot \rho
+$$
+
+<p>The area \( A \) can be broken down as a function of the font complexity and number of characters for text-based content.</p>
+
+<h2>Step 2: Font Geometry and Complexity Factor</h2>
+<p>Each font has unique geometry that affects the area covered by ink. A "complexity factor" \( C \) represents how much ink a particular font consumes per character on average. Fonts with thinner strokes or hollow shapes (e.g., "Ecofont") have a lower complexity factor, while bold or decorative fonts with more inked surface area have a higher \( C \) value.</p>
+
+<p>For a given text document, the total ink-covered area \( A \) can be estimated as:</p>
+
+$$
+A = C \cdot N
+$$
+
+<p>where:</p>
+<ul>
+    <li><b>\( C \)</b> is the average complexity factor for the chosen font, which correlates with stroke width and shape features.</li>
+    <li><b>\( N \)</b> is the total number of characters in the document.</li>
+</ul>
+
+<h2>Step 3: Substituting for Weight</h2>
+<p>Using the expressions for \( A \) and substituting into the weight formula, we find that:</p>
+
+$$
+W = C \cdot N \cdot t \cdot \rho
+$$
+
+<h2>Optimization: Ink-Saving Fonts</h2>
+<p>To minimize the weight (and therefore ink usage), we want to select a font that minimizes \( C \). Fonts with thinner strokes, open shapes, or perforations (such as <b>Ecofont</b> or sans-serif fonts like <b>Arial Narrow</b>) have lower \( C \) values and are generally more economical in ink usage.</p>
+
+<p>To find the optimal font, we should consider:</p>
+<ul>
+    <li><b>Sans-serif fonts</b> (e.g., Arial, Calibri) – They generally have simpler geometry and thinner strokes.</li>
+    <li><b>Fonts with reduced stroke width</b> – Fonts designed to be narrow or lightweight use less ink for each character.</li>
+    <li><b>Perforated fonts</b> (e.g., Ecofont) – Specially designed fonts with small holes or gaps within strokes reduce the complexity factor \( C \), further saving ink.</li>
+</ul>
+
+<h2>Conclusion</h2>
+<p>Based on this analysis, fonts that minimize \( C \) and are designed for efficient ink usage, such as Ecofont, Arial Narrow, or Calibri Light, offer significant ink savings. For those seeking to optimize for ink cost, choosing a low-complexity font can be an effective measure.</p>
+
+</body>
+</html>
