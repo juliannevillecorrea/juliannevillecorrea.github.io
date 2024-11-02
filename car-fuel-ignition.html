@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Formula One Car Refuel Tube Orifice Calculation</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+</head>
+<body>
+
+<h1>Formula One Car Refuel Tube Orifice Calculation</h1>
+
+<h2>1. Defining the Problem</h2>
+<p>We want to calculate the diameter of the orifice in the refuel tube of a Formula One car. The orifice should avoid ignition risks due to:
+   <ul>
+     <li>Minimizing turbulent flow, which can cause frictional heating.</li>
+     <li>Ensuring fuel flow remains in the laminar or manageable transitional flow regime.</li>
+   </ul>
+</p>
+
+<p>Let's define the following parameters:</p>
+<ul>
+  <li>Desired fuel flow rate \( Q \) in liters per second (let's assume \( Q = 12 \, \text{L/s} \) for a rapid refuel).</li>
+  <li>Dynamic viscosity of fuel, \( \mu \approx 0.001 \, \text{Pa}\cdot\text{s} \).</li>
+  <li>Density of fuel, \( \rho \approx 750 \, \text{kg/m}^3 \).</li>
+  <li>Acceptable Reynolds number \( \text{Re} \) for avoiding turbulent flow (for a manageable transitional flow, let’s set \( \text{Re} \approx 2000 \) as the upper limit).</li>
+</ul>
+
+<h2>2. Formula for Reynolds Number</h2>
+<p>The Reynolds number \( \text{Re} \) is given by:</p>
+$$
+\text{Re} = \frac{\rho v D}{\mu}
+$$
+<p>where:</p>
+<ul>
+  <li>\( \rho \) is the density of the fuel.</li>
+  <li>\( v \) is the velocity of the fuel in the tube.</li>
+  <li>\( D \) is the diameter of the orifice.</li>
+  <li>\( \mu \) is the dynamic viscosity of the fuel.</li>
+</ul>
+
+<p>We can express the velocity \( v \) in terms of the flow rate \( Q \) and orifice diameter \( D \):</p>
+$$
+v = \frac{Q}{A} = \frac{Q}{\frac{\pi D^2}{4}} = \frac{4Q}{\pi D^2}
+$$
+
+<h3>Substituting for \( v \) in Reynolds number:</h3>
+<p>Substituting \( v = \frac{4Q}{\pi D^2} \) into the Reynolds number formula:</p>
+$$
+\text{Re} = \frac{\rho \cdot \left( \frac{4Q}{\pi D^2} \right) \cdot D}{\mu} = \frac{4 \rho Q}{\pi \mu D}
+$$
+
+<h2>3. Solving for Diameter \( D \)</h2>
+<p>Rearrange to solve for \( D \) such that \( \text{Re} \leq 2000 \):</p>
+$$
+D \geq \frac{4 \rho Q}{\pi \mu \cdot 2000}
+$$
+
+<h3>Inputting Known Values:</h3>
+<p>Substitute \( \rho = 750 \, \text{kg/m}^3 \), \( Q = 0.012 \, \text{m}^3/\text{s} \), and \( \mu = 0.001 \, \text{Pa} \cdot \text{s} \):</p>
+$$
+D \geq \frac{4 \times 750 \times 0.012}{\pi \times 0.001 \times 2000} \approx 0.0143 \, \text{m} \approx 14.3 \, \text{mm}
+$$
+
+<h2>4. Conclusion</h2>
+<p>To maintain manageable flow without excessive turbulence and frictional heating, the orifice diameter should be approximately <strong>14.3 mm</strong> or larger.</p>
+
+</body>
+</html>

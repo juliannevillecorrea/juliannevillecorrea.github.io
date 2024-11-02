@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cruise Ship Displacement Calculation</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+</head>
+<body>
+
+<h1>Cruise Ship Displacement and Evacuation Time Estimation</h1>
+
+<h2>1. Displacement Calculation</h2>
+<p>To keep the cruise ship afloat, the weight of the water displaced by the ship must be equal to the weight of the ship itself. This follows from <em>Archimedes' principle</em>:</p>
+
+<p>The weight of the ship is given as:</p>
+$$
+\text{Weight of the ship} = 200,000 \, \text{tons} = 200,000 \times 1,000 \, \text{kg} = 200,000,000 \, \text{kg}
+$$
+
+<p>To stay afloat, the ship must displace an equivalent mass of seawater. Assuming the density of seawater is approximately:</p>
+$$
+\text{Density of seawater} = 1,025 \, \text{kg/m}^3
+$$
+
+<p>The volume of water displaced \( V \) can then be calculated as:</p>
+$$
+V = \frac{\text{Mass of ship}}{\text{Density of seawater}} = \frac{200,000,000 \, \text{kg}}{1,025 \, \text{kg/m}^3} \approx 195,122 \, \text{m}^3
+$$
+
+<p>Therefore, the ship must displace approximately <strong>195,122 cubic meters</strong> of seawater to remain afloat.</p>
+
+<h2>2. Hypothetical Evacuation Time if Hull is Breached</h2>
+<p>Now, let us hypothesize the time available for evacuation if the hull is breached at the stern, near the ballast.</p>
+
+<p>For simplicity, let's assume the following:</p>
+<ul>
+  <li>The breach is close to the waterline.</li>
+  <li>The breach has an area of \( A = 1 \, \text{m}^2 \).</li>
+  <li>The rate of water entering is determined by Torricelli’s theorem: \( v = \sqrt{2gh} \), where:
+    <ul>
+      <li>\( g \) is the acceleration due to gravity (approx. \( 9.8 \, \text{m/s}^2 \))</li>
+      <li>\( h \) is the height of the water column above the breach (let’s assume \( h = 5 \, \text{m} \))</li>
+    </ul>
+  </li>
+</ul>
+
+<p>The initial inflow velocity \( v \) is:</p>
+$$
+v = \sqrt{2 \cdot 9.8 \cdot 5} \approx 9.9 \, \text{m/s}
+$$
+
+<p>Thus, the inflow rate \( Q \) (volume per second) through the breach is:</p>
+$$
+Q = A \cdot v = 1 \, \text{m}^2 \times 9.9 \, \text{m/s} = 9.9 \, \text{m}^3/\text{s}
+$$
+
+<p>Given the total volume that must remain undisturbed to keep the ship afloat is \( 195,122 \, \text{m}^3 \), let’s hypothesize the time \( t \) to reach critical displacement if the rate of flooding remains constant:</p>
+$$
+t = \frac{195,122 \, \text{m}^3}{9.9 \, \text{m}^3/\text{s}} \approx 19,719 \, \text{s}
+$$
+
+<p>Converting to hours:</p>
+$$
+t \approx \frac{19,719}{3600} \approx 5.5 \, \text{hours}
+$$
+
+<h3>Conclusion</h3>
+<p>This gives approximately <strong>5.5 hours</strong> for evacuation under idealized conditions. In a real scenario, structural factors and safety measures would affect this estimate, but it provides a general idea of the time available in such an emergency.</p>
+
+</body>
+</html>

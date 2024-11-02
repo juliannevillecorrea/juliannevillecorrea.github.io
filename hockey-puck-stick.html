@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Momentum of an Ice Hockey Puck and Ideal Hockey Stick Weight</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+</head>
+<body>
+
+<h1>Momentum of an Ice Hockey Puck and Ideal Hockey Stick Weight</h1>
+
+<h2>1. Calculating the Momentum of the Puck</h2>
+<p>Let's denote the following variables:</p>
+<ul>
+  <li>\( m_p \): Mass of the puck (standard puck weight is approximately 0.17 kg).</li>
+  <li>\( v_p \): Velocity of the puck after impact with the stick.</li>
+</ul>
+
+<p>The momentum \( p \) of the puck after being hit by the hockey stick is given by:</p>
+$$
+p = m_p \cdot v_p
+$$
+
+<h2>2. Relation Between Hockey Stick and Puck Velocity</h2>
+<p>Let's define additional variables for the interaction between the stick, player, and puck:</p>
+<ul>
+  <li>\( m_s \): Mass of the hockey stick.</li>
+  <li>\( v_s \): Velocity of the hockey stick just before impact.</li>
+  <li>\( m_{pl} \): Mass of the player.</li>
+  <li>\( v_{pl} \): Velocity of the player skating toward the puck.</li>
+</ul>
+
+<p>Assuming that the player transfers a significant portion of their energy to the puck through the stick, the final velocity of the puck \( v_p \) can be approximated from the conservation of momentum:</p>
+$$
+m_s \cdot v_s + m_{pl} \cdot v_{pl} = (m_p + m_s + m_{pl}) \cdot v_p
+$$
+
+<h2>3. Accounting for Friction and Distance to the Goal</h2>
+<p>Let's introduce:
+<ul>
+  <li>\( \mu_k \): Coefficient of kinetic friction between the puck and the ice surface.</li>
+  <li>\( d \): Distance to the goal.</li>
+</ul>
+
+<p>The force of friction \( f \) acting on the puck as it moves toward the goal is:</p>
+$$
+f = \mu_k \cdot m_p \cdot g
+$$
+where \( g \) is the acceleration due to gravity (\( g \approx 9.8 \, \text{m/s}^2 \)).
+
+<p>This frictional force causes a deceleration \( a \), where:</p>
+$$
+a = \frac{f}{m_p} = \mu_k \cdot g
+$$
+
+<p>Using the kinematic equation to find the final velocity \( v_p \) required to reach the goal from distance \( d \):</p>
+$$
+v_p^2 = v_i^2 - 2 \cdot a \cdot d
+$$
+
+<p>Assuming the initial velocity \( v_i \) is \( v_s \) (the speed at which the stick hits the puck), we can rewrite this as:</p>
+$$
+v_s^2 - 2 \cdot \mu_k \cdot g \cdot d = 0 \Rightarrow v_s = \sqrt{2 \cdot \mu_k \cdot g \cdot d}
+$$
+
+<h2>4. Ideal Weight of the Hockey Stick</h2>
+<p>Based on the above, an ideal weight for the hockey stick would balance speed and ease of handling without excessive mass, which might reduce control or make swift acceleration difficult. Using empirical data and the average requirements of ice hockey:</p>
+<ul>
+  <li>The mass of a typical hockey stick ranges from 400 to 500 grams (0.4 to 0.5 kg).</li>
+</ul>
+
+<p>Thus, an ideal weight <strong>for an ice hockey stick</strong> lies within this range to maximize control and enable a swift impact on the puck.</p>
+
+</body>
+</html>
