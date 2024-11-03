@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Physics of Dart Throwing</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+</head>
+<body>
+
+<h1>Physics of Dart Throwing</h1>
+
+<h2>1. Defining Variables</h2>
+<p>Let's define the key variables involved in the physics of a dart throw:</p>
+<ul>
+  <li>\( m \): Mass of the dart.</li>
+  <li>\( v \): Initial velocity of the dart when released by the player.</li>
+  <li>\( C_d \): Drag coefficient of the dart, which depends on its shape.</li>
+  <li>\( A \): Cross-sectional area of the dart perpendicular to its velocity.</li>
+  <li>\( \rho \): Density of air.</li>
+  <li>\( g \): Acceleration due to gravity (\( g \approx 9.8 \, \text{m/s}^2 \)).</li>
+  <li>\( d \): Distance from the player to the dartboard.</li>
+  <li>\( h \): Height difference between the release point and the center of the target.</li>
+  <li>\( \text{COM} \): Center of mass of the dart.</li>
+  <li>\( L \): Length of the dart.</li>
+  <li>\( \theta \): Launch angle of the dart with respect to the horizontal.</li>
+</ul>
+
+<h2>2. Initial Velocity and Launch Angle</h2>
+<p>The initial velocity \( v \) and angle \( \theta \) at which the dart is thrown determine its horizontal and vertical velocity components:</p>
+<ul>
+  <li>Horizontal velocity: \( v_x = v \cdot \cos(\theta) \)</li>
+  <li>Vertical velocity: \( v_y = v \cdot \sin(\theta) \)</li>
+</ul>
+
+<h2>3. Effect of Gravity on Vertical Motion</h2>
+<p>In the absence of drag, the dart’s vertical position \( y \) as a function of time \( t \) is given by:</p>
+$$
+y(t) = v_y \cdot t - \frac{1}{2} g \cdot t^2
+$$
+
+<p>At the same time, the horizontal position \( x \) of the dart is:</p>
+$$
+x(t) = v_x \cdot t
+$$
+
+<h2>4. Including Air Drag</h2>
+<p>The drag force \( F_d \) acting on the dart as it moves through the air is given by:</p>
+$$
+F_d = \frac{1}{2} C_d \cdot \rho \cdot A \cdot v^2
+$$
+
+<p>This drag force opposes the direction of motion, reducing both the horizontal and vertical velocities. Thus, the equations of motion become:</p>
+<ul>
+  <li>Horizontal: \( m \frac{dv_x}{dt} = -\frac{1}{2} C_d \cdot \rho \cdot A \cdot v \cdot v_x \)</li>
+  <li>Vertical: \( m \frac{dv_y}{dt} = -m \cdot g - \frac{1}{2} C_d \cdot \rho \cdot A \cdot v \cdot v_y \)</li>
+</ul>
+
+<p>These are differential equations that can be solved to find the position and velocity of the dart at any time \( t \), taking drag into account.</p>
+
+<h2>5. Center of Mass and Stability of the Dart</h2>
+<p>The center of mass (COM) of the dart affects its stability during flight. A well-designed dart has its COM closer to the front, which helps it align with its velocity vector and maintain a stable trajectory. The torque \( \tau \) due to the drag force \( F_d \) and the distance from the COM \( r \) is:</p>
+$$
+\tau = r \cdot F_d
+$$
+
+<p>The torque will cause the dart to rotate, and the moment of inertia \( I \) of the dart resists this rotation:</p>
+$$
+\alpha = \frac{\tau}{I}
+$$
+where \( \alpha \) is the angular acceleration.
+
+<h2>6. Distance to the Dartboard and Required Accuracy</h2>
+<p>The dartboard has a standard diameter, and the player stands a fixed distance \( d \) from it. For the dart to hit a specific target on the board, it must be aimed precisely, accounting for the horizontal and vertical deviations caused by gravity and drag. The height difference \( h \) between the release point and the target center must also be considered.</p>
+
+<p>If \( t_f \) is the time taken for the dart to reach the dartboard horizontally, then \( t_f \) can be calculated as:</p>
+$$
+t_f = \frac{d}{v_x}
+$$
+
+<p>The vertical position \( y(t_f) \) when the dart reaches the board is given by:</p>
+$$
+y(t_f) = v_y \cdot t_f - \frac{1}{2} g \cdot t_f^2
+$$
+
+<p>The dart will hit the intended spot if \( y(t_f) = h \), which requires careful adjustment of the initial angle \( \theta \) and velocity \( v \) to achieve the desired trajectory.</p>
+
+<h2>7. Final Relationship Between Variables</h2>
+<p>To hit the target, we derive the relationship between the various factors:</p>
+$$
+h = v \cdot \sin(\theta) \cdot \frac{d}{v \cdot \cos(\theta)} - \frac{1}{2} g \cdot \left( \frac{d}{v \cdot \cos(\theta)} \right)^2
+$$
+
+<p>Solving for \( \theta \) gives the required angle, accounting for distance \( d \), gravity \( g \), initial velocity \( v \), and height \( h \).</p>
+
+<h2>Conclusion</h2>
+<p>This derivation shows the complex interaction of drag, gravity, initial conditions, and stability factors like the center of mass and torque on a dart's flight. The final result offers a target trajectory based on these factors, enabling a more accurate dart throw.</p>
+
+</body>
+</html>

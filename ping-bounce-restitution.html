@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ping Pong Ball Bounce Height Calculation</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+</head>
+<body>
+
+<h1>Deriving the Rebound Height of a Ping Pong Ball</h1>
+
+<h2>1. Defining Variables</h2>
+<p>We want to calculate the rebound height of a ping pong ball after it bounces. Let's define the following variables:</p>
+<ul>
+  <li>\( h_0 \): Initial drop height.</li>
+  <li>\( m \): Mass of the ping pong ball.</li>
+  <li>\( C_d \): Drag coefficient of the ball.</li>
+  <li>\( A \): Cross-sectional area of the ball.</li>
+  <li>\( \rho \): Density of air.</li>
+  <li>\( g \): Acceleration due to gravity.</li>
+  <li>\( e \): Coefficient of restitution, which relates to the hardness of the ball and determines how much energy is retained after the bounce.</li>
+  <li>\( h_r \): Rebound height after the bounce.</li>
+</ul>
+
+<h2>2. Calculating Velocity Before Impact</h2>
+<p>As the ball falls, gravity and air resistance act on it. Neglecting air resistance initially for simplicity, the velocity \( v \) of the ball just before impact can be calculated using the energy conservation principle or kinematics:</p>
+$$
+v = \sqrt{2 \cdot g \cdot h_0}
+$$
+
+<p>If we include air resistance, the drag force \( F_d \) acting on the ball as it falls is given by:</p>
+$$
+F_d = \frac{1}{2} C_d \cdot \rho \cdot A \cdot v^2
+$$
+
+<p>This drag force causes a deceleration, so the final velocity \( v_f \) before impact would be slightly less than \( \sqrt{2 \cdot g \cdot h_0} \). However, for simplicity, we will continue with the case where air resistance is minimal or negligible, and the velocity just before impact is approximately:</p>
+$$
+v \approx \sqrt{2 \cdot g \cdot h_0}
+$$
+
+<h2>3. Impact and Energy Loss Due to Coefficient of Restitution</h2>
+<p>The coefficient of restitution \( e \) is a measure of the "bounciness" of the ball and is defined as the ratio of the velocity after impact to the velocity before impact:</p>
+$$
+e = \frac{v_{\text{after}}}{v_{\text{before}}}
+$$
+
+<p>Thus, the velocity of the ball immediately after the bounce, \( v_{\text{after}} \), is:</p>
+$$
+v_{\text{after}} = e \cdot v = e \cdot \sqrt{2 \cdot g \cdot h_0}
+$$
+
+<h2>4. Calculating the Rebound Height \( h_r \)</h2>
+<p>The rebound height \( h_r \) can be calculated using the energy conservation principle. The potential energy at the rebound height is equal to the kinetic energy right after the bounce:</p>
+$$
+m \cdot g \cdot h_r = \frac{1}{2} m \cdot v_{\text{after}}^2
+$$
+
+<p>Substitute \( v_{\text{after}} = e \cdot \sqrt{2 \cdot g \cdot h_0} \):</p>
+$$
+m \cdot g \cdot h_r = \frac{1}{2} m \cdot (e \cdot \sqrt{2 \cdot g \cdot h_0})^2
+$$
+
+<p>Solving for \( h_r \):</p>
+$$
+h_r = e^2 \cdot h_0
+$$
+
+<h2>5. Effect of Drag and Hardness on the Rebound Height</h2>
+<p>The drag force \( F_d \) acts against the motion of the ball both during the fall and after the bounce, reducing the velocity. Over time, drag would reduce the rebound height slightly on each successive bounce.</p>
+
+<p>The coefficient of restitution \( e \), which depends on the hardness of the ball and surface, plays a critical role. A higher \( e \) (typically 0.85-0.90 for ping pong balls) indicates a "harder" and more elastic material, which will yield a higher rebound height:</p>
+$$
+h_r = e^2 \cdot h_0
+$$
+
+<h3>Conclusion</h3>
+<p>The final relation for the rebound height \( h_r \) of the ping pong ball dropped from a height \( h_0 \), taking into account its hardness via the coefficient of restitution \( e \), is:</p>
+$$
+h_r = e^2 \cdot h_0
+$$
+
+<p>To maximize rebound height, one can aim for a higher coefficient of restitution and minimize drag by optimizing the ball's aerodynamics and material hardness.</p>
+
+</body>
+</html>
