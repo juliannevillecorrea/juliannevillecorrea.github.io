@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Distribution Inside an Igloo</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .equation {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f4f4f4;
+            border-radius: 5px;
+        }
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .chart {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Temperature Distribution Inside an Igloo</h1>
+
+<p>The thermal environment inside an igloo is influenced by several factors, including its geometry, wall thickness, ambient temperature, and internal air volume. This analysis derives the temperature distribution across the igloo walls, the internal temperature with respect to external factors, and explores how the igloo structure retains heat and provides insulation from cold external temperatures.</p>
+
+<h2>Problem Formulation</h2>
+
+<p>Given:</p>
+<ul>
+    <li>Outer ambient temperature \( T_{ambient} \) (in °C).</li>
+    <li>Wall thickness \( d \) (in meters).</li>
+    <li>Thermal conductivity of ice/snow \( k \) (in W/m·K).</li>
+    <li>Geometry of the igloo (assumed to be a hemisphere with radius \( R \)).</li>
+    <li>Volume of air inside the igloo \( V \).</li>
+</ul>
+
+<p>We want to determine the steady-state temperature distribution \( T(r) \) within the igloo's walls and the internal temperature \( T_{inside} \) at equilibrium.</p>
+
+<h2>Solution</h2>
+
+<h3>1. Heat Conduction through the Igloo Walls</h3>
+
+<p>The heat flux \( q \) through the igloo walls due to conduction is given by Fourier's law:</p>
+
+<div class="equation">
+    $$ q = -k \frac{dT}{dr} $$
+</div>
+
+<p>where:</p>
+<ul>
+    <li>\( k \) is the thermal conductivity of snow or ice, which depends on the material properties of the igloo walls.</li>
+    <li>\( \frac{dT}{dr} \) is the temperature gradient across the wall.</li>
+</ul>
+
+<p>Assuming the igloo is a hemisphere with wall thickness \( d \), the outer radius is \( R \) and the inner radius is \( R - d \). At steady state, the heat flow through each spherical layer of the igloo wall remains constant, leading to the temperature distribution:</p>
+
+<div class="equation">
+    $$ T(r) = T_{ambient} + \frac{Q}{4 \pi k r} $$
+</div>
+
+<p>where \( Q \) is the heat being conducted through the walls from the inside to the outside.</p>
+
+<h3>2. Heat Transfer Balance for Internal Temperature</h3>
+
+<p>The internal temperature \( T_{inside} \) is governed by a balance between heat production inside (e.g., body heat of occupants) and heat loss through the igloo walls. Assuming an occupant heat output of \( Q_{occ} \), the heat balance equation becomes:</p>
+
+<div class="equation">
+    $$ Q_{occ} = \frac{k A (T_{inside} - T_{ambient})}{d} $$
+</div>
+
+<p>where:</p>
+<ul>
+    <li>\( A = 2 \pi R^2 \) is the surface area of the igloo's hemispherical walls.</li>
+    <li>\( d \) is the thickness of the walls.</li>
+</ul>
+
+<p>Solving for \( T_{inside} \):</p>
+
+<div class="equation">
+    $$ T_{inside} = T_{ambient} + \frac{Q_{occ} \cdot d}{k \cdot A} $$
+</div>
+
+<p>This equation shows that increasing wall thickness \( d \) or the thermal conductivity \( k \) directly impacts \( T_{inside} \), helping retain heat.</p>
+
+<h3>3. Effects of Internal Air Volume and Thermal Mass</h3>
+
+<p>The thermal mass of air inside the igloo impacts how quickly the internal temperature responds to changes in heat input or loss. The internal temperature is stabilized by the specific heat capacity \( c_p \) of air, and the mass of the air volume \( V \):</p>
+
+<div class="equation">
+    $$ Q_{air} = m_{air} \cdot c_p \cdot \Delta T $$
+</div>
+
+<p>where:</p>
+<ul>
+    <li>\( m_{air} = \rho_{air} \cdot V \) is the mass of the air, with \( \rho_{air} \) being the density of air.</li>
+    <li>\( c_p \) is the specific heat capacity of air.</li>
+</ul>
+
+<p>The larger the internal air volume \( V \), the more heat is required to raise the internal temperature by \( \Delta T \), thus moderating temperature changes.</p>
+
+<h2>Graphical Representation</h2>
+
+<p>Below are sample charts showing the relationships between internal temperature, wall thickness, and ambient temperature.</p>
+
+<div class="chart-container">
+    <!-- Graph of Internal Temperature vs Wall Thickness -->
+    <div class="chart">
+        <h3>Internal Temperature vs Wall Thickness</h3>
+        <svg width="400" height="300">
+            <!-- Axes -->
+            <line x1="50" y1="250" x2="350" y2="250" stroke="black" stroke-width="2"></line>
+            <line x1="50" y1="250" x2="50" y2="50" stroke="black" stroke-width="2"></line>
+
+            <!-- Labels -->
+            <text x="180" y="280" font-size="14">Wall Thickness \( d \)</text>
+            <text x="20" y="150" font-size="14" transform="rotate(-90, 20, 150)">Internal Temperature \( T_{inside} \)</text>
+
+            <!-- Plot Line (Assumed relationship) -->
+            <polyline points="50,200 100,180 150,160 200,140 250,120 300,110"
+                      fill="none" stroke="blue" stroke-width="2"></polyline>
+        </svg>
+    </div>
+
+    <!-- Graph of Internal Temperature vs Ambient Temperature -->
+    <div class="chart">
+        <h3>Internal Temperature vs Ambient Temperature</h3>
+        <svg width="400" height="300">
+            <!-- Axes -->
+            <line x1="50" y1="250" x2="350" y2="250" stroke="black" stroke-width="2"></line>
+            <line x1="50" y1="250" x2="50" y2="50" stroke="black" stroke-width="2"></line>
+
+            <!-- Labels -->
+            <text x="180" y="280" font-size="14">Ambient Temperature \( T_{ambient} \)</text>
+            <text x="20" y="150" font-size="14" transform="rotate(-90, 20, 150)">Internal Temperature \( T_{inside} \)</text>
+
+            <!-- Plot Line (Direct relationship) -->
+            <polyline points="50,60 100,90 150,130 200,160 250,200 300,230"
+                      fill="none" stroke="red" stroke-width="2"></polyline>
+        </svg>
+    </div>
+</div>
+
+<h2>Conclusion</h2>
+
+<p>The internal temperature of an igloo depends on factors like wall thickness, thermal conductivity, ambient temperature, and air volume. Increased wall thickness and air volume help to retain heat, while a lower ambient temperature increases heat demand to maintain comfort. The igloo's geometry also affects insulation, and these insights can guide igloo construction for optimal thermal insulation.</p>
+
+</body>
+</html>
