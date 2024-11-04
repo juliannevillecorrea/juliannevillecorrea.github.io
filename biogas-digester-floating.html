@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Height-Pressure Relationship in a Floating Cover Biogas Digester</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .equation {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f4f4f4;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Height-Pressure Relationship in a Floating Cover Biogas Digester</h1>
+
+<p>A floating cover biogas digester consists of a chamber where biogas accumulates, causing a floating cover to rise. As the gas builds up, the pressure inside the chamber increases, causing a change in the height of the floating cover.</p>
+
+<h2>Problem Formulation</h2>
+
+<p>Given:</p>
+<ul>
+    <li>Initial pressure in the chamber, \( P_0 \) (e.g., atmospheric pressure).</li>
+    <li>Variable pressure in the chamber as gas is produced, \( P \).</li>
+    <li>Cross-sectional area of the chamber, \( A \), assumed constant.</li>
+    <li>Height of the floating cover at any pressure \( P \), \( h(P) \).</li>
+</ul>
+
+<p>We need to derive an equation that gives \( h(P) \) as a function of \( P \).</p>
+
+<h2>Solution</h2>
+
+<p>Assuming an ideal gas behavior, we can relate pressure \( P \), volume \( V \), and height \( h \) as follows.</p>
+
+<div class="equation">
+    $$ V = A \cdot h(P) $$
+</div>
+
+<p>According to Boyle's Law, since temperature is constant:</p>
+
+<div class="equation">
+    $$ P_0 V_0 = P \cdot V $$
+</div>
+
+<p>where \( V_0 \) is the initial volume and \( P_0 \) is the initial pressure. Since \( V = A \cdot h(P) \) and \( V_0 = A \cdot h_0 \), where \( h_0 \) is the initial height:</p>
+
+<div class="equation">
+    $$ P_0 \cdot A \cdot h_0 = P \cdot A \cdot h(P) $$
+</div>
+
+<p>Dividing both sides by \( A \) and solving for \( h(P) \):</p>
+
+<div class="equation">
+    $$ h(P) = \frac{P_0 \cdot h_0}{P} $$
+</div>
+
+<p>Thus, the height \( h(P) \) varies inversely with the pressure \( P \), indicating that as pressure increases, the floating cover height decreases according to the relationship above.</p>
+
+<h2>Conclusion</h2>
+
+<p>This inverse relationship between height and pressure in a floating cover biogas digester ensures that the digester maintains consistent pressure regulation as biogas production varies.</p>
+
+</body>
+</html>

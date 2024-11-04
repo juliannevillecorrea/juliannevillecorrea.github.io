@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pencil Tip Sharpness, Writing Speed, and Friction</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .equation {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f4f4f4;
+            border-radius: 5px;
+        }
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .chart {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Pencil Tip Sharpness, Writing Speed, and Friction</h1>
+
+<p>When writing in cursive with a pencil, several factors influence the ease and speed of writing. Specifically, the sharpness of the pencil tip, the writing speed, and the coefficient of friction between the pencil tip and the writing surface all play significant roles. Here, we aim to explore these relationships in detail.</p>
+
+<h2>Problem Formulation</h2>
+
+<p>Given:</p>
+<ul>
+    <li>The angle of the pencil tip, \( \theta \), where a sharper angle corresponds to a sharper point.</li>
+    <li>Writing speed, \( v \), measured in meters per second.</li>
+    <li>Coefficient of friction between the pencil tip and the paper, \( \mu \).</li>
+</ul>
+
+<p>We want to understand how changes in pencil tip sharpness and writing speed affect the frictional force during writing, and thus how these factors influence the writing experience.</p>
+
+<h2>Solution</h2>
+
+<p>The frictional force \( F_f \) experienced by the pencil tip is given by:</p>
+
+<div class="equation">
+    $$ F_f = \mu N $$
+</div>
+
+<p>where \( \mu \) is the coefficient of friction and \( N \) is the normal force exerted by the hand on the pencil.</p>
+
+<h3>1. Frictional Force and Writing Speed</h3>
+
+<p>As the writing speed \( v \) increases, more kinetic energy is involved in the movement, which can reduce the effect of friction on the overall writing feel. However, in this case, we assume that the frictional force remains constant regardless of speed but affects the effort needed for consistent writing. Therefore, we can write:</p>
+
+<div class="equation">
+    $$ F_f \propto \frac{1}{v} $$
+</div>
+
+<p>This implies that as speed \( v \) increases, the effective impact of friction per unit time decreases, allowing for smoother motion in cursive writing.</p>
+
+<h3>2. Frictional Force and Tip Sharpness</h3>
+
+<p>The sharpness of the pencil tip, related to angle \( \theta \), impacts the area of contact. A sharper tip (smaller \( \theta \)) increases pressure \( P \) on the contact area:</p>
+
+<div class="equation">
+    $$ P = \frac{F}{A} $$
+</div>
+
+<p>where \( A \) is the contact area, and \( F \) is the applied force. A smaller contact area due to a sharper tip increases pressure, which can increase \( F_f \) since:</p>
+
+<div class="equation">
+    $$ F_f = \mu N $$
+</div>
+
+<h2>Graphs and Charts</h2>
+
+<div class="chart-container">
+    <!-- Graph of Frictional Force vs. Writing Speed -->
+    <div class="chart">
+        <h3>Frictional Force vs. Writing Speed</h3>
+        <svg width="400" height="300">
+            <!-- Axes -->
+            <line x1="50" y1="250" x2="350" y2="250" stroke="black" stroke-width="2"></line>
+            <line x1="50" y1="250" x2="50" y2="50" stroke="black" stroke-width="2"></line>
+
+            <!-- Labels -->
+            <text x="180" y="280" font-size="14">Writing Speed \( v \)</text>
+            <text x="20" y="150" font-size="14" transform="rotate(-90, 20, 150)">Frictional Force \( F_f \)</text>
+
+            <!-- Plot Line (Inverse relationship) -->
+            <polyline points="50,250 100,200 150,150 200,120 250,90 300,70 350,60"
+                      fill="none" stroke="blue" stroke-width="2"></polyline>
+        </svg>
+    </div>
+
+    <!-- Graph of Frictional Force vs. Tip Sharpness -->
+    <div class="chart">
+        <h3>Frictional Force vs. Tip Sharpness</h3>
+        <svg width="400" height="300">
+            <!-- Axes -->
+            <line x1="50" y1="250" x2="350" y2="250" stroke="black" stroke-width="2"></line>
+            <line x1="50" y1="250" x2="50" y2="50" stroke="black" stroke-width="2"></line>
+
+            <!-- Labels -->
+            <text x="180" y="280" font-size="14">Tip Sharpness \( \theta \)</text>
+            <text x="20" y="150" font-size="14" transform="rotate(-90, 20, 150)">Frictional Force \( F_f \)</text>
+
+            <!-- Plot Line (Direct relationship) -->
+            <polyline points="50,250 100,200 150,150 200,110 250,70 300,40"
+                      fill="none" stroke="red" stroke-width="2"></polyline>
+        </svg>
+    </div>
+</div>
+
+<h2>Conclusion</h2>
+
+<p>The relationships show that:</p>
+<ul>
+    <li>As writing speed increases, the effective impact of friction per unit time decreases, allowing smoother cursive writing.</li>
+    <li>As the tip becomes sharper, the increased pressure on the smaller contact area leads to a greater frictional force, which can make writing feel more resistant.</li>
+</ul>
+
+</body>
+</html>

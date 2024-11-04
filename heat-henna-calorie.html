@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Loss Due to Henna Drying on Hair</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .equation {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f4f4f4;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Heat Loss Due to Henna Drying on Hair</h1>
+
+<p>When Sourabh applies henna to his hair, the drying process involves heat loss due to evaporation. As the henna dries, water in the henna paste evaporates, carrying away heat energy. We aim to derive the heat loss associated with this drying process, given ambient temperature, humidity, and latent heat of vaporization, and calculate how many calories Sourabh should consume to compensate for this heat loss.</p>
+
+<h2>Problem Formulation</h2>
+
+<p>Given:</p>
+<ul>
+    <li>Mass of water in the henna paste, \( m \) (in grams).</li>
+    <li>Latent heat of vaporization of water, \( L \), which is approximately \( 540 \, \text{cal/g} \).</li>
+    <li>Ambient temperature \( T_{ambient} \) (in °C) and relative humidity \( RH \) (as a percentage).</li>
+</ul>
+
+<p>We need to derive an expression for the heat loss \( Q \) due to evaporation and calculate the caloric intake Sourabh would need to balance this loss.</p>
+
+<h2>Solution</h2>
+
+<h3>1. Heat Loss due to Vaporization</h3>
+
+<p>The total heat loss \( Q \) due to the evaporation of water can be calculated using the latent heat formula:</p>
+
+<div class="equation">
+    $$ Q = m \cdot L $$
+</div>
+
+<p>where:</p>
+<ul>
+    <li>\( m \) is the mass of the water in the henna paste (in grams).</li>
+    <li>\( L \) is the latent heat of vaporization of water, approximately \( 540 \, \text{cal/g} \).</li>
+</ul>
+
+<p>Assuming that all the water evaporates as the henna dries, \( Q \) represents the total heat lost from Sourabh's scalp due to evaporation.</p>
+
+<h3>2. Effect of Ambient Temperature and Humidity</h3>
+
+<p>The rate of evaporation, and hence the heat loss, depends on the difference between the vapor pressure of water at the scalp temperature and the vapor pressure in the surrounding air. This is influenced by ambient temperature \( T_{ambient} \) and relative humidity \( RH \).</p>
+
+<p>The vapor pressure \( P_{evap} \) of water at the scalp temperature \( T_{scalp} \) can be estimated by the Antoine equation:</p>
+
+<div class="equation">
+    $$ \ln P_{evap} = A - \frac{B}{C + T_{scalp}} $$
+</div>
+
+<p>where \( A \), \( B \), and \( C \) are empirical constants for water.</p>
+
+<p>The actual evaporation rate \( R \) can be given by:</p>
+
+<div class="equation">
+    $$ R = k \cdot (P_{evap} - P_{ambient} \cdot RH) $$
+</div>
+
+<p>where:</p>
+<ul>
+    <li>\( k \) is a constant depending on conditions like airflow.</li>
+    <li>\( P_{ambient} \) is the vapor pressure of water at \( T_{ambient} \).</li>
+    <li>\( RH \) is the relative humidity.</li>
+</ul>
+
+<p>The rate \( R \) affects the total heat loss \( Q \), which we can now adjust for ambient conditions.</p>
+
+<h3>3. Caloric Intake Required to Compensate for Heat Loss</h3>
+
+<p>To compensate for the heat lost, Sourabh would need to consume additional calories equal to the calculated \( Q \) in calories. Thus:</p>
+
+<div class="equation">
+    $$ \text{Calories needed} = Q $$
+</div>
+
+<h2>Graphical Representation</h2>
+
+<p>Below are charts to show how heat loss varies with ambient temperature and relative humidity.</p>
+
+<div class="chart-container">
+    <!-- Graph of Heat Loss vs Ambient Temperature -->
+    <div class="chart">
+        <h3>Heat Loss vs Ambient Temperature</h3>
+        <svg width="400" height="300">
+            <!-- Axes -->
+            <line x1="50" y1="250" x2="350" y2="250" stroke="black" stroke-width="2"></line>
+            <line x1="50" y1="250" x2="50" y2="50" stroke="black" stroke-width="2"></line>
+
+            <!-- Labels -->
+            <text x="180" y="280" font-size="14">Ambient Temperature \( T_{ambient} \)</text>
+            <text x="20" y="150" font-size="14" transform="rotate(-90, 20, 150)">Heat Loss \( Q \)</text>
+
+            <!-- Plot Line (Assumed relationship) -->
+            <polyline points="50,250 100,220 150,180 200,140 250,100 300,70"
+                      fill="none" stroke="blue" stroke-width="2"></polyline>
+        </svg>
+    </div>
+
+    <!-- Graph of Heat Loss vs Humidity -->
+    <div class="chart">
+        <h3>Heat Loss vs Humidity</h3>
+        <svg width="400" height="300">
+            <!-- Axes -->
+            <line x1="50" y1="250" x2="350" y2="250" stroke="black" stroke-width="2"></line>
+            <line x1="50" y1="250" x2="50" y2="50" stroke="black" stroke-width="2"></line>
+
+            <!-- Labels -->
+            <text x="180" y="280" font-size="14">Relative Humidity \( RH \)</text>
+            <text x="20" y="150" font-size="14" transform="rotate(-90, 20, 150)">Heat Loss \( Q \)</text>
+
+            <!-- Plot Line (Assumed relationship) -->
+            <polyline points="50,60 100,90 150,130 200,180 250,220 300,250"
+                      fill="none" stroke="red" stroke-width="2"></polyline>
+        </svg>
+    </div>
+</div>
+
+<h2>Conclusion</h2>
+
+<p>The total heat loss \( Q \) from henna drying can be calculated with the latent heat of vaporization. Higher ambient temperatures and lower humidity increase evaporation, thus increasing \( Q \). To compensate for this heat loss, Sourabh would need to consume \( Q \) calories, calculated using the mass of water in the henna paste.</p>
+
+</body>
+</html>

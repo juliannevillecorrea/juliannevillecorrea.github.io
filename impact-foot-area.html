@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact Force and Surface Area Relationship in Sports</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .equation {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f4f4f4;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Impact Force and Surface Area Relationship in Sports</h1>
+
+<p>When a player’s foot contacts the ground while playing a sport, the force exerted on the ground (impact force) is distributed over the contact area of the foot with the pitch. We aim to derive a relationship between the impact force, \( F \), and the surface area of contact, \( A \).</p>
+
+<h2>Problem Formulation</h2>
+
+<p>Given:</p>
+<ul>
+    <li>Impact force on the ground, \( F \) (measured in newtons).</li>
+    <li>Surface area of the foot in contact with the ground, \( A \) (measured in square meters).</li>
+    <li>Pressure exerted on the ground due to the impact force, \( P \).</li>
+</ul>
+
+<p>We want to derive a formula that expresses \( A \) in terms of \( F \) and \( P \).</p>
+
+<h2>Solution</h2>
+
+<p>Pressure \( P \) is defined as the force applied per unit area. This can be expressed as:</p>
+
+<div class="equation">
+    $$ P = \frac{F}{A} $$
+</div>
+
+<p>Rearranging this equation to solve for \( A \) in terms of \( F \) and \( P \):</p>
+
+<div class="equation">
+    $$ A = \frac{F}{P} $$
+</div>
+
+<p>Therefore, the surface area of contact \( A \) is inversely proportional to the pressure \( P \) for a given impact force \( F \). As the pressure increases, the contact area decreases, and vice versa.</p>
+
+<h2>Graph of Area vs Impact Force</h2>
+
+<p>For a constant pressure \( P \), the relationship between area \( A \) and force \( F \) is linear:</p>
+
+<div class="equation">
+    $$ A = \frac{F}{P} $$
+</div>
+
+<p>Below is a simple plot of area \( A \) versus force \( F \) for a constant pressure \( P \):</p>
+
+<svg width="400" height="300">
+    <!-- Axes -->
+    <line x1="50" y1="250" x2="350" y2="250" stroke="black" stroke-width="2"></line>
+    <line x1="50" y1="250" x2="50" y2="50" stroke="black" stroke-width="2"></line>
+
+    <!-- Labels -->
+    <text x="180" y="280" font-size="14">Force \( F \)</text>
+    <text x="20" y="150" font-size="14" transform="rotate(-90, 20, 150)">Area \( A \)</text>
+
+    <!-- Plot Line (Linear relationship) -->
+    <polyline points="50,250 100,200 150,150 200,100 250,75 300,50"
+              fill="none" stroke="blue" stroke-width="2"></polyline>
+
+    <!-- Scale Labels -->
+    <text x="50" y="260" font-size="12">0</text>
+    <text x="100" y="260" font-size="12">10</text>
+    <text x="150" y="260" font-size="12">20</text>
+    <text x="200" y="260" font-size="12">30</text>
+    <text x="250" y="260" font-size="12">40</text>
+    <text x="300" y="260" font-size="12">50</text>
+</svg>
+
+<h2>Conclusion</h2>
+
+<p>The relationship between area \( A \) and impact force \( F \) at constant pressure \( P \) is linear, as derived. This relationship suggests that as force increases, the contact area required to maintain the same pressure increases proportionally.</p>
+
+</body>
+</html>
