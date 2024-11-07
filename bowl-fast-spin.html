@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimizing Rough Areas for Spin Bowling in Cricket</title>
+    <script type="text/javascript" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f9fc;
+            color: #333;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .formula {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            background-color: #fafafa;
+            margin-top: 20px;
+            display: block;
+        }
+        p {
+            font-size: 1.1em;
+        }
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Optimizing Rough Areas for Spin Bowling in Cricket</h1>
+
+<p>
+    This solution aims to determine the optimal bowling strategy for a cricket team where 4 fast bowlers bowl before 1 spin bowler. The fast bowlers' footfalls create rough patches on the pitch, which can be utilized by the spin bowler. The captain must strategically decide the order in which the fast bowlers bowl to maximize the rough area available when the spin bowler begins bowling.
+</p>
+
+<h2>Problem Statement</h2>
+<p>
+    Given 4 fast bowlers \( F_1, F_2, F_3, F_4 \) and 1 spin bowler \( S \):
+</p>
+<ul>
+    <li>All fast bowlers bowl before the spin bowler.</li>
+    <li>Each fast bowler contributes roughness to the pitch cumulatively.</li>
+    <li>The captain needs to find an order that maximizes the rough area for the spin bowler \( S \).</li>
+</ul>
+
+<h2>Solution Approach</h2>
+
+<h3>1. Number of Possible Arrangements</h3>
+<p>
+    Since the spin bowler \( S \) must bowl last, we only need to arrange the 4 fast bowlers, which can be done in:
+</p>
+<div class="formula">
+    \[
+    4! = 24 \text{ ways}
+    \]
+</div>
+
+<h3>2. Roughness Contribution Model</h3>
+<p>
+    Each fast bowler’s overs create cumulative roughness. Let the contribution to roughness from each fast bowler's spell be proportional to the <em>order</em> in which they bowl. For simplicity, assume that each bowler's contribution increases linearly with their position:
+</p>
+<div class="formula">
+    \[
+    \text{Roughness}_{\text{total}} = k_1 \times F_1 + k_2 \times F_2 + k_3 \times F_3 + k_4 \times F_4
+    \]
+</div>
+<p>
+    where \( k_i \) represents the roughness multiplier depending on the order (e.g., \( k_4 > k_3 > k_2 > k_1 \)).
+</p>
+
+<h3>3. Visualization of Roughness Development</h3>
+<p>
+    To help visualize the accumulation of roughness, we can plot roughness as a function of over number. Below, we use a canvas to display an example of how roughness might develop over time with different arrangements.
+</p>
+
+<canvas id="roughnessCanvas" width="600" height="300"></canvas>
+
+<h3>4. Strategy for Maximum Roughness</h3>
+<p>
+    By ordering the fast bowlers to maximize roughness (e.g., placing the bowler with the highest average footfall impact last among the fast bowlers), we can increase the cumulative rough area before the spin bowler comes into action.
+</p>
+
+<script>
+    // Canvas to illustrate roughness accumulation over the overs
+    const canvas = document.getElementById('roughnessCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Fast bowler roughness impact levels based on bowling order
+    const roughnessImpact = [5, 10, 15, 20]; // Arbitrary values representing roughness increase
+    const numOvers = 4;
+    let cumulativeRoughness = 0;
+
+    // Draw the roughness accumulation graph
+    ctx.beginPath();
+    ctx.moveTo(50, 250); // Starting point
+
+    // Loop through overs to plot roughness accumulation
+    for (let i = 0; i < numOvers; i++) {
+        cumulativeRoughness += roughnessImpact[i];
+        ctx.lineTo(100 + i * 100, 250 - cumulativeRoughness); // Plot points
+    }
+    ctx.strokeStyle = '#e74c3c';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Add labels and points
+    ctx.fillStyle = '#333';
+    ctx.font = '16px Arial';
+    for (let i = 0; i < numOvers; i++) {
+        ctx.fillText(`Over ${i + 1}`, 80 + i * 100, 270);
+        ctx.beginPath();
+        ctx.arc(100 + i * 100, 250 - roughnessImpact.slice(0, i + 1).reduce((a, b) => a + b, 0), 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#e74c3c';
+        ctx.fill();
+    }
+
+    // Label for Roughness
+    ctx.fillStyle = '#333';
+    ctx.fillText('Cumulative Roughness', 10, 20);
+    ctx.fillText('0', 30, 250);
+    ctx.fillText('20', 30, 150);
+    ctx.fillText('40', 30, 50);
+</script>
+
+<h2>Conclusion</h2>
+<p>
+    The captain can maximize the roughness for the spin bowler by strategically arranging the fast bowlers in a way that maximizes cumulative roughness. Based on the roughness contribution model, an ideal order places the fast bowler with the most footfall impact to bowl last among the fast bowlers. This approach ensures that the pitch conditions are optimized for spin bowling, making it more challenging for the opposing batters.
+</p>
+
+</body>
+</html>

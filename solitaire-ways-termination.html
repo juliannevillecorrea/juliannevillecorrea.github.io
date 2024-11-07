@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solitaire Endings Calculation</title>
+    <script type="text/javascript" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .formula {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #2a9d8f;
+        }
+        h1 {
+            color: #264653;
+        }
+        h2 {
+            color: #e76f51;
+        }
+        p {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Calculating Possible Endings in Klondike Solitaire</h1>
+
+<p>
+    In a standard game of Klondike Solitaire, the number of possible ways the game can end is influenced by the initial shuffle
+    of the deck and the player's moves. Let's break down the calculation process.
+</p>
+
+<h2>1. Shuffling the Deck</h2>
+<p>
+    The deck consists of 52 unique cards, so the number of possible shuffles is given by:
+</p>
+<div class="formula">
+    \[
+    52! = 8.0658 \times 10^{67}
+    \]
+</div>
+<p>
+    This value represents the different ways to order the deck before gameplay begins.
+</p>
+
+<h2>2. Game Outcomes</h2>
+<p>
+    Each shuffle might yield a different sequence of possible moves, leading to either a <strong>winning</strong> or <strong>losing</strong> outcome.
+</p>
+<p>
+    Due to the complexity of decision-making and the arrangement of cards, it is challenging to calculate the exact number of possible game-ending states. However, we know that:
+</p>
+
+<div class="formula">
+    \[
+    \text{Total Outcomes} = 52! \times \text{Move Combinations}
+    \]
+</div>
+
+<p>
+    Here, <em>Move Combinations</em> represent the various moves a player can make based on the deck shuffle.
+</p>
+
+<h2>3. Approximation</h2>
+<p>
+    For practical purposes, we consider the solution an estimate given the vast number of configurations.
+</p>
+
+</body>
+</html>

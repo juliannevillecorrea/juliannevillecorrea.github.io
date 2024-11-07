@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics of Hive Strategy</title>
+    <script type="text/javascript" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .formula {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.6em;
+            margin-top: 1em;
+        }
+        h3 {
+            font-size: 1.4em;
+            margin-top: 1em;
+        }
+        p {
+            font-size: 1.1em;
+            color: #333;
+        }
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Mathematics of Strategy in the Game of Hive</h1>
+
+<p>
+    The game of <em>Hive</em> is a strategic board game governed by principles from <strong>graph theory</strong> and <strong>combinatorial game theory</strong>. The main goal is to surround the opponent's queen bee while maintaining mobility for your own pieces. Let’s break down some core mathematical concepts that influence optimal strategies in Hive.
+</p>
+
+<h2>1. Graph Theory Basics in Hive</h2>
+<p>
+    Each piece in Hive can be represented as a <span class="highlight">node</span> in a graph, and an adjacency relationship between pieces forms an <span class="highlight">edge</span> in the graph.
+</p>
+<div class="formula">
+    \[
+    G = (V, E)
+    \]
+</div>
+<p>
+    where \( V \) is the set of all pieces (nodes), and \( E \) is the set of adjacency relationships (edges).
+</p>
+
+<h2>2. Connected Components</h2>
+<p>
+    In Hive, all pieces must remain in a single <span class="highlight">connected component</span> throughout the game. This rule ensures that no piece or group of pieces can be separated from the rest of the hive.
+</p>
+<div class="formula">
+    \[
+    \text{Connected Component: } \forall u, v \in V, \exists \text{ path } (u \rightarrow v)
+    \]
+</div>
+<p>
+    The above formula expresses that for any two pieces \( u \) and \( v \) in the hive, there must be a path connecting them. This principle shapes movement and placement strategies, as each player must maintain the integrity of the hive.
+</p>
+
+<h2>3. Freedom of Movement</h2>
+<p>
+    A piece can only move if it maintains the hive’s connected component and if it has <span class="highlight">freedom of movement</span>. This rule can be calculated by checking the “sliding freedom” of each piece. Mathematically, we can define this as:
+</p>
+<div class="formula">
+    \[
+    \text{Freedom of Movement: } \quad d_{\text{adjacent}}(p) \leq 2
+    \]
+</div>
+<p>
+    where \( d_{\text{adjacent}}(p) \) represents the degree (number of adjacent nodes) of piece \( p \). A piece can only slide if it has at most two neighboring pieces restricting its movement.
+</p>
+
+<h2>4. Adjacency Matrix for Hive Control</h2>
+<p>
+    To model control over areas of the board, we can use an <strong>adjacency matrix</strong> \( A \), where each element \( a_{ij} \) indicates whether two pieces are adjacent (1 if adjacent, 0 if not):
+</p>
+<div class="formula">
+    \[
+    A = \begin{bmatrix}
+    0 & 1 & 0 & \dots & 1 \\
+    1 & 0 & 1 & \dots & 0 \\
+    0 & 1 & 0 & \dots & 1 \\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    1 & 0 & 1 & \dots & 0 \\
+    \end{bmatrix}
+    \]
+</div>
+<p>
+    This matrix helps players determine zones of control, identifying which pieces can be moved or placed to restrict the opponent’s queen bee while defending their own.
+</p>
+
+<h2>5. Combinatorial Game Theory: Winning and Losing Positions</h2>
+<p>
+    In Hive, each position can be analyzed as a <span class="highlight">winning</span> or <span class="highlight">losing position</span> based on the possible moves that can be made by each player. Formally, a winning position has at least one move that leads to a losing position for the opponent.
+</p>
+<div class="formula">
+    \[
+    \text{Winning Position: } \exists \text{ move } m \text{ such that } P(m) \text{ is a losing position}
+    \]
+</div>
+<p>
+    This recursive approach helps determine the optimal moves to make, which either restrict the opponent’s queen or enhance mobility for future moves.
+</p>
+
+<h3>Conclusion</h3>
+<p>
+    These mathematical concepts provide a framework for decision-making in Hive. By analyzing adjacency, connectivity, and freedom of movement, players can optimize their strategies and make moves that lead to winning outcomes.
+</p>
+
+</body>
+</html>
