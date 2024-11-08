@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Momentum Transfer in Baseball Bat and Ball Collision</title>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <h1>Analysis of Momentum Transfer in a Baseball Bat-Ball Collision</h1>
+
+    <p>
+        In this analysis, we consider the mechanics of hitting a baseball with a bat in terms of momentum transfer. When a bat hits the ball, 
+        there is an interaction that changes the momentum of both the bat and the ball, resulting in the ball being propelled away from the 
+        bat at high speed. To study this, we examine the principle of conservation of momentum, as well as vector decomposition of forces and velocities.
+    </p>
+
+    <h2>1. Problem Statement</h2>
+    <p>
+        A baseball bat of mass \( M \) and initial velocity \( \vec{V}_{\text{bat}} \) collides with a baseball of mass \( m \) and initial velocity 
+        \( \vec{V}_{\text{ball}} \). After the collision, the ball is propelled in the direction opposite to its initial path, while the bat continues 
+        with a reduced velocity. The analysis seeks to determine:
+    </p>
+    <ul>
+        <li>The final velocity \( \vec{V}'_{\text{bat}} \) of the bat after the collision.</li>
+        <li>The final velocity \( \vec{V}'_{\text{ball}} \) of the ball.</li>
+    </ul>
+
+    <p>
+        We will assume a perfectly elastic collision (no energy loss) to simplify calculations, though in real scenarios, some energy would be 
+        dissipated as heat or sound.
+    </p>
+
+    <h2>2. Assumptions and Given Quantities</h2>
+    <p>
+        Let the initial conditions be defined as follows:
+    </p>
+    <ul>
+        <li>Mass of the bat: \( M \)</li>
+        <li>Initial velocity of the bat: \( \vec{V}_{\text{bat}} = V_{\text{bat}} \hat{i} \)</li>
+        <li>Mass of the ball: \( m \)</li>
+        <li>Initial velocity of the ball: \( \vec{V}_{\text{ball}} = -V_{\text{ball}} \hat{i} \)</li>
+    </ul>
+
+    <p>
+        Here, we use the \( \hat{i} \) and \( \hat{j} \) unit vectors for the x-axis and y-axis, respectively.
+    </p>
+
+    <h2>3. Conservation of Momentum</h2>
+    <p>
+        In an isolated system, the total linear momentum before and after the collision remains constant. Thus,
+    </p>
+    <p>
+        \[
+        \text{Total Initial Momentum} = \text{Total Final Momentum}
+        \]
+    </p>
+    <p>
+        Expressed in equation form:
+    </p>
+    <p>
+        \[
+        M \vec{V}_{\text{bat}} + m \vec{V}_{\text{ball}} = M \vec{V}'_{\text{bat}} + m \vec{V}'_{\text{ball}}
+        \]
+    </p>
+
+    <h2>4. Solving for Final Velocities</h2>
+    <p>
+        Assuming an elastic collision, kinetic energy is also conserved:
+    </p>
+    <p>
+        \[
+        \frac{1}{2} M V_{\text{bat}}^2 + \frac{1}{2} m V_{\text{ball}}^2 = \frac{1}{2} M {V'_{\text{bat}}}^2 + \frac{1}{2} m {V'_{\text{ball}}}^2
+        \]
+    </p>
+    <p>
+        These two equations (momentum and energy conservation) allow us to solve for \( V'_{\text{bat}} \) and \( V'_{\text{ball}} \). By rearranging and simplifying, 
+        we obtain the final velocities for a one-dimensional elastic collision:
+    </p>
+    <p>
+        \[
+        V'_{\text{bat}} = \frac{(M - m)V_{\text{bat}} + 2m V_{\text{ball}}}{M + m}
+        \]
+    </p>
+    <p>
+        \[
+        V'_{\text{ball}} = \frac{(m - M)V_{\text{ball}} + 2M V_{\text{bat}}}{M + m}
+        \]
+    </p>
+
+    <h2>5. Vector Decomposition</h2>
+    <p>
+        If the collision is not head-on but occurs at an angle, we can decompose the velocities into x- and y-components. Assuming 
+        that the initial velocity of the ball makes an angle \( \theta \) with the bat's path, we can define:
+    </p>
+    <ul>
+        <li>Initial velocity of the ball along the x-axis: \( V_{\text{ball,x}} = V_{\text{ball}} \cos \theta \)</li>
+        <li>Initial velocity of the ball along the y-axis: \( V_{\text{ball,y}} = V_{\text{ball}} \sin \theta \)</li>
+    </ul>
+
+    <p>
+        The same momentum conservation principles apply separately to the x- and y-components:
+    </p>
+    <p>
+        <b>In the x-direction:</b>
+        \[
+        M V_{\text{bat}} + m V_{\text{ball,x}} = M V'_{\text{bat,x}} + m V'_{\text{ball,x}}
+        \]
+    </p>
+    <p>
+        <b>In the y-direction:</b>
+        \[
+        0 + m V_{\text{ball,y}} = M V'_{\text{bat,y}} + m V'_{\text{ball,y}}
+        \]
+    </p>
+
+    <h2>6. Conclusion</h2>
+    <p>
+        This analysis demonstrates that the post-collision velocities depend on both the masses and initial velocities of the bat and the ball, as well as the 
+        angle of impact. Vector decomposition is essential for analyzing collisions that are not along a single line, allowing us to study the outcomes in 
+        both the x- and y-directions independently.
+    </p>
+    <p>
+        By conserving both momentum and kinetic energy, we arrive at the final velocities in each direction, providing insight into how forces are 
+        transmitted and absorbed during a high-speed collision such as hitting a baseball.
+    </p>
+</body>
+</html>
