@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ecological Control of Mosquito Populations</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+    canvas { margin-top: 20px; border: 1px solid #000; }
+    .diagram { display: flex; justify-content: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>Ecological Control of Mosquito Populations</h1>
+
+<h2>Problem Statement</h2>
+<p>
+  This document explores how to control mosquito populations by understanding the relationships between available food resources, 
+  dragonfly biomass, mosquito biomass, and weather patterns. Dragonflies are natural predators of mosquitoes, and by increasing the biomass of dragonflies, 
+  we can potentially reduce mosquito numbers. However, these interactions depend on several ecological and environmental parameters, 
+  including the availability of food sources (like small insects), temperature, humidity, and rainfall, which influence both mosquito and dragonfly populations.
+</p>
+
+<h2>Variables and Parameters</h2>
+<p>Here are the primary variables involved:</p>
+<ul>
+  <li>\( B_{\text{mosquito}} \): Mosquito biomass in the area (grams).</li>
+  <li>\( B_{\text{dragonfly}} \): Dragonfly biomass in the area (grams).</li>
+  <li>\( f_{\text{available}} \): Available food resources for both dragonflies and mosquitoes (grams per square meter).</li>
+  <li>\( T \): Temperature (°C).</li>
+  <li>\( H \): Humidity (%).</li>
+  <li>\( P_{\text{dragonfly}} \): Predation rate of dragonflies on mosquitoes (mosquitoes per day per dragonfly).</li>
+  <li>\( k \): Conversion efficiency of food into biomass.</li>
+  <li>\( m_{\text{mosquito}} \): Average mass of a single mosquito (grams).</li>
+  <li>\( m_{\text{dragonfly}} \): Average mass of a single dragonfly (grams).</li>
+</ul>
+
+<h2>Mathematical Relationships</h2>
+
+<h3>1. Relationship between Food Availability and Biomass</h3>
+<p>The available food \( f_{\text{available}} \) influences the biomass of both mosquitoes and dragonflies. The biomass of each species can be modeled based on the efficiency of food conversion:</p>
+<p>
+  \[
+  B_{\text{mosquito}} = k_{\text{mosquito}} \cdot f_{\text{available}} \cdot A
+  \]
+</p>
+<p>
+  \[
+  B_{\text{dragonfly}} = k_{\text{dragonfly}} \cdot f_{\text{available}} \cdot A
+  \]
+</p>
+<p>where:</p>
+<ul>
+  <li>\( A \): Total area of habitat (square meters).</li>
+  <li>\( k_{\text{mosquito}} \) and \( k_{\text{dragonfly}} \): Efficiency factors for food conversion to biomass for mosquitoes and dragonflies, respectively.</li>
+</ul>
+
+<h3>2. Predation Impact of Dragonflies on Mosquito Biomass</h3>
+<p>Dragonflies prey on mosquitoes, reducing the mosquito biomass in the area. The rate of reduction of mosquito biomass \( \Delta B_{\text{mosquito}} \) due to dragonflies is:</p>
+<p>
+  \[
+  \Delta B_{\text{mosquito}} = P_{\text{dragonfly}} \cdot N_{\text{dragonfly}} \cdot m_{\text{mosquito}} \cdot t
+  \]
+</p>
+<p>where:</p>
+<ul>
+  <li>\( N_{\text{dragonfly}} = \frac{B_{\text{dragonfly}}}{m_{\text{dragonfly}}} \): Total number of dragonflies in the area.</li>
+  <li>\( t \): Time period considered (days).</li>
+</ul>
+
+<h3>3. Temperature, Humidity, and Biomass Growth Rates</h3>
+<p>The biomass growth rates of both mosquitoes and dragonflies are affected by temperature \( T \) and humidity \( H \). Let:</p>
+<p>
+  \[
+  r_{\text{mosquito}}(T, H) = r_0 \cdot e^{-\alpha (T - T_{\text{opt}})^2 - \beta (H - H_{\text{opt}})^2}
+  \]
+</p>
+<p>and</p>
+<p>
+  \[
+  r_{\text{dragonfly}}(T, H) = r_0 \cdot e^{-\gamma (T - T_{\text{opt}})^2 - \delta (H - H_{\text{opt}})^2}
+  \]
+</p>
+<p>where:</p>
+<ul>
+  <li>\( r_{\text{mosquito}} \) and \( r_{\text{dragonfly}} \): Growth rates of mosquito and dragonfly biomass respectively.</li>
+  <li>\( T_{\text{opt}} \) and \( H_{\text{opt}} \): Optimal temperature and humidity for mosquito or dragonfly growth.</li>
+  <li>\( \alpha, \beta, \gamma, \delta \): Constants that describe sensitivity to temperature and humidity variations.</li>
+</ul>
+
+<h3>4. Final Biomass of Mosquitoes and Dragonflies</h3>
+<p>Taking all these relationships into account, the final biomass \( B_{\text{mosquito}} \) and \( B_{\text{dragonfly}} \) after a time period \( t \) can be calculated as:</p>
+<p>
+  \[
+  B_{\text{mosquito}}(t) = B_{\text{mosquito}}(0) \cdot e^{r_{\text{mosquito}}(T, H) \cdot t} - \Delta B_{\text{mosquito}}
+  \]
+</p>
+<p>
+  \[
+  B_{\text{dragonfly}}(t) = B_{\text{dragonfly}}(0) \cdot e^{r_{\text{dragonfly}}(T, H) \cdot t}
+  \]
+</p>
+
+<h2>Visualization of Biomass Changes Over Time</h2>
+<p>This chart shows the change in mosquito and dragonfly biomass over time based on food availability and other factors.</p>
+
+<div class="diagram">
+  <canvas id="biomassChart" width="500" height="300"></canvas>
+</div>
+
+<script>
+  // Set up the canvas for the chart
+  const canvas = document.getElementById('biomassChart');
+  const ctx = canvas.getContext('2d');
+
+  // Variables (sample values for demonstration)
+  const initialMosquitoBiomass = 500;  // grams
+  const initialDragonflyBiomass = 200; // grams
+  const growthRateMosquito = 0.05;     // hypothetical growth rate
+  const growthRateDragonfly = 0.03;    // hypothetical growth rate
+  const predationRate = 0.01;          // hypothetical predation rate
+
+  // Calculate biomass over a period
+  const days = Array.from({ length: 30 }, (_, i) => i + 1);
+  const mosquitoBiomass = days.map(day => 
+    initialMosquitoBiomass * Math.exp(growthRateMosquito * day) - predationRate * initialDragonflyBiomass * day
+  );
+  const dragonflyBiomass = days.map(day => 
+    initialDragonflyBiomass * Math.exp(growthRateDragonfly * day)
+  );
+
+  // Draw the chart
+  function drawChart() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Set chart properties
+    const chartWidth = canvas.width - 50;
+    const chartHeight = canvas.height - 50;
+    const maxBiomass = Math.max(...mosquitoBiomass, ...dragonflyBiomass);
+
+    // Draw axes
+    ctx.beginPath();
+    ctx.moveTo(40, 10);
+    ctx.lineTo(40, chartHeight);
+    ctx.lineTo(chartWidth, chartHeight);
+    ctx.stroke();
+
+    // Draw mosquito biomass line
+    ctx.strokeStyle = 'red';
+    ctx.beginPath();
+    days.forEach((day, index) => {
+      const x = 50 + index * (chartWidth / days.length);
+      const y = chartHeight - (mosquitoBiomass[index] / maxBiomass) * chartHeight;
+      if (index === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.fillText("Mosquito Biomass", chartWidth - 100, 20);
+
+    // Draw dragonfly biomass line
+    ctx.strokeStyle = 'green';
+    ctx.beginPath();
+    days.forEach((day, index) => {
+      const x = 50 + index * (chartWidth / days.length);
+      const y = chartHeight - (dragonflyBiomass[index] / maxBiomass) * chartHeight;
+      if (index === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.fillText("Dragonfly Biomass", chartWidth - 100, 40);
+  }
+
+  drawChart();
+</script>
+
+<h2>Conclusion</h2>
+<p>
+  By increasing dragonfly populations through targeted food supplementation and managing their habitats based on optimal temperature and humidity, 
+  we can reduce mosquito populations. This approach creates a natural ecological balance and offers a sustainable solution to control mosquito populations.
+</p>
+
+</body>
+</html>

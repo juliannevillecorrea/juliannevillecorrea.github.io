@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biomass Calculation of an Ant Colony</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+    canvas { margin-top: 20px; border: 1px solid #000; }
+    .diagram { display: flex; justify-content: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>Biomass Calculation of an Ant Colony</h1>
+
+<h2>Problem Statement</h2>
+<p>
+  The biomass of an ant colony depends on several factors, including the availability of food in the area around the colony, 
+  the number of ants, the metabolic rate of ants, and seasonal fluctuations. This document calculates the biomass 
+  \( M \) of an ant colony and describes how it fluctuates as a function of food resources in the vicinity.
+</p>
+
+<h2>Approach and Variables</h2>
+<p>Let's define the key variables and parameters involved in calculating the biomass:</p>
+<ul>
+  <li>\( N \): Total number of ants in the colony.</li>
+  <li>\( m_{\text{ant}} \): Average mass of a single ant (in grams).</li>
+  <li>\( f_{\text{available}} \): Food available per unit area in the vicinity of the colony (grams per square meter).</li>
+  <li>\( R \): Radius of the foraging area around the colony (meters).</li>
+  <li>\( F_{\text{total}} \): Total food available in the foraging area.</li>
+  <li>\( k \): Efficiency of food conversion to biomass.</li>
+  <li>\( r \): Metabolic rate per ant (grams of food per day).</li>
+</ul>
+
+<h2>Calculation of Biomass</h2>
+<p>We start by calculating the total food available in the colony's foraging area:</p>
+<p>
+  \[
+  F_{\text{total}} = f_{\text{available}} \times \pi R^2
+  \]
+</p>
+
+<p>The biomass \( M \) of the ant colony can be estimated as:</p>
+<p>
+  \[
+  M = N \times m_{\text{ant}}
+  \]
+</p>
+
+<p>Where \( N \) is the population of ants, which depends on the food resources available. Assuming the colony can support a number of ants proportional to the food available:</p>
+<p>
+  \[
+  N = \frac{k \cdot F_{\text{total}}}{r}
+  \]
+</p>
+
+<p>Combining these equations, we have the biomass \( M \) of the colony as:</p>
+<p>
+  \[
+  M = m_{\text{ant}} \times \frac{k \cdot F_{\text{total}}}{r} = m_{\text{ant}} \times \frac{k \cdot f_{\text{available}} \cdot \pi R^2}{r}
+  \]
+</p>
+
+<h3>Interdependencies and Fluctuations</h3>
+<p>The biomass \( M \) fluctuates with changes in the following variables:</p>
+<ul>
+  <li><strong>Food Availability (\( f_{\text{available}} \))</strong>: Seasonal and environmental factors can impact the amount of food in the foraging area. Increased food availability leads to an increase in the potential ant population and biomass.</li>
+  <li><strong>Foraging Radius (\( R \))</strong>: Larger foraging areas increase food resources, allowing more ants and hence greater biomass. However, larger foraging distances require more energy expenditure, affecting the efficiency \( k \).</li>
+  <li><strong>Metabolic Rate (\( r \))</strong>: Higher metabolic rates may reduce the number of ants sustainable on the available food, thus lowering biomass.</li>
+  <li><strong>Efficiency (\( k \))</strong>: This factor captures how effectively ants convert food into biomass. Higher efficiency increases the colony’s capacity to support more ants, thereby increasing biomass.</li>
+</ul>
+
+<h2>Illustration of Biomass as a Function of Food Availability</h2>
+<p>The following chart visualizes biomass \( M \) as a function of food availability \( f_{\text{available}} \).</p>
+
+<div class="diagram">
+  <canvas id="biomassChart" width="500" height="300"></canvas>
+</div>
+
+<script>
+  // Set up the canvas for the chart
+  const canvas = document.getElementById('biomassChart');
+  const ctx = canvas.getContext('2d');
+
+  // Variables (assuming sample values)
+  const m_ant = 0.003; // Mass of one ant in grams
+  const k = 0.8;       // Food to biomass conversion efficiency
+  const R = 20;        // Foraging radius in meters
+  const r = 0.01;      // Metabolic rate per ant in grams of food per day
+
+  // Calculate biomass for varying food availability
+  const foodAvailability = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]; // Food availability (g/m^2)
+  const biomassData = foodAvailability.map(f_available => {
+    const F_total = f_available * Math.PI * R ** 2;
+    const N = (k * F_total) / r;
+    return m_ant * N;
+  });
+
+  // Draw the chart
+  function drawChart() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Set chart properties
+    const chartWidth = canvas.width - 50;
+    const chartHeight = canvas.height - 50;
+    const maxBiomass = Math.max(...biomassData);
+
+    // Draw axes
+    ctx.beginPath();
+    ctx.moveTo(40, 10);
+    ctx.lineTo(40, chartHeight);
+    ctx.lineTo(chartWidth, chartHeight);
+    ctx.stroke();
+
+    // Draw biomass bars
+    foodAvailability.forEach((f_available, index) => {
+      const barHeight = (biomassData[index] / maxBiomass) * chartHeight;
+      ctx.fillStyle = 'green';
+      ctx.fillRect(50 + index * 50, chartHeight - barHeight, 30, barHeight);
+      
+      // Labels
+      ctx.fillStyle = 'black';
+      ctx.fillText(f_available + " g/m²", 50 + index * 50, chartHeight + 15);
+      ctx.fillText(biomassData[index].toFixed(2) + " g", 50 + index * 50, chartHeight - barHeight - 5);
+    });
+
+    // Labels
+    ctx.fillStyle = 'black';
+    ctx.fillText("Food Availability (g/m²)", chartWidth / 2 - 50, chartHeight + 40);
+    ctx.save();
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText("Biomass (g)", -chartHeight / 2 - 30, 20);
+    ctx.restore();
+  }
+
+  drawChart();
+</script>
+
+<h2>Conclusion</h2>
+<p>
+  This model shows how the biomass \( M \) of an ant colony changes with food availability and other parameters. 
+  Since the biomass is directly proportional to the food availability in the vicinity, fluctuations in the food resource due to seasonal changes or environmental factors 
+  directly impact the colony's growth potential and overall biomass.
+</p>
+
+</body>
+</html>

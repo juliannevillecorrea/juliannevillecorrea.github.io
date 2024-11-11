@@ -1,0 +1,138 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: file:///home/chronos/u-abe49ed4767b8e6e447c93dd65800b070707b7f4/MyFiles/Downloads/cadquery-tardis-who.html
+Subject: Building a TARDIS Model with CadQuery
+Date: Mon, 11 Nov 2024 14:58:51 +0530
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--zTuLmS2eQ3tSEpu5Qr7BIKeNhcQMKrRKeg7NUb6bOT----"
+
+
+------MultipartBoundary--zTuLmS2eQ3tSEpu5Qr7BIKeNhcQMKrRKeg7NUb6bOT----
+Content-Type: text/html
+Content-ID: <frame-741AB2BE891254283FDE31F8867985FE@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///home/chronos/u-abe49ed4767b8e6e447c93dd65800b070707b7f4/MyFiles/Downloads/cadquery-tardis-who.html
+
+<!DOCTYPE html><html lang=3D"en"><head><meta http-equiv=3D"Content-Type" co=
+ntent=3D"text/html; charset=3DUTF-8"><link rel=3D"stylesheet" type=3D"text/=
+css" href=3D"cid:css-b7675de4-1f74-4b75-b1c9-dccb5a99af26@mhtml.blink" />
+ =20
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1.0">
+  <title>Building a TARDIS Model with CadQuery</title>
+ =20
+</head>
+<body>
+
+<h1>Building a TARDIS Model with CadQuery</h1>
+
+<p>This tutorial shows how to model a simplified TARDIS from Doctor Who usi=
+ng the Python library CadQuery. The model consists of the main body, roof, =
+and light, representing the iconic look of the TARDIS.</p>
+
+<h2>1. Main Structure: HTML &amp; Canvas</h2>
+<p>For this demo, we use HTML and canvas to approximate the 3D shape of the=
+ TARDIS in a 2D illustration.</p>
+
+<h2>2. JavaScript Code for Canvas Illustration</h2>
+<p>The JavaScript code below draws a simple 2D representation of the TARDIS=
+, showing the boxy structure, roof layers, and light. It doesn=E2=80=99t fu=
+lly represent the 3D design but helps visualize the basic parts.</p>
+
+<canvas id=3D"tardisCanvas" width=3D"300" height=3D"500"></canvas>
+
+
+
+<h2>3. Explanation of CadQuery Code for TARDIS</h2>
+<p>Below is the Python code for constructing the TARDIS in CadQuery. We bre=
+ak it down step-by-step:</p>
+
+<pre><code># Import CadQuery
+import cadquery as cq
+
+# Dimensions
+width =3D 1.0         # Base width of the TARDIS
+depth =3D 1.0         # Base depth of the TARDIS
+height =3D 2.2        # Total height of the TARDIS
+roof_height =3D 0.2   # Height of the roof section
+light_height =3D 0.15 # Height of the light
+light_diameter =3D 0.1 # Diameter of the light on top
+
+# Step 1: Main Body
+body =3D (
+    cq.Workplane("XY")
+    .box(width, depth, height - roof_height)
+)
+
+# Step 2: Roof Structure
+roof =3D (
+    cq.Workplane("XY")
+    .workplane(offset=3Dheight - roof_height)
+    .rect(width * 1.1, depth * 1.1)
+    .extrude(roof_height / 4)
+    .faces("&gt;Z").workplane()
+    .rect(width * 1.05, depth * 1.05)
+    .extrude(roof_height / 4)
+    .faces("&gt;Z").workplane()
+    .rect(width * 0.9, depth * 0.9)
+    .extrude(roof_height / 2)
+)
+
+# Step 3: Light on Top
+light =3D (
+    cq.Workplane("XY")
+    .workplane(offset=3Dheight)
+    .circle(light_diameter / 2)
+    .extrude(light_height)
+)
+
+# Step 4: Assemble the Model
+tardis =3D body.union(roof).union(light)
+</code></pre>
+
+<h2>Explanation of Each Step</h2>
+<ol>
+  <li><strong>Main Body:</strong> We create the TARDIS body using <code>.bo=
+x()</code> to define a rectangular prism.</li>
+  <li><strong>Roof Structure:</strong> The roof is modeled as stacked recta=
+ngles that decrease in size as they go up. The code uses multiple layers to=
+ mimic the stepped roof.</li>
+  <li><strong>Light on Top:</strong> The light on top is a small cylinder c=
+reated using <code>.circle()</code> and <code>.extrude()</code>.</li>
+  <li><strong>Assembly:</strong> We use <code>union()</code> to join each p=
+art into a single TARDIS model.</li>
+</ol>
+
+<h2>Try CadQuery Online</h2>
+<p>To run this code, you can use a Python environment with CadQuery install=
+ed. Alternatively, you can use <a href=3D"https://cadquery.readthedocs.io/e=
+n/latest/" target=3D"_blank">CadQuery=E2=80=99s documentation</a> or an onl=
+ine editor like Jupyter Notebooks with CadQuery to get started.</p>
+
+<h2>Conclusion</h2>
+<p>This tutorial gives a basic overview of creating a TARDIS with CadQuery.=
+ For a more realistic model, consider adding textures, detailed windows, an=
+d door panels. The 2D canvas view serves as a conceptual starting point, wh=
+ile CadQuery can generate the full 3D model.</p>
+
+
+
+</body></html>
+------MultipartBoundary--zTuLmS2eQ3tSEpu5Qr7BIKeNhcQMKrRKeg7NUb6bOT----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-b7675de4-1f74-4b75-b1c9-dccb5a99af26@mhtml.blink
+
+@charset "utf-8";
+
+body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; colo=
+r: rgb(51, 51, 51); }
+
+canvas { border: 1px solid rgb(0, 0, 0); display: block; margin: auto; }
+
+code { background-color: rgb(244, 244, 244); padding: 2px 5px; display: blo=
+ck; margin: 10px 0px; }
+
+h2 { color: rgb(0, 86, 179); }
+------MultipartBoundary--zTuLmS2eQ3tSEpu5Qr7BIKeNhcQMKrRKeg7NUb6bOT------

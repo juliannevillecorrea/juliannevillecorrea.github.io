@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Probability of Needle Balancing on its Nose</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+    canvas { margin-top: 20px; border: 1px solid #000; }
+    .diagram { display: flex; justify-content: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>Probability of a Needle Balancing on its Nose</h1>
+
+<h2>Problem Statement</h2>
+<p>
+  Consider a needle of length \( L \), diameter \( d \), and mass \( m \) placed vertically on a horizontal surface,
+  standing on its tip under normal conditions (i.e., no unusual weather disturbances, typical gravitational field of \( g = 9.81 \, m/s^2 \), etc.). 
+  The question is to determine the probability \( P \) that the needle will continue to stand on its nose after being placed this way.
+</p>
+
+<h2>Approach and Assumptions</h2>
+<ol>
+  <li>The needle is initially placed in a perfectly balanced state.</li>
+  <li>We ignore any minor air currents or vibrations except those due to Brownian motion.</li>
+  <li>The needle will fall if it deviates from the vertical by any small angle \( \theta \) such that the center of mass (CoM) is no longer directly above the tip.</li>
+  <li>The probability of staying balanced depends on the likelihood of the needle remaining in the vertical alignment.</li>
+</ol>
+
+<h2>Mathematical Derivation</h2>
+<p>
+  We start by considering the critical angle \( \theta \) at which the needle will begin to tip over due to gravitational torque. 
+  If the needle deviates from the vertical by an angle greater than \( \theta_c \), it will no longer be able to return to the vertical position due to gravitational forces.
+</p>
+
+<p>Using small-angle approximation, the probability \( P \) of the needle standing on its tip can be related to the critical angle and the stability dynamics.</p>
+
+<div id="equations">
+  <p>The critical angle \( \theta_c \) at which the needle tips is given by:</p>
+  <p>
+    \[
+    \theta_c \approx \arctan\left(\frac{d}{2L}\right)
+    \]
+  </p>
+
+  <p>The probability \( P \) of the needle staying balanced on its tip can be approximated using a stability argument, resulting in:</p>
+  <p>
+    \[
+    P \approx e^{-\frac{mgL}{2kT}}
+    \]
+  </p>
+  <p>where:</p>
+  <ul>
+    <li>\( m \) is the mass of the needle,</li>
+    <li>\( g \) is the gravitational acceleration,</li>
+    <li>\( L \) is the length of the needle,</li>
+    <li>\( k \) is the Boltzmann constant,</li>
+    <li>\( T \) is the absolute temperature.</li>
+  </ul>
+</div>
+
+<h2>Illustration</h2>
+<div class="diagram">
+  <canvas id="needleCanvas" width="300" height="400"></canvas>
+</div>
+
+<script>
+  // Set up the canvas and draw the needle standing on its tip
+  const canvas = document.getElementById('needleCanvas');
+  const ctx = canvas.getContext('2d');
+
+  // Needle properties
+  const needleLength = 200; // px
+  const needleTipX = canvas.width / 2;
+  const needleTipY = canvas.height - 10;
+
+  // Draw the needle
+  function drawNeedle(angle) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(needleTipX, needleTipY);
+    const needleEndX = needleTipX + needleLength * Math.sin(angle);
+    const needleEndY = needleTipY - needleLength * Math.cos(angle);
+    ctx.lineTo(needleEndX, needleEndY);
+    ctx.stroke();
+  }
+
+  // Draw a balanced needle at angle 0
+  drawNeedle(0);
+
+  // Animate a slight angle deviation
+  let angle = 0;
+  const maxAngle = 0.1;
+  setInterval(() => {
+    angle = angle === 0 ? maxAngle : 0;
+    drawNeedle(angle);
+  }, 1000);
+</script>
+
+<h2>Conclusion</h2>
+<p>
+  Given that the probability \( P \) is exponentially small, it suggests that under typical conditions, it is highly unlikely for the needle to stay balanced on its tip.
+  This probability decreases further as the height-to-width ratio \( \frac{L}{d} \) of the needle increases, making such an event practically impossible in real-world scenarios.
+</p>
+
+</body>
+</html>
