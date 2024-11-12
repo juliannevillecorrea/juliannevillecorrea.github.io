@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ice Cream Melting Analysis</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<body>
+    <h1>Analysis of Ice Cream Melting Due to Ambient Heat and Licking</h1>
+    
+    <h2>Problem Setup</h2>
+    <p>We want to determine how quickly an ice cream stick melts under the combined effects of ambient air temperature and repeated licking.</p>
+    
+    <h2>Variables and Equations</h2>
+    <p>Assumptions:</p>
+    <ul>
+        <li>\( T_{\text{air}} \): Ambient temperature</li>
+        <li>\( T_{\text{ice}} \): Ice cream temperature (near freezing point)</li>
+        <li>\( Q_{\text{lick}} \): Heat transferred per lick</li>
+        <li>\( f \): Frequency of licking (licks per second)</li>
+        <li>\( h_{\text{air}} \): Convective heat transfer coefficient</li>
+        <li>\( A \): Surface area of ice cream exposed to air</li>
+        <li>\( m \): Mass of ice cream remaining at time \( t \)</li>
+        <li>\( L \): Latent heat of fusion of ice cream</li>
+    </ul>
+    
+    <h3>Heat Transfer Due to Ambient Air</h3>
+    <p>The rate of heat transfer from the ambient air is given by:</p>
+    <p>
+        \[
+        \frac{dQ_{\text{air}}}{dt} = h_{\text{air}} A (T_{\text{air}} - T_{\text{ice}})
+        \]
+    </p>
+    
+    <h3>Heat Transfer Per Lick</h3>
+    <p>Each lick adds a fixed amount of heat \( Q_{\text{lick}} \), so the heat input from licking is:</p>
+    <p>
+        \[
+        Q_{\text{lick}} = \text{constant heat transfer per lick}
+        \]
+    </p>
+    
+    <h3>Melting Rate</h3>
+    <p>The melting rate is determined by the total heat input, divided by the latent heat of fusion:</p>
+    <p>
+        \[
+        \frac{dm}{dt} = -\frac{1}{L} \left( \frac{dQ_{\text{air}}}{dt} + f \cdot Q_{\text{lick}} \right)
+        \]
+    </p>
+    
+    <h2>Dependence of Melting Time on Licking Frequency</h2>
+    <p>As \( f \) increases, the additional heat input from licking also increases, accelerating the melting rate.</p>
+   
+</body>
+</html>

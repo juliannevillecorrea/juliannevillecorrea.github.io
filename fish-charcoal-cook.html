@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Cooking Time on a Charcoal Fire</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<body>
+    <h1>Exhaustive Analysis of Fish Cooking Time on a Charcoal Fire</h1>
+
+    <h2>Problem Setup</h2>
+    <p>We want to calculate the time taken for a fish to cook on a charcoal fire, assuming perfect charcoal and no rain. The factors affecting the cooking time include the fish's thermal properties, the temperature of the charcoal fire, and the heat transfer mechanisms involved (convection, conduction, and radiation).</p>
+    
+    <h2>Parameters</h2>
+    <ul>
+        <li><strong>Fish Properties:</strong>
+            <ul>
+                <li>\( m_{\text{fish}} \): Mass of the fish (kg).</li>
+                <li>\( C_{\text{fish}} \): Specific heat capacity of the fish (J/kg·K).</li>
+                <li>\( T_{\text{initial}} \): Initial temperature of the fish (°C).</li>
+                <li>\( T_{\text{final}} \): Final cooking temperature (°C).</li>
+                <li>\( \rho_{\text{fish}} \): Density of the fish (kg/m³).</li>
+                <li>\( d_{\text{fish}} \): Thickness of the fish (m).</li>
+            </ul>
+        </li>
+        <li><strong>Charcoal Fire Properties:</strong>
+            <ul>
+                <li>\( T_{\text{fire}} \): Temperature of the charcoal fire (°C).</li>
+                <li>\( A_{\text{surface}} \): Surface area of the fish exposed to the fire (m²).</li>
+                <li>\( h_{\text{conv}} \): Convective heat transfer coefficient (W/m²·K).</li>
+                <li>\( \epsilon_{\text{fish}} \): Emissivity of the fish's surface.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>Heat Transfer Equations</h2>
+    <p>The total heat required to cook the fish can be expressed as the sum of convection, conduction, and radiation:</p>
+    <ul>
+        <li><strong>Convection:</strong>
+            \[
+            Q_{\text{conv}} = h_{\text{conv}} A_{\text{surface}} (T_{\text{fire}} - T_{\text{fish}})
+            \]
+        </li>
+        <li><strong>Conduction:</strong>
+            \[
+            Q_{\text{cond}} = \frac{k_{\text{fish}} A_{\text{surface}} (T_{\text{surface}} - T_{\text{interior}})}{d_{\text{fish}}}
+            \]
+        </li>
+        <li><strong>Radiation:</strong>
+            \[
+            Q_{\text{rad}} = \epsilon_{\text{fish}} \sigma A_{\text{surface}} (T_{\text{fire}}^4 - T_{\text{fish}}^4)
+            \]
+        </li>
+    </ul>
+    
+    <h2>Total Heat Required</h2>
+    <p>The total heat required to cook the fish is the sum of all three mechanisms:</p>
+    \[
+    Q_{\text{total}} = Q_{\text{conv}} + Q_{\text{cond}} + Q_{\text{rad}}
+    \]
+
+    <h2>Time to Cook the Fish</h2>
+    <p>The time taken to cook the fish is given by the equation:</p>
+    \[
+    t_{\text{cook}} = \frac{m_{\text{fish}} C_{\text{fish}} (T_{\text{final}} - T_{\text{initial}})}{Q_{\text{total}}}
+    \]
+
+    <h2>Conclusion</h2>
+    <p>By calculating the total heat transfer and dividing by the specific heat capacity of the fish, we can determine the cooking time. This method assumes ideal conditions with no external disturbances like rain or variations in charcoal heat output.</p>
+</body>
+</html>
