@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooling Time of Hot Tea</title>
+    <script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <h1>Problem Statement</h1>
+    <p>
+        A mug of hot tea is cooling to ambient temperature through convective heat transfer with the surrounding air. The cooling process is influenced by both:
+        <ul>
+            <li>The air in contact with the top surface of the tea</li>
+            <li>The mug walls in contact with the surrounding air</li>
+        </ul>
+        This derivation will address two cases:
+        <ol>
+            <li>A room with normal airflow and no additional forced convection.</li>
+            <li>A room with a ceiling fan that provides additional airflow, thus increasing the convective heat transfer rate.</li>
+        </ol>
+    </p>
+
+    <h2>Derivation of Cooling Time</h2>
+    <p>Let’s define the parameters and variables:</p>
+    <ul>
+        <li>\( T(t) \): Temperature of the tea at time \( t \)</li>
+        <li>\( T_{\text{amb}} \): Ambient temperature</li>
+        <li>\( T_0 \): Initial temperature of the tea</li>
+        <li>\( h \): Convective heat transfer coefficient without fan</li>
+        <li>\( h_{\text{fan}} \): Convective heat transfer coefficient with fan</li>
+        <li>\( A \): Surface area of tea in contact with air</li>
+        <li>\( m \): Mass of tea</li>
+        <li>\( c \): Specific heat capacity of tea</li>
+    </ul>
+
+    <h3>Newton’s Law of Cooling</h3>
+    <p>
+        Using Newton's Law of Cooling, the rate of heat loss can be modeled as:
+        \[
+        \frac{dQ}{dt} = -h A (T(t) - T_{\text{amb}})
+        \]
+        Where \( Q \) is the thermal energy.
+    </p>
+    
+    <p>The temperature change over time \( T(t) \) can be expressed as:</p>
+    <p>
+        \[
+        m c \frac{dT}{dt} = -h A (T(t) - T_{\text{amb}})
+        \]
+        Rearranging and solving this differential equation for temperature \( T(t) \) gives:
+        \[
+        T(t) = T_{\text{amb}} + (T_0 - T_{\text{amb}}) e^{-\frac{h A}{m c} t}
+        \]
+    </p>
+
+    <h3>Cooling Time with Ceiling Fan</h3>
+    <p>
+        With a ceiling fan providing forced convection, the convective heat transfer coefficient \( h \) increases to \( h_{\text{fan}} \). This affects the rate of cooling as follows:
+        \[
+        T_{\text{fan}}(t) = T_{\text{amb}} + (T_0 - T_{\text{amb}}) e^{-\frac{h_{\text{fan}} A}{m c} t}
+        \]
+    </p>
+
+    <h2>Comparison of Cooling Times</h2>
+    <p>The ratio of cooling times can be approximated as:</p>
+    <p>
+        \[
+        \frac{t_{\text{fan}}}{t} = \frac{\frac{h A}{m c}}{\frac{h_{\text{fan}} A}{m c}} = \frac{h}{h_{\text{fan}}}
+        \]
+    </p>
+
+    <h3>Graphical Representation</h3>
+    <canvas id="coolingGraph" width="800" height="400"></canvas>
+
+    <script>
+        // Set up graph parameters
+        const canvas = document.getElementById('coolingGraph');
+        const ctx = canvas.getContext('2d');
+        
+        // Parameters for calculation
+        const T0 = 90; // Initial temperature in °C
+        const Tamb = 25; // Ambient temperature in °C
+        const h = 10; // Convective heat transfer coefficient without fan (W/m²·K)
+        const hFan = 30; // Convective heat transfer coefficient with fan (W/m²·K)
+        const A = 0.05; // Surface area in m²
+        const m = 0.25; // Mass of tea in kg
+        const c = 4186; // Specific heat capacity in J/(kg·K)
+        const timeStep = 1; // Time step in seconds
+        const totalTime = 1800; // Total time in seconds
+
+        function coolingTemp(h) {
+            const data = [];
+            for (let t = 0; t <= totalTime; t += timeStep) {
+                const T = Tamb + (T0 - Tamb) * Math.exp(-(h * A) / (m * c) * t);
+                data.push({t: t / 60, T: T}); // Time in minutes
+            }
+            return data;
+        }
+
+        const dataNoFan = coolingTemp(h);
+        const dataWithFan = coolingTemp(hFan);
+
+        // Draw graph
+        function drawGraph(data1, data2) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(50, 350);
+            ctx.lineTo(750, 350);
+            ctx.moveTo(50, 350);
+            ctx.lineTo(50, 50);
+            ctx.stroke();
+
+            // Plot temperature without fan
+            ctx.strokeStyle = "blue";
+            ctx.beginPath();
+            data1.forEach(point => {
+                const x = 50 + point.t * 700 / (totalTime / 60);
+                const y = 350 - (point.T - Tamb) * 300 / (T0 - Tamb);
+                ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            // Plot temperature with fan
+            ctx.strokeStyle = "red";
+            ctx.beginPath();
+            data2.forEach(point => {
+                const x = 50 + point.t * 700 / (totalTime / 60);
+                const y = 350 - (point.T - Tamb) * 300 / (T0 - Tamb);
+                ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            ctx.fillStyle = "blue";
+            ctx.fillText("No Fan", 650, 80);
+            ctx.fillStyle = "red";
+            ctx.fillText("With Fan", 650, 100);
+        }
+
+        drawGraph(dataNoFan, dataWithFan);
+    </script>
+
+    <p>The graph shows the faster cooling rate with the fan due to increased convective heat transfer.</p>
+</body>
+</html>

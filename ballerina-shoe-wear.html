@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ballerina Shoe Lifespan Analysis</title>
+    <script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <h1>Problem Statement</h1>
+    <p>
+        We aim to calculate the estimated lifespan of a pair of ballerina’s shoes given:
+        <ul>
+            <li>Average body weight</li>
+            <li>Common shoe materials</li>
+            <li>Typical use frequency</li>
+            <li>Wear and tear from dance maneuvers (jumps, turns, etc.)</li>
+        </ul>
+        We will find mathematical relationships among these parameters and illustrate the findings with graphs.
+    </p>
+
+    <h2>Variables and Assumptions</h2>
+    <ul>
+        <li>\( W \): Body weight of the ballerina (assume 55 kg)</li>
+        <li>\( F \): Average force exerted on shoes per jump or maneuver</li>
+        <li>\( \mu \): Friction coefficient between shoes and floor (0.6, typical for dance floors)</li>
+        <li>\( n \): Average number of dance maneuvers per session (e.g., 100 jumps, turns, etc.)</li>
+        <li>\( t \): Number of sessions per week (assume 5 sessions per week)</li>
+        <li>\( D \): Degradation rate of shoe material per force impact</li>
+        <li>\( M \): Total material durability of the shoe (measured as a function of maximum cumulative force it can withstand before failing)</li>
+    </ul>
+
+    <h2>Mathematical Modeling of Shoe Lifespan</h2>
+    <p>1. **Force Exerted per Maneuver**</p>
+    <p>The force exerted on the shoes during each maneuver can be calculated as:</p>
+    <p>
+        \[
+        F = W \cdot g \cdot \mu
+        \]
+        where:
+        <ul>
+            <li>\( g = 9.81 \, \text{m/s}^2 \): gravitational acceleration</li>
+            <li>\( W \): body weight in kg</li>
+        </ul>
+    </p>
+
+    <p>2. **Total Force Impact per Week**</p>
+    <p>Assuming \( n \) maneuvers per session and \( t \) sessions per week, the cumulative force on shoes per week is:</p>
+    <p>
+        \[
+        F_{\text{weekly}} = F \cdot n \cdot t
+        \]
+    </p>
+
+    <p>3. **Material Degradation**</p>
+    <p>Let \( D \) represent the material degradation rate, i.e., the proportion of the shoe's maximum durability capacity (\( M \)) lost per unit of force. Thus, the weekly degradation becomes:</p>
+    <p>
+        \[
+        \text{Degradation}_{\text{weekly}} = F_{\text{weekly}} \cdot D
+        \]
+    </p>
+
+    <p>4. **Lifespan Calculation**</p>
+    <p>The total lifespan \( L \) in weeks of the shoes can be estimated by dividing the total durability \( M \) by the weekly degradation:</p>
+    <p>
+        \[
+        L = \frac{M}{\text{Degradation}_{\text{weekly}}} = \frac{M}{F \cdot n \cdot t \cdot D}
+        \]
+    </p>
+
+    <h3>Example Calculation with Assumptions</h3>
+    <p>Assume typical values:</p>
+    <ul>
+        <li>\( W = 55 \, \text{kg} \)</li>
+        <li>\( \mu = 0.6 \)</li>
+        <li>\( n = 100 \) maneuvers per session</li>
+        <li>\( t = 5 \) sessions per week</li>
+        <li>\( D = 1 \times 10^{-5} \): degradation per unit force</li>
+        <li>\( M = 500 \): durability threshold (cumulative force capacity before failure)</li>
+    </ul>
+    <p>With these values, we can calculate \( L \) (in weeks) and plot it.</p>
+
+    <h3>Graphical Representation of Shoe Lifespan Under Varying Parameters</h3>
+    <canvas id="lifespanGraph" width="800" height="400"></canvas>
+
+    <script>
+        // Set up graph parameters
+        const canvas = document.getElementById('lifespanGraph');
+        const ctx = canvas.getContext('2d');
+        
+        // Calculation parameters
+        const W = 55; // Weight in kg
+        const g = 9.81; // Gravity in m/s²
+        const mu = 0.6; // Friction coefficient
+        const n = 100; // Maneuvers per session
+        const t = 5; // Sessions per week
+        const D = 1e-5; // Degradation rate
+        const M = 500; // Total material durability threshold
+
+        const F = W * g * mu;
+        const weeklyDegradation = F * n * t * D;
+        const lifespanWeeks = M / weeklyDegradation;
+
+        // Lifespan sensitivity to weight variations
+        const weights = Array.from({length: 50}, (_, i) => 30 + i); // 30 kg to 80 kg
+        const lifespans = weights.map(weight => {
+            const F_var = weight * g * mu;
+            const weeklyDeg_var = F_var * n * t * D;
+            return M / weeklyDeg_var;
+        });
+
+        // Draw graph
+        function drawGraph(weights, lifespans) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(50, 350);
+            ctx.lineTo(750, 350);
+            ctx.moveTo(50, 350);
+            ctx.lineTo(50, 50);
+            ctx.stroke();
+
+            ctx.strokeStyle = "blue";
+            ctx.beginPath();
+            lifespans.forEach((lifespan, i) => {
+                const x = 50 + i * (700 / weights.length);
+                const y = 350 - (lifespan / Math.max(...lifespans)) * 300;
+                ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            ctx.fillStyle = "black";
+            ctx.fillText("Lifespan (weeks)", 400, 30);
+            ctx.fillText("Body Weight (kg)", 350, 370);
+        }
+
+        drawGraph(weights, lifespans);
+    </script>
+
+    <p>The graph shows the relationship between body weight and shoe lifespan. Heavier weights result in greater forces and faster material degradation, reducing shoe lifespan.</p>
+</body>
+</html>
