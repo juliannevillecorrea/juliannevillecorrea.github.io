@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Calculation of Brake Horsepower Saved by Drafting</title>
+<script type="text/javascript" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+
+<h1>Calculation of Brake Horsepower Saved by Drafting</h1>
+
+<h2>Introduction</h2>
+<p>
+In motorsports, "drafting" or "slipstreaming" is a technique where a car follows closely behind another vehicle to reduce aerodynamic drag. This decrease in drag reduces the power required to maintain a certain speed, allowing the car to save brake horsepower (BHP). The car in front disrupts the airflow, creating a low-pressure area directly behind it. This low-pressure region benefits the trailing car by reducing the air resistance, or drag force, that it would normally encounter.
+</p>
+
+<h2>Problem Statement</h2>
+<p>
+Calculate the brake horsepower (BHP) saved by a car when drafting another car in front of it. Consider the drag reduction due to the low-pressure wake created by the lead car, which the following car exploits by remaining close behind. We will develop the mathematical relations to calculate the savings in BHP.
+</p>
+
+<h2>Assumptions and Given Data</h2>
+<ul>
+  <li>The speed of both cars, \( V \), is constant and equal.</li>
+  <li>The coefficient of drag of the trailing car, \( C_d \), is reduced while drafting.</li>
+  <li>The frontal area of the trailing car is \( A \).</li>
+  <li>The air density is \( \rho \).</li>
+</ul>
+
+<h2>Variables</h2>
+<p>Define the following variables:</p>
+<ul>
+  <li><b>Drag force without drafting, \( F_{d0} \):</b> The drag force experienced by the trailing car without drafting.</li>
+  <li><b>Drag force with drafting, \( F_d \):</b> The drag force experienced by the trailing car while drafting.</li>
+  <li><b>Power without drafting, \( P_{0} \):</b> The power needed to overcome the drag force when there is no drafting.</li>
+  <li><b>Power with drafting, \( P \):</b> The power needed to overcome the reduced drag force while drafting.</li>
+  <li><b>Brake Horsepower Saved, \( BHP_{saved} \):</b> The amount of brake horsepower saved by drafting.</li>
+</ul>
+
+<h2>Mathematical Model</h2>
+<p>
+The drag force \( F_d \) on a car moving at a constant speed \( V \) can be expressed as:
+</p>
+
+$$
+F_d = \frac{1}{2} C_d \rho A V^2
+$$
+
+<p>where:</p>
+<ul>
+  <li>\( C_d \) = Coefficient of drag</li>
+  <li>\( \rho \) = Density of air (typically around 1.225 kg/m<sup>3</sup> at sea level)</li>
+  <li>\( A \) = Frontal area of the car</li>
+  <li>\( V \) = Speed of the car</li>
+</ul>
+
+<p>When the car is drafting, the drag coefficient \( C_d \) is reduced by a certain factor due to the low-pressure wake. Let the reduction factor be represented by \( k \) (where \( 0 < k < 1 \)), so the effective drag coefficient while drafting is \( kC_d \).</p>
+
+<p>Therefore, the drag force while drafting, \( F_d \), becomes:</p>
+
+$$
+F_d = \frac{1}{2} k C_d \rho A V^2
+$$
+
+<h3>Calculating Brake Horsepower</h3>
+<p>
+The power required to overcome drag (in watts) is the product of the drag force and the velocity of the car. Thus:
+</p>
+
+$$
+P_0 = F_{d0} \cdot V = \left( \frac{1}{2} C_d \rho A V^2 \right) \cdot V = \frac{1}{2} C_d \rho A V^3
+$$
+
+<p>Similarly, the power required while drafting is:</p>
+
+$$
+P = F_d \cdot V = \left( \frac{1}{2} k C_d \rho A V^2 \right) \cdot V = \frac{1}{2} k C_d \rho A V^3
+$$
+
+<p>The brake horsepower saved, \( BHP_{saved} \), due to drafting can be calculated as:</p>
+
+$$
+BHP_{saved} = \frac{P_0 - P}{745.7} = \frac{\left( \frac{1}{2} C_d \rho A V^3 \right) - \left( \frac{1}{2} k C_d \rho A V^3 \right)}{745.7}
+$$
+
+<p>Simplifying, we get:</p>
+
+$$
+BHP_{saved} = \frac{\frac{1}{2} C_d \rho A V^3 (1 - k)}{745.7}
+$$
+
+<h2>Example Calculation</h2>
+<p>Let's calculate the brake horsepower saved for a specific example where:</p>
+<ul>
+  <li>\( C_d = 0.3 \)</li>
+  <li>\( A = 2.5 \, \text{m}^2 \)</li>
+  <li>\( \rho = 1.225 \, \text{kg/m}^3 \)</li>
+  <li>\( V = 30 \, \text{m/s} \) (approximately 108 km/h)</li>
+  <li>\( k = 0.6 \) (i.e., a 40% reduction in drag coefficient due to drafting)</li>
+</ul>
+
+<p>Substituting into the formula:</p>
+
+$$
+BHP_{saved} = \frac{\frac{1}{2} \times 0.3 \times 1.225 \times 2.5 \times (30)^3 \times (1 - 0.6)}{745.7}
+$$
+
+<p>Calculating step-by-step:</p>
+
+<ul>
+  <li>\( F_d = 0.5 \times 0.3 \times 1.225 \times 2.5 \times 30^2 \)</li>
+  <li>Power saved calculation here...</li>
+</ul>
+
+<br>
+</body>
+</html>

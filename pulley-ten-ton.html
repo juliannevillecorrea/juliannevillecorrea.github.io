@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Design of a Pulley System to Lift a One-Ton Load</title>
+<script type="text/javascript" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+
+<h1>Design of a Pulley System to Lift a One-Ton Load</h1>
+
+<h2>Problem Statement</h2>
+<p>
+Design a pulley system that will enable an able-bodied individual to lift a load of one ton (1000 kg) through a height of 10 meters with minimal effort. The system should reduce the effective force required to lift the load, allowing for safe and efficient operation by a single person.
+</p>
+
+<h2>Requirements</h2>
+<ul>
+  <li><b>Load (L):</b> 1000 kg</li>
+  <li><b>Height to lift (h):</b> 10 meters</li>
+  <li><b>Gravity (g):</b> 9.81 m/s<sup>2</sup></li>
+  <li><b>Effective force required:</b> Should be low enough for an able-bodied individual to exert without excessive strain (typically below 100 N).</li>
+</ul>
+
+<h2>Introduction to Pulley Systems</h2>
+<p>
+A pulley system is a mechanical arrangement of pulleys designed to reduce the force needed to lift a load. Pulley systems can be single, double, or compound, and the mechanical advantage (MA) they provide depends on the number of pulleys and the arrangement used.
+</p>
+
+<p>In this design, we aim to maximize the mechanical advantage so that the required input force is minimized. To calculate the mechanical advantage of a pulley system, we use the following equation:</p>
+
+$$
+\text{Mechanical Advantage (MA)} = \frac{\text{Load (L)}}{\text{Effort (E)}}
+$$
+
+<p>Where:</p>
+<ul>
+  <li>\( L \) = Weight of the load in Newtons, calculated as \( L = m \cdot g \).</li>
+  <li>\( E \) = Force exerted by the individual to lift the load.</li>
+</ul>
+
+<h2>Calculations</h2>
+<p>
+First, we calculate the weight of the load:
+</p>
+
+$$
+L = m \cdot g = 1000 \, \text{kg} \times 9.81 \, \text{m/s}^2 = 9810 \, \text{N}
+$$
+
+<p>To design a system where the individual needs to exert a force of approximately 100 N, we calculate the required mechanical advantage \( MA \):</p>
+
+$$
+\text{MA} = \frac{L}{E} = \frac{9810 \, \text{N}}{100 \, \text{N}} = 98.1
+$$
+
+<p>
+A high mechanical advantage can be achieved using a compound pulley system, also known as a block and tackle arrangement. With each additional pulley, the force required to lift the load decreases, though the distance the rope must be pulled increases.
+</p>
+
+<h2>Design of the Compound Pulley System</h2>
+<p>To achieve an \( MA \) of around 98, we can use a system of pulleys with a total of approximately 8 to 10 pulleys in various combinations. This will allow the effort required to lift the load to fall within the safe range for an individual.</p>
+
+<p>The final arrangement will involve two main components:</p>
+<ul>
+  <li><b>Fixed Pulley Block:</b> Pulleys attached to a fixed point, which change the direction of the applied force without adding mechanical advantage.</li>
+  <li><b>Movable Pulley Block:</b> Pulleys that move with the load, which multiply the force applied to lift the load.</li>
+</ul>
+
+<p>Using a system of 5 movable pulleys and 5 fixed pulleys arranged in a block and tackle configuration, we can achieve a mechanical advantage of approximately 10, which means:</p>
+
+$$
+E = \frac{L}{\text{MA}} = \frac{9810}{10} \approx 98.1 \, \text{N}
+$$
+
+<p>This brings the required force to around 100 N, meeting the design requirements.</p>
+
+<h3>Length of Rope</h3>
+<p>To lift the load by 10 meters, the individual will need to pull a length of rope that is a multiple of the height due to the increased mechanical advantage. For a mechanical advantage of 10, the length of rope \( L_r \) needed is:</p>
+
+$$
+L_r = \text{Height} \times \text{MA} = 10 \, \text{m} \times 10 = 100 \, \text{m}
+$$
+
+<h2>Detailed Steps of Operation</h2>
+<ol>
+  <li>The individual will pull on the free end of the rope.</li>
+  <li>As the rope is pulled, the force is distributed across the pulleys, reducing the effective load per pulley.</li>
+  <li>The pulleys multiply the applied force, making it possible to lift the load with the required reduced effort.</li>
+</ol>
+
+<h2>Conclusion</h2>
+<p>This compound pulley system with a mechanical advantage of approximately 10 allows an able-bodied individual to lift a one-ton load through a height of 10 meters by exerting a manageable force of around 100 N. This design achieves the necessary force reduction while ensuring efficiency and safety in operation.</p>
+
+</body>
+</html>
