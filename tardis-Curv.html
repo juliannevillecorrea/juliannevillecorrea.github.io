@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a TARDIS with Curv</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        code { background-color: #f4f4f4; padding: 5px; border-radius: 4px; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<h1>Building a TARDIS in Curv</h1>
+
+<p>This guide explains how to create a TARDIS model using the <code>Curv</code> language. We’ll go through each part of the TARDIS step-by-step, with detailed explanations of each command and keyword used in Curv.</p>
+
+<h2>Outline of the Project</h2>
+<ol>
+    <li>Install and Set Up Curv</li>
+    <li>Define the Basic Dimensions and Parameters</li>
+    <li>Create the Base and Walls of the TARDIS</li>
+    <li>Add Windows and Doors</li>
+    <li>Create Roof and Light Fixture</li>
+    <li>Apply Detailing and Color</li>
+</ol>
+
+<h2>1. Install and Set Up Curv</h2>
+
+<p>To start, install Curv from <a href="https://curv3d.github.io/">https://curv3d.github.io/</a>. Curv is a functional 3D modeling language that you can use on the command line or via the graphical interface.</p>
+
+<h2>2. Define the Basic Dimensions and Parameters</h2>
+
+<p>Curv allows defining variables for dimensions. We’ll use these to parameterize the TARDIS dimensions for scalability and flexibility.</p>
+
+<pre><code>
+// Set base dimensions
+let width = 100;             // Width of the TARDIS base in mm
+let height = 200;            // Total height of the TARDIS
+let wall_thickness = 5;      // Wall thickness
+let roof_height = 30;        // Height of the roof section
+let door_height = 130;       // Door height
+let window_height = 30;      // Window height
+</code></pre>
+
+<h2>3. Create the Base and Walls of the TARDIS</h2>
+
+<p>In Curv, we create 3D shapes using built-in functions such as <code>cube</code> and <code>difference</code>. The <code>cube</code> function creates a rectangular prism, and the <code>difference</code> function allows us to create hollowed structures by subtracting shapes.</p>
+
+<pre><code>
+// Create the base structure of the TARDIS with walls
+let base = difference(
+    cube([width, width, height]),                // Outer box
+    cube([width - 2 * wall_thickness, width - 2 * wall_thickness, height - wall_thickness])  // Hollowed interior
+);
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>let</code>: Declares a variable.</li>
+    <li><code>cube</code>: Creates a rectangular prism. The argument is a list with three values representing the X, Y, and Z dimensions.</li>
+    <li><code>difference</code>: Subtracts one shape from another. Here, we create the hollowed TARDIS structure by subtracting a smaller cube from a larger cube.</li>
+</ul>
+
+<h2>4. Add Windows and Doors</h2>
+
+<p>We add windows and doors by creating cutouts on the walls using <code>cube</code> and <code>difference</code> functions to create holes for each part.</p>
+
+<h3>Windows</h3>
+
+<pre><code>
+// Define the window dimensions and position
+let window = difference(
+    base,
+    cube([20, 5, window_height]) * translate([40, width - wall_thickness, height / 2])
+);
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>cube</code>: Creates a rectangular prism shape, which we position to act as a cutout.</li>
+    <li><code>translate</code>: Moves the cube to the correct position for the window cutout.</li>
+</ul>
+
+<h3>Doors</h3>
+
+<pre><code>
+// Define the door dimensions and position on the front face
+let door = difference(
+    base,
+    cube([width / 4, 5, door_height]) * translate([width / 4, wall_thickness, 0])
+);
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>cube</code>: Defines the shape of the door.</li>
+    <li><code>translate</code>: Moves the door shape into the correct position on the TARDIS.</li>
+</ul>
+
+<h2>5. Create Roof and Light Fixture</h2>
+
+<p>The roof is represented by a scaled cube, while the light fixture is a sphere positioned on top of the roof. We use the <code>scale</code> and <code>translate</code> commands to position and resize each part.</p>
+
+<pre><code>
+// Create the pyramid-shaped roof
+let roof = scale([1, 1, 0.3], cube([width, width, roof_height])) * translate([0, 0, height]);
+
+// Add a light fixture on the top center of the roof
+let light = sphere(5) * translate([0, 0, height + roof_height]);
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>scale</code>: Scales an object along specified dimensions. Here, the cube is scaled to create a pyramid shape.</li>
+    <li><code>sphere</code>: Creates a spherical shape; in this case, it’s used to create the light on the roof.</li>
+    <li><code>translate</code>: Positions the roof and light fixture in their correct locations.</li>
+</ul>
+
+<h2>6. Apply Detailing and Color</h2>
+
+<p>In Curv, we can add color using <code>material</code>. Below, we set the colors for the base and the light fixture.</p>
+
+<pre><code>
+// Adding color
+let tardis_base = material("plastic", "blue") * base;
+let tardis_light = material("glass", "light") * light;
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>material</code>: Defines material properties and color for objects. Here, the TARDIS base is colored blue and made of "plastic," while the light is set to "glass."</li>
+</ul>
+
+
+
+</body>
+</html>
