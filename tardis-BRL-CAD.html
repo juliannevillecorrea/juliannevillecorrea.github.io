@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a TARDIS with BRL-CAD</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        code { background-color: #f4f4f4; padding: 5px; border-radius: 4px; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<h1>Building a TARDIS in BRL-CAD</h1>
+
+<p>This guide demonstrates how to build a TARDIS using <code>BRL-CAD</code>, an open-source CAD software. The instructions explain how to create the base, walls, windows, doors, roof, and light fixture, with detailed explanations for each BRL-CAD command used.</p>
+
+<h2>Outline of the Project</h2>
+<ol>
+    <li>Install and Set Up BRL-CAD</li>
+    <li>Define the Basic Dimensions and Parameters</li>
+    <li>Create the Base and Walls of the TARDIS</li>
+    <li>Add Windows and Doors</li>
+    <li>Add Roof and Light Fixture</li>
+    <li>Apply Detailing and Color</li>
+</ol>
+
+<h2>1. Install and Set Up BRL-CAD</h2>
+
+<p>To begin, install <code>BRL-CAD</code> by following the instructions on their official website: <a href="https://brlcad.org">https://brlcad.org</a>. Open <code>mged</code> (BRL-CAD’s geometry editor) to begin entering commands directly.</p>
+
+<h2>2. Define the Basic Dimensions and Parameters</h2>
+
+<p>Define the dimensions of the TARDIS to ensure scalability and proper proportions. We will use the following variables:</p>
+
+<pre><code>set width 100               # Width of the TARDIS base in mm
+set height 200              # Total height of the TARDIS
+set wall_thickness 5        # Wall thickness
+set roof_height 30          # Height of the roof section
+set door_height 130         # Door height
+set window_height 30        # Window height
+</code></pre>
+
+<h2>3. Create the Base and Walls of the TARDIS</h2>
+
+<p>We use the <code>in</code> command to create geometric shapes. In this case, we use <code>arb8</code> and <code>rpp</code> primitives.</p>
+
+<pre><code>
+# Create a hollow box for the TARDIS body
+in base.r arb8 -$width/2 -$width/2 0 $width/2 -$width/2 0 $width/2 $width/2 0 -$width/2 $width/2 0 -$width/2 -$width/2 $height $width/2 -$width/2 $height $width/2 $width/2 $height -$width/2 $width/2 $height
+in hollow_base.r rpp -$width/2 -$width/2 0 $width/2 $width/2 $height
+comb walls.c - base.r - hollow_base.r
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>in</code>: The command to create a new geometry object. Each object is given a name, followed by its type and parameters.</li>
+    <li><code>arb8</code>: An 8-point Arbitrary Convex Polyhedron, ideal for creating a box with 8 vertices.</li>
+    <li><code>rpp</code>: Right Parallelepiped, defined by two opposite corners, which is often used for rectangular prisms.</li>
+    <li><code>comb</code>: Creates a combination (or group) of objects. Here, <code>walls.c</code> is a combination that subtracts <code>hollow_base.r</code> from <code>base.r</code> to create hollow walls.</li>
+</ul>
+
+<h2>4. Add Windows and Doors</h2>
+
+<p>We will add rectangular cutouts on each side for the windows and a larger cutout for the door on the front face. Each of these cutouts will also use the <code>in</code> command with the <code>rpp</code> primitive.</p>
+
+<h3>Windows</h3>
+
+<pre><code>
+# Define the window dimensions and position
+in window.r rpp -$window_width/2 -$window_width/2 $window_height $(window_height + 10) $wall_thickness $width
+comb windows.c - window.r - base.r
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>window.r</code>: This is the name of the new object, which represents a window cutout.</li>
+    <li><code>rpp</code>: Creates a rectangular shape for each window by defining the two opposite corners of the rectangular prism.</li>
+    <li><code>comb</code>: <code>windows.c</code> subtracts <code>window.r</code> from <code>base.r</code> to create a window space.</li>
+</ul>
+
+<h3>Doors</h3>
+
+<pre><code>
+# Define the door dimensions and position on the front face
+in door.r rpp -$width/4 -$width/4 0 $width/4 $door_height $wall_thickness
+comb door.c - door.r - windows.c
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>door.r</code>: This object represents a door cutout.</li>
+    <li><code>rpp</code>: Defines the rectangular door shape by specifying two opposite corners.</li>
+    <li><code>comb</code>: <code>door.c</code> subtracts <code>door.r</code> from <code>windows.c</code> to form a door space.</li>
+</ul>
+
+<h2>5. Add Roof and Light Fixture</h2>
+
+<p>The roof is a pyramid shape created with the <code>arb4</code> primitive. A sphere will serve as the light fixture on top of the roof.</p>
+
+<pre><code>
+# Create the pyramid-shaped roof
+in roof.r arb4 -$width/2 -$width/2 $height $width/2 -$width/2 $height $width/2 $width/2 $height -$width/2 $width/2 $height $roof_height
+
+# Add a light fixture on the top center of the roof
+in light.r sphere 0 0 $height+$roof_height 5
+comb roof_light.c u roof.r u light.r
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>arb4</code>: A four-point arbitrary convex polyhedron, ideal for creating the triangular roof shape by specifying four vertices.</li>
+    <li><code>sphere</code>: Creates a spherical object; here, it’s used to create the light fixture at the roof’s peak.</li>
+    <li><code>u</code>: Union operator. In <code>roof_light.c</code>, it unites <code>roof.r</code> and <code>light.r</code> into a single combination.</li>
+</ul>
+
+<h2>6. Apply Detailing and Color</h2>
+
+<p>BRL-CAD allows adding color to materials with the <code>mater</code> command.</p>
+
+<pre><code>
+# Adding color
+mater base.r "plastic" "blue" 128 128 255
+mater light.r "glass" "light" 255 255 255
+</code></pre>
+
+<h3>Explanation of Commands</h3>
+<ul>
+    <li><code>mater</code>: Defines material properties and color for objects. Here, <code>plastic</code> and <code>blue</code> are used for the base, while <code>glass</code> and <code>light</code> are used for the light fixture.</li>
+    <li><code>128 128 255</code>: RGB values representing the color blue.</li>
+</ul>
+
+
+
+</body>
+</html>
