@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a TARDIS with CadQuery</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <h1>Building a TARDIS with CadQuery</h1>
+
+        <h2>Introduction</h2>
+        <p>While we can't quite replicate the magic of the TARDIS from Doctor Who, we can certainly use our engineering skills and a powerful CAD tool like CadQuery to design a visually stunning, if not functional, replica.</p>
+
+        <h2>Setting Up the Environment</h2>
+        <ol>
+            <li>**Install Required Libraries:**
+                <pre><code>pip install cadquery</code></pre>
+            </li>
+            <li>**Import Necessary Modules:**
+                <pre><code>import cadquery as cq
+from cadquery import Workplane, Edge</code></pre>
+            </li>
+        </ol>
+
+        <h2>Creating the TARDIS Exterior</h2>
+        <pre><code>def create_tardis_exterior():
+    # Create the base box
+    tardis_exterior = Workplane("XY").box(2, 2, 3)
+
+    # Add the roof
+    roof_height = 1
+    roof = Workplane("XY").rect(2, 2).extrude(roof_height)
+    tardis_exterior = tardis_exterior.union(roof)
+
+    # Add the door
+    door_width = 1
+    door_height = 2
+    door = Workplane("XY").rect(door_width, door_height).extrude(0.1)
+    door_cutout = tardis_exterior.cut(door)
+
+    return tardis_exterior
+</code></pre>
+
+        <h2>Designing the TARDIS Interior</h2>
+        <p>The interior is where the real fun begins. You can design multiple levels, corridors, and rooms.</p>
+        <pre><code>def create_tardis_interior():
+    # Create the main interior space
+    interior_width = 10
+    interior_depth = 10
+    interior_height = 5
+    interior = Workplane("XY").box(interior_width, interior_depth, interior_height)
+
+    # Add details like consoles, chairs, and levers
+    # ... (Use Workplane operations to create various shapes)
+
+    # Create a time rotor (simplified)
+    rotor_diameter = 2
+    rotor_thickness = 0.5
+    rotor = Workplane("XY").circle(rotor_diameter / 2).extrude(rotor_thickness)
+
+    return interior
+</code></pre>
+
+        <h2>Combining Exterior and Interior</h2>
+        <p>To combine the exterior and interior, we'll need to position the interior within the exterior shell, ensuring it's smaller and offset to create the illusion of a larger interior space:</p>
+        <pre><code>def assemble_tardis():
+    exterior = create_tardis_exterior()
+    interior = create_tardis_interior().translate((1, 1, 1))  # Offset the interior
+
+    # Combine the parts
+    tardis = exterior.union(interior)
+
+    return tardis
+</code></pre>
+
+        <h2>Exporting the Model</h2>
+        <pre><code>result = assemble_tardis()
+result.exportStl("tardis.stl")</code></pre>
+
+        <p>This is a simplified example. The actual TARDIS design can be much more complex, involving intricate details and potentially multiple levels. With CadQuery, you can explore your creativity and build your own unique TARDIS.</p>
+
+     
