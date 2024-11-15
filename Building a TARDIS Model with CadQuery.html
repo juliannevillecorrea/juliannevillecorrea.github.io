@@ -1,148 +1,124 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive 3D TARDIS with CadQuery Code</title>
-  <style>
-    body { display: flex; flex-direction: column; align-items: center; background-color: #1a1a1a; color: white; font-family: Arial, sans-serif; margin: 0; }
-    canvas { width: 100%; max-width: 600px; height: 400px; margin-top: 20px; background-color: #333; }
-    pre { background-color: #222; padding: 10px; color: #1e90ff; overflow-x: auto; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a TARDIS with CadQuery</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        code { background-color: #f4f4f4; padding: 5px; border-radius: 4px; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
+    </style>
 </head>
 <body>
 
-<h1>3D TARDIS Viewer</h1>
-<p>Rotate the TARDIS by clicking and dragging. Zoom with the scroll wheel.</p>
-<canvas id="tardisCanvas"></canvas>
+<h1>Building a TARDIS in CadQuery</h1>
 
-<h2>CadQuery Code</h2>
-<pre id="cadqueryCode">
-import cadquery as cq
+<p>This guide explains how to build a TARDIS (Time And Relative Dimension In Space) using the <code>CadQuery</code> Python library. This project covers all steps to create a visual representation of the iconic British blue police box.</p>
 
-# Parameters for TARDIS
-width, depth, height = 30, 30, 60
-roof_height, door_width, door_height = 10, 8, 30
-panel_depth, light_height, light_diameter = 1, 5, 4
+<h2>Outline of the Project</h2>
+<ol>
+    <li>Install and Set Up CadQuery</li>
+    <li>Define the Basic Dimensions and Parameters</li>
+    <li>Create the Base and Walls of the TARDIS</li>
+    <li>Add Windows and Doors</li>
+    <li>Add Roof and Light Fixture</li>
+    <li>Apply Detailing and Color</li>
+</ol>
 
-# Base box
-tardis = cq.Workplane("XY").box(width, depth, height)
+<h2>1. Install and Set Up CadQuery</h2>
 
-# Roof on top
-roof = (cq.Workplane("XY")
-        .box(width + 5, depth + 5, roof_height)
-        .translate((0, 0, height / 2 + roof_height / 2)))
+<p>To start, install <code>CadQuery</code> by running:</p>
 
-# Light on top
-light = (cq.Workplane("XY")
-         .cylinder(light_height, light_diameter / 2)
-         .translate((0, 0, height / 2 + roof_height + light_height / 2)))
+<pre><code>pip install cadquery</code></pre>
 
-# Door panels
-door = (cq.Workplane("XY")
-        .moveTo(-width / 2 + door_width / 2 + 2, 0)
-        .box(door_width, panel_depth, door_height)
-        .translate((0, 0, -height / 2 + door_height / 2 + 5)))
+<p>For the best experience, use an IDE like Jupyter Notebook or a 3D viewer like <em>cq-editor</em> to visualize your model.</p>
 
-# Combine parts
-tardis = tardis.union(roof).union(light).cut(door)
-</pre>
+<h2>2. Define the Basic Dimensions and Parameters</h2>
 
-<script>
-  // Simplified 3D rendering logic
-  const canvas = document.getElementById('tardisCanvas');
-  const context = canvas.getContext('2d');
-  let angleX = 0;
-  let angleY = 0;
-  let zoom = 100;
+<p>Start by importing CadQuery and defining the dimensions for scalability:</p>
 
-  // Mockup 3D TARDIS points for demonstration
-  const tardisPoints = [
-    [-15, -15, -30], [15, -15, -30], [15, 15, -30], [-15, 15, -30],
-    [-15, -15, 30], [15, -15, 30], [15, 15, 30], [-15, 15, 30]
-  ];
+<pre><code>import cadquery as cq
 
-  const tardisEdges = [
-    [0, 1], [1, 2], [2, 3], [3, 0], // Bottom square
-    [4, 5], [5, 6], [6, 7], [7, 4], // Top square
-    [0, 4], [1, 5], [2, 6], [3, 7]  // Vertical lines
-  ];
+# Define TARDIS dimensions
+width = 100  # Width of the TARDIS base in mm
+height = 200  # Total height
+wall_thickness = 5  # Wall thickness
+roof_height = 30  # Height of the roof section
+door_height = 130  # Door height
+window_height = 30  # Height of window sections
+</code></pre>
 
-  // Handle mouse events for rotation
-  let isDragging = false;
-  let lastX, lastY;
-  canvas.addEventListener('mousedown', (event) => {
-    isDragging = true;
-    lastX = event.clientX;
-    lastY = event.clientY;
-  });
+<h2>3. Create the Base and Walls of the TARDIS</h2>
 
-  canvas.addEventListener('mousemove', (event) => {
-    if (isDragging) {
-      angleY += (event.clientX - lastX) * 0.01;
-      angleX += (event.clientY - lastY) * 0.01;
-      lastX = event.clientX;
-      lastY = event.clientY;
-      render();
-    }
-  });
+<p>Using CadQuery, create a hollow square-shaped structure for the walls:</p>
 
-  canvas.addEventListener('mouseup', () => { isDragging = false; });
-  canvas.addEventListener('wheel', (event) => {
-    zoom += event.deltaY * -0.05;
-    zoom = Math.min(Math.max(zoom, 50), 200);
-    render();
-  });
+<pre><code># Create the base shape of the TARDIS
+base = cq.Workplane("XY").box(width, width, height - roof_height)
+# Add wall thickness for depth
+walls = base.faces(">Z").shell(-wall_thickness)
+</code></pre>
 
-  // 3D transformation and projection functions
-  function rotate(point, angleX, angleY) {
-    let [x, y, z] = point;
-    let cosY = Math.cos(angleY), sinY = Math.sin(angleY);
-    let cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+<h2>4. Add Windows and Doors</h2>
 
-    // Rotation around Y-axis
-    let dx = x * cosY - z * sinY;
-    let dz = z * cosY + x * sinY;
+<p>We’ll add small rectangular cutouts on each side for the windows and a larger one for the door.</p>
 
-    // Rotation around X-axis
-    let dy = y * cosX - dz * sinX;
-    dz = dz * cosX + y * sinX;
+<h3>Windows</h3>
+<pre><code>window_width = 15
+window_spacing = 5
 
-    return [dx, dy, dz];
-  }
+# Create windows on the front face
+windows = (
+    walls.faces(">Z")
+    .workplane(centerOption="CenterOfMass")
+    .rect(window_width, window_height, forConstruction=True)
+    .vertices().hole(wall_thickness / 2)
+)
+</code></pre>
 
-  function project(point) {
-    const [x, y, z] = rotate(point, angleX, angleY);
-    const scale = zoom / (zoom + z);
-    return [canvas.width / 2 + x * scale, canvas.height / 2 - y * scale];
-  }
+<h3>Doors</h3>
+<pre><code># Create a door shape in the front
+door = (
+    windows.faces(">Z")
+    .workplane(centerOption="CenterOfMass")
+    .rect(width / 2, door_height)
+    .cutBlind(-wall_thickness)
+)
+</code></pre>
 
-  function render() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.strokeStyle = "cyan";
-    context.lineWidth = 2;
-    
-    tardisEdges.forEach(([start, end]) => {
-      const [x1, y1] = project(tardisPoints[start]);
-      const [x2, y2] = project(tardisPoints[end]);
-      context.beginPath();
-      context.moveTo(x1, y1);
-      context.lineTo(x2, y2);
-      context.stroke();
-    });
-  }
+<h2>5. Add Roof and Light Fixture</h2>
 
-  window.addEventListener('resize', () => {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-    render();
-  });
+<p>To create a roof, add a pyramid shape with a central light fixture:</p>
 
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
-  render();
-</script>
+<pre><code># Create the pyramid-shaped roof
+roof = (
+    door.faces(">Z")
+    .workplane(centerOption="CenterOfMass")
+    .polyline([(width / 2, 0), (width / 4, roof_height), (-width / 2, 0)])
+    .close()
+    .extrude(wall_thickness)
+)
+
+# Add a light fixture on the top center of the roof
+light = (
+    roof.faces(">Z")
+    .workplane(centerOption="CenterOfMass")
+    .circle(5)  # Light fixture radius
+    .extrude(10)  # Light fixture height
+)
+</code></pre>
+
+<h2>6. Apply Detailing and Color</h2>
+
+<p>CadQuery does not directly support color, but you can add detailing or colorize in a downstream CAD viewer.</p>
+
+<p><code># Add raised lettering for "POLICE BOX" and other details as required</code></p>
+
+
+
+
 
 </body>
 </html>
