@@ -1,0 +1,200 @@
+
+ <!DOCTYPE html>
+ <html>
+ <head>
+  <title>The King's Quest</title>
+  <style>
+  body {
+  font-family: Arial, sans-serif;
+  }
+  .scene {
+  margin-bottom: 20px;
+  }
+  .options {
+  margin-top: 10px;
+  }
+  button {
+  padding: 5px 10px;
+  cursor: pointer;
+  }
+  </style>
+ </head>
+ <body>
+  <h1>The King's Quest</h1>
+  <div id="game">
+  <div class="scene" id="start">
+  <p>You are a king troubled by the affairs of your kingdom. To ensure your reign is just and prosperous, you seek answers to three essential questions that could guide your decisions:</p>
+  <ol>
+  <li>What is the right time to begin something?</li>
+  <li>Which people should you listen to?</li>
+  <li>What is the most important thing to do?</li>
+  </ol>
+  <p>Desperate for guidance, you announce a great reward for anyone who can provide satisfactory answers.</p>
+  <button onclick="showScene('begin')">BEGIN</button>
+  </div>
+ 
+
+  <div class="scene" id="begin" style="display:none;">
+  <p>Learned individuals from across the land arrive, each offering different advice.</p>
+  <h4>The First Question: Timing</h4>
+  <p>To know the right time for every action...</p>
+  <div class="options">
+  <button onclick="showScene('table')">Draw up a table of days, months, and years (TABLE)</button>
+  <button onclick="showScene('attend')">Pay attention to all that is going on (ATTEND)</button>
+  <button onclick="showScene('council')">Have a council of wise men (COUNCIL)</button>
+  <button onclick="showScene('magic')">Consult magicians (MAGIC)</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="table" style="display:none;">
+  <p>You create a rigid timetable. The kingdom initially prospers, but unforeseen events disrupt your schedule, leading to discontent.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="attend" style="display:none;">
+  <p>You become engrossed in daily affairs, neglecting long-term planning. The kingdom thrives in the short term, but lacks direction.</p>
+  <h4>The Second Question: Counsel</h4>
+  <p>Which people should the King listen to?</p>
+  <div class="options">
+  <button onclick="showScene('councilors')">Councilors</button>
+  <button onclick="showScene('priests')">Priests</button>
+  <button onclick="showScene('doctors')">Doctors</button>
+  <button onclick="showScene('warriors')">Warriors</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="council" style="display:none;">
+  <p>The council's debates are lengthy, and decisions are slow. Urgent matters are delayed, causing unrest.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="magic" style="display:none;">
+  <p>The magicians' predictions are cryptic and often misleading. You make several decisions based on false information, leading to chaos.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="councilors" style="display:none;">
+  <p>The kingdom becomes politically stable but lacks spiritual depth and innovation.</p>
+  <h4>The Third Question: Priorities</h4>
+  <p>What is the most important thing for the King to do?</p>
+  <div class="options">
+  <button onclick="showScene('science')">Advance Science</button>
+  <button onclick="showScene('warfare')">Master the Art of Warfare</button>
+  <button onclick="showScene('worship')">Dedicate yourself to Religious Worship</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="priests" style="display:none;">
+  <p>The kingdom becomes morally upright but resistant to change and practical solutions.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="doctors" style="display:none;">
+  <p>The kingdom enjoys excellent health but neglects matters of defense and economy.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="warriors" style="display:none;">
+  <p>The kingdom is secure but oppressive, leading to rebellion.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="science" style="display:none;">
+  <p>The kingdom prospers through innovation, but its people become detached from tradition and spirituality.</p>
+  <p>Dissatisfied despite your kingdom's progress, you seek the counsel of a renowned hermit. Disguised in simple clothes, you leave your bodyguard and approach his dwelling. The hermit is digging the ground.</p>
+  <p>Do you:</p>
+  <div class="options">
+  <button onclick="showScene('help')">Offer to help the hermit?</button>
+  <button onclick="showScene('demand')">Demand answers to your questions immediately?</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="warfare" style="display:none;">
+  <p>The kingdom expands its territory, but at the cost of its resources and the suffering of its people.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="worship" style="display:none;">
+  <p>The kingdom is blessed with peace but stagnates due to a lack of progress and defense.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="demand" style="display:none;">
+  <p>The Hermit refuses to answer, and you return to your kingdom no wiser, leaving your people without true guidance.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="help" style="display:none;">
+  <p>You assist the hermit with his work. A wounded man appears. </p>
+  <p>Do you:</p>
+  <div class="options">
+  <button onclick="showScene('tend')">Tend to the wounded man?</button>
+  <button onclick="showScene('ignore')">Ignore him and continue seeking answers?</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="ignore" style="display:none;">
+  <p>The hermit is disappointed by your lack of compassion and refuses to answer. You return to your kingdom no wiser, leaving your people without true guidance.</p>
+  <p><strong>GAME OVER</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="tend" style="display:none;">
+  <p>You and the hermit care for the wounded man. The man, once healed, reveals himself as your enemy, who sought revenge but is now indebted to you. He pledges his loyalty. The hermit then reveals the answers you sought:</p>
+  <ol>
+  <li><strong>The most important time is NOW</strong>: Act in the present, for it is the only time you have power.</li>
+  <li><strong>The most necessary person is the one you are with</strong>: Focus on those who need your help at this moment.</li>
+  <li><strong>The most important affair is to do that person good</strong>: Because that is the purpose of life.</li>
+  </ol>
+  <p><strong>YOU WIN</strong>. You return to your kingdom, ready to rule with compassion and wisdom.</p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+  </div>
+ 
+
+  <script>
+  function showScene(sceneId) {
+  // Hide all scenes
+  let scenes = document.querySelectorAll('.scene');
+  scenes.forEach(scene => scene.style.display = 'none');
+ 
+
+  // Show the selected scene
+  document.getElementById(sceneId).style.display = 'block';
+  }
+ 
+
+  function resetGame() {
+  showScene('start');
+  }
+  </script>
+ </body>
+ </html>
+
+ 
+
+ 
