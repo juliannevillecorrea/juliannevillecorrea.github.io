@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+ <html>
+ <head>
+  <title>The King's Quest</title>
+  <style>
+  body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 20px;
+  background-color: #f4f4f4;
+  color: #333;
+  }
+  h1 {
+  color: #444;
+  text-align: center;
+  }
+  .scene {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .options {
+  margin-top: 15px;
+  }
+  button {
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  }
+  button:hover {
+  background-color: #4cae4c;
+  }
+  button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(92, 184, 92, 0.5);
+  }
+  .outcome {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  }
+  .game-over {
+  color: red;
+  font-weight: bold;
+  }
+  .win {
+  color: green;
+  font-weight: bold;
+  }
+  /* Hidden content */
+  .hidden {
+  display: none;
+  }
+  </style>
+ </head>
+ <body>
+  <h1>The King's Quest</h1>
+  <div id="game">
+  <div class="scene" id="start">
+  <p>You are King Alaric, ruler of the prosperous kingdom of Eldoria. Yet, despite the wealth and peace, you are troubled. You believe that true leadership requires wisdom beyond simple governance. To ensure your reign is just and that Eldoria continues to flourish, you seek answers to three essential questions that could guide all your decisions:</p>
+  <ol>
+  <li>What is the right time to begin something?</li>
+  <li>Which people should you listen to?</li>
+  <li>What is the most important thing to do?</li>
+  </ol>
+  <p>Driven by this quest for knowledge, you announce throughout the kingdom that you will bestow a great reward upon anyone who can provide satisfactory answers. The announcement attracts countless individuals, each with their own perspective.</p>
+  <button onclick="showScene('begin')">BEGIN YOUR QUEST</button>
+  </div>
+ 
+
+  <div class="scene" id="begin" style="display:none;">
+  <p>Learned individuals, sages, and charlatans from across the land arrive at your court, each eager to offer their advice and claim the promised reward. The diversity of opinions is overwhelming. You decide to address each question separately, starting with the most fundamental.</p>
+  <h4>The First Question: Timing</h4>
+  <p>To know the right time for every action...</p>
+  <div class="options">
+  <button onclick="showScene('table')">Draw up a meticulous table of days, months, and years, dictating every action (TABLE)</button>
+  <button onclick="showScene('attend')">Pay keen attention to all that is going on around you, acting on immediate needs (ATTEND)</button>
+  <button onclick="showScene('council')">Establish a council of wise men to deliberate on the proper time for each significant action (COUNCIL)</button>
+  <button onclick="showScene('magic')">Consult with court magicians and astrologers to foresee the most auspicious times (MAGIC)</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="table" style="display:none;">
+  <p>You dedicate yourself to creating a comprehensive timetable, detailing every aspect of your rule from dawn till dusk. Initially, the kingdom responds well to the newfound order and predictability. However, when unforeseen events such as a sudden famine and a trade route blockage occur, the rigid schedule proves disastrous, leading to widespread discontent and inefficiency.</p>
+  <p class="outcome game-over"><strong>Your inflexibility has cost you the trust of your people. The kingdom is thrown into chaos.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="attend" style="display:none;">
+  <p>You resolve to immerse yourself in the daily affairs of the kingdom, attending to every detail and addressing issues as they arise. This hands-on approach leads to immediate improvements and fosters a sense of connection with your subjects. However, long-term planning is neglected, and the kingdom begins to lack strategic direction. A neighboring kingdom, seeing your lack of foresight, begins to encroach on your borders.</p>
+  <p>With war looming, you must now decide who to trust for counsel.</p>
+  <h4>The Second Question: Counsel</h4>
+  <p>Which people should the King listen to in this time of crisis?</p>
+  <div class="options">
+  <button onclick="showScene('councilors')">Your seasoned Councilors, known for their political acumen</button>
+  <button onclick="showScene('priests')">The revered Priests, who claim to have divine insight</button>
+  <button onclick="showScene('doctors')">The astute Doctors, who understand the health and well-being of the populace</button>
+  <button onclick="showScene('warriors')">Your battle-hardened Warriors, who know the strategies of war</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="council" style="display:none;">
+  <p>You form a council of the most esteemed wise men in your kingdom, tasking them with determining the best course of action for every significant decision. The debates are thorough and exhaustive, but agonizingly slow. Urgent matters are often delayed by weeks, and the kingdom suffers from bureaucratic inertia. A vital trade agreement falls apart due to the council's inability to act swiftly.</p>
+  <p class="outcome game-over"><strong>The paralysis of your council has stifled progress and cost the kingdom dearly.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="magic" style="display:none;">
+  <p>Entrusting your faith to the mystical arts, you consult with the court magicians and astrologers, relying on their predictions to guide your decisions. While some of their forecasts prove accurate, many are vague or outright misleading. Based on a misinterpreted prophecy, you launch a costly and ultimately fruitless expedition to a distant land, depleting the kingdom's resources and sparking skepticism among your people.</p>
+  <p class="outcome game-over"><strong>Your reliance on unreliable magic has led to financial ruin and public distrust.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="councilors" style="display:none;">
+  <p>You heed the advice of your councilors, who advocate for a strategy of political maneuvering and alliance-building. They successfully negotiate treaties with neighboring kingdoms, securing Eldoria's borders and ensuring a fragile peace. However, their focus on political stability comes at the expense of spiritual depth and social innovation. The people, though secure, feel a growing sense of emptiness.</p>
+  <p>Despite the peace, a sense of unease lingers. You realize something is missing. What should your primary focus be to truly enrich the kingdom?</p>
+  <h4>The Third Question: Priorities</h4>
+  <p>What is the most important thing for the King to do to ensure the well-being of Eldoria?</p>
+  <div class="options">
+  <button onclick="showScene('science')">Advance Science and knowledge, fostering innovation and progress</button>
+  <button onclick="showScene('warfare')">Master the Art of Warfare, ensuring the kingdom's defense and dominance</button>
+  <button onclick="showScene('worship')">Dedicate yourself to Religious Worship, seeking divine favor and moral guidance</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="priests" style="display:none;">
+  <p>You place your trust in the priests, adhering strictly to their moral and spiritual guidance. The kingdom becomes renowned for its piety and virtuous living. However, this rigid adherence to tradition stifles creativity and makes the kingdom resistant to change and practical solutions. A new farming technique that could solve food shortages is rejected because it goes against ancient traditions.</p>
+  <p class="outcome game-over"><strong>Your kingdom, though morally sound, is unable to adapt to new challenges and slowly declines.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="doctors" style="display:none;">
+  <p>You listen to the counsel of the doctors, prioritizing the health and well-being of your populace above all else. Eldoria becomes a haven of healing and longevity, with advanced medical practices and widespread wellness. However, this focus leads to the neglect of matters of defense and economy. A sudden raid by bandits catches the kingdom unprepared, and vital trade routes are left unprotected.</p>
+  <p class="outcome game-over"><strong>Your kingdom, though healthy, is vulnerable and impoverished.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="warriors" style="display:none;">
+  <p>You rely on your warriors, fortifying the kingdom and expanding its military might. Eldoria becomes a formidable power, feared by its neighbors. However, this constant state of alert breeds an oppressive atmosphere, and the people grow weary of the endless drills and heavy taxation. A rebellion sparks in a distant province, fueled by resentment and a longing for peace.</p>
+  <p class="outcome game-over"><strong>Your kingdom, though strong, is fractured by internal strife and tyranny.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="science" style="display:none;">
+  <p>You champion science and knowledge, establishing academies and funding research into all fields of study. Eldoria experiences a golden age of innovation, with groundbreaking inventions and advancements in medicine, agriculture, and technology. However, this relentless pursuit of progress leads to a detachment from tradition and spirituality. Many of your subjects feel alienated and question the purpose of their lives in this rapidly changing world.</p>
+  <p>Despite the outward prosperity, you sense a deep spiritual void within your kingdom. Dissatisfied and realizing that material progress alone is not enough, you decide to seek the wisdom of a renowned hermit said to live in seclusion deep within the ancient forest of Elmsong. Disguised in simple clothes, you leave your royal retinue behind and venture into the woods alone. After a day's journey, you come across a small clearing where the hermit is tending a garden. He is digging the ground with a spade.</p>
+  <p>Do you:</p>
+  <div class="options">
+  <button onclick="showScene('help')">Humbly offer to help the hermit with his laborious task?</button>
+  <button onclick="showScene('demand')">Impatiently demand that he answer your questions immediately?</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="warfare" style="display:none;">
+  <p>You dedicate yourself to mastering the art of warfare, building a powerful army and expanding your kingdom's territory through conquest. Eldoria becomes an empire, feared and respected throughout the land. However, this expansion comes at the cost of the kingdom's resources and the suffering of its people. The conquered territories are restless, and the constant warfare drains the treasury and the morale of your subjects.</p>
+  <p class="outcome game-over"><strong>Your kingdom, though vast, is built on a foundation of blood and tears, destined to collapse under its own weight.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="worship" style="display:none;">
+  <p>You devote yourself entirely to religious worship, constructing grand temples and leading your people in daily prayers and rituals. Eldoria is blessed with peace and harmony, and the people are united in their faith. However, this singular focus leads to stagnation in other areas of life, such as commerce, innovation, and defense. A neighboring kingdom, seeing your pacifism as weakness, launches an invasion, catching Eldoria completely unprepared.</p>
+  <p class="outcome game-over"><strong>Your kingdom, though pious, is defenseless and falls to invaders.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="demand" style="display:none;">
+  <p>Approaching the hermit with regal authority, you demand that he impart his wisdom and answer your questions without delay. The hermit, unimpressed by your display of power, simply shakes his head and turns away, resuming his digging. Disappointed and frustrated, you return to your kingdom no wiser than before, leaving your people without the true guidance they need.</p>
+  <p class="outcome game-over"><strong>Your arrogance has cost you the opportunity to gain true wisdom, and your kingdom continues to drift aimlessly.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="help" style="display:none;">
+  <p>Humbly approaching the hermit, you offer your assistance with his arduous task. The hermit, without a word, nods in acceptance and hands you the spade. You work alongside him for several hours, the sweat of your brow mingling with the earth. As the sun begins to set, a figure emerges from the forest – a wounded man, clutching his stomach, blood seeping through his fingers. He stumbles towards you, collapsing at your feet.</p>
+  <p>Do you:</p>
+  <div class="options">
+  <button onclick="showScene('tend')">Set aside your quest and tend to the wounded man's injuries with the best of your abilities?</button>
+  <button onclick="showScene('ignore')">Ignore his plight, focusing solely on obtaining the answers you seek from the hermit?</button>
+  </div>
+  </div>
+ 
+
+  <div class="scene" id="ignore" style="display:none;">
+  <p>Determined to stay focused on your original purpose, you ignore the wounded man and press the hermit for answers. The hermit, observing your lack of compassion, sighs deeply. "True wisdom," he says, "begins with empathy. If you cannot see the value in helping those in need, you are not ready to receive my teachings." With that, he turns and walks away, disappearing into the forest, leaving you alone with your unfulfilled quest.</p>
+  <p class="outcome game-over"><strong>Your lack of compassion has closed the door to true wisdom, and you return to your kingdom empty-handed.</strong></p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+ 
+
+  <div class="scene" id="tend" style="display:none;">
+  <p>Putting aside your royal concerns, you kneel beside the wounded man, examining his injuries. With the hermit's assistance, you clean and bandage his wounds, using strips of your own clothing to staunch the bleeding. You carry him to the hermit's small dwelling, where you tend to him throughout the night. By morning, the man's fever has broken, and he is conscious. He looks at you with gratitude, then with a dawning sense of recognition. He is a known enemy of yours. He reveals himself as a nobleman from a conquered province, who had sworn revenge on you for the death of his brother. He admits he had been waiting in ambush, intending to kill you, but his plans went awry when he was attacked by bandits.</p>
+  <p>Overcome with remorse and gratitude, the nobleman pledges his loyalty to you, promising to serve you faithfully for the rest of his days. The hermit, who has been watching silently, steps forward. "You have already found the answers you seek, King Alaric," he says.</p>
+  <p class="outcome win">The Hermit then reveals the answers you sought:</p>
+  <ol>
+  <li><strong>The most important time is NOW</strong>: The present moment is the only time over which you have any control. Your actions in the present determine the future.</li>
+  <li><strong>The most necessary person is the one you are with</strong>: The person in front of you, who needs your help or attention, is the one you should focus on. Every interaction is an opportunity to show kindness and make a difference.</li>
+  <li><strong>The most important affair is to do that person good</strong>: Serving others is the highest purpose of life. By helping those in need, you not only improve their lives but also enrich your own.</li>
+  </ol>
+  <p class="outcome win"><strong>YOU WIN</strong>. Humbled and enlightened, you return to your kingdom, ready to rule with compassion, wisdom, and a newfound understanding of the true meaning of leadership.</p>
+  <button onclick="resetGame()">Restart</button>
+  </div>
+  </div>
+ 
+
+  <script>
+  function showScene(sceneId) {
+  // Hide all scenes
+  let scenes = document.querySelectorAll('.scene');
+  scenes.forEach(scene => scene.style.display = 'none');
+ 
+
+  // Show the selected scene
+  document.getElementById(sceneId).style.display = 'block';
+  }
+ 
+
+  function resetGame() {
+  showScene('start');
+  }
+  </script>
+ </body>
+ </html>
