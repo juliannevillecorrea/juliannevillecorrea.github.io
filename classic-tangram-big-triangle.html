@@ -1,5 +1,59 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+    <title>Tangram Big Triangle (WebGL)</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r159/three.min.js"></script>
+    <script>
+        // Set up the scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Define the triangle's vertices
+        const vertices = [
+            new THREE.Vector3(3, 35, 0),  // Vertex A
+            new THREE.Vector3(103, 35, 0), // Vertex B
+            new THREE.Vector3(53, 85, 0)   // Vertex C
+        ];
+
+        // Create the geometry
+        const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
+
+        // Define the faces (triangles)
+        const indices = [0, 1, 2];
+        geometry.setIndex(indices);
+        geometry.computeVertexNormals();
+        geometry.computeBoundingBox();
+
+        // Create a material
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide }); // Green color
+
+        // Create the mesh
+        const triangle = new THREE.Mesh(geometry, material);
+        scene.add(triangle);
+
+        // Position the camera
+        camera.position.z = 200;
+        camera.lookAt(53,60,0)
+        // Animate (not really needed for a static triangle)
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+=======
   <head>
     <link rel='stylesheet' type='text/css' href='http://www.x3dom.org/download/x3dom.css'></link>
   </head>
@@ -74,4 +128,5 @@
       </Group>
     </Scene>
   </X3D>
+
 </html>
