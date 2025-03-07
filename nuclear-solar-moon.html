@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feasibility Study: Solar Farms vs. Nuclear Reactors for Lunar Colonies</title>
+    <!-- MathJax Configuration -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #0a3d62;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0a3d62;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #0a3d62;
+            margin-top: 30px;
+            border-left: 4px solid #0a3d62;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .comparison {
+            display: flex;
+            margin: 20px 0;
+        }
+        .column {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin: 0 10px;
+        }
+        .pros-cons {
+            display: flex;
+            margin: 20px 0;
+        }
+        .pros, .cons {
+            flex: 1;
+            padding: 15px;
+            margin: 0 10px;
+        }
+        .pros {
+            background-color: #e7f4e4;
+        }
+        .cons {
+            background-color: #f9e7e7;
+        }
+        .conclusion {
+            background-color: #f2f9ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .highlight {
+            background-color: #ffffcc;
+            padding: 2px 4px;
+        }
+        figure {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .reference {
+            font-size: 0.9em;
+            border-left: 3px solid #ccc;
+            padding-left: 10px;
+            margin: 5px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Feasibility Study: Solar Farms vs. Nuclear Reactors for Lunar Power Generation</h1>
+    
+    <div class="executive-summary">
+        <h2>Executive Summary</h2>
+        <p>This feasibility study evaluates two primary power generation options for establishing sustainable lunar colonies: solar photovoltaic farms and nuclear fission reactors. The analysis considers technical feasibility, deployment challenges, maintenance requirements, scaling potential, and long-term sustainability in the unique lunar environment.</p>
+        
+        <p>Establishing reliable power generation is perhaps the most critical infrastructure challenge for any permanent lunar settlement. Without consistent power, life support systems, scientific operations, resource extraction facilities, and habitat maintenance would be impossible. This study provides a comprehensive evaluation to inform strategic planning for lunar colonization efforts.</p>
+    </div>
+
+    <h2>1. Lunar Environment Context</h2>
+    
+    <h3>1.1 Key Environmental Factors</h3>
+    <ul>
+        <li><strong>Vacuum conditions:</strong> No atmospheric attenuation of solar radiation but also no convective cooling</li>
+        <li><strong>Lunar day/night cycle:</strong> ~14 Earth days of sunlight followed by ~14 Earth days of darkness</li>
+        <li><strong>Temperature extremes:</strong> +120°C in direct sunlight to -180°C during lunar night</li>
+        <li><strong>Regolith characteristics:</strong> Abrasive dust that can damage mechanical systems and coat solar panels</li>
+        <li><strong>Radiation exposure:</strong> Lack of magnetic field and atmosphere results in high radiation levels</li>
+        <li><strong>Gravity:</strong> 1/6th of Earth's gravity (1.62 m/s²)</li>
+    </ul>
+
+    <h3>1.2 Power Requirements for a Lunar Colony</h3>
+    <p>A functional lunar colony would require power for multiple critical systems:</p>
+    <ul>
+        <li>Life support (air recycling, water processing, thermal control)</li>
+        <li>Habitat lighting and operations</li>
+        <li>Communications systems</li>
+        <li>Scientific research equipment</li>
+        <li>In-situ resource utilization (ISRU) operations</li>
+        <li>Manufacturing and repair facilities</li>
+        <li>Agriculture and food production</li>
+    </ul>
+    
+    <p>Estimated power requirements would scale with colony size:</p>
+    <ul>
+        <li>Small outpost (4-6 people): 25-50 kW continuous</li>
+        <li>Medium research base (12-20 people): 100-200 kW continuous</li>
+        <li>Large settlement (50+ people): 0.5-2 MW continuous</li>
+        <li>Industrial colony with resource processing: 5+ MW continuous</li>
+    </ul>
+
+    <h2>2. Solar Power on the Moon</h2>
+    
+    <h3>2.1 Solar Energy Potential</h3>
+    <p>The solar constant at the Moon's distance from the Sun is approximately 1361 W/m² with no atmospheric attenuation. This gives the formula for incident solar energy:</p>
+    
+    <p>$$E_{solar} = 1361 \text{ W/m}^2 \times A \times \eta \times \cos(\theta)$$</p>
+    
+    <p>Where:</p>
+    <ul>
+        <li>$A$ = area of solar panels (m²)</li>
+        <li>$\eta$ = solar panel efficiency</li>
+        <li>$\theta$ = angle of incidence from the normal</li>
+    </ul>
+    
+    <p>For a 1000 m² solar farm with 30% efficient panels at optimal orientation:</p>
+    
+    <p>$$E_{optimal} = 1361 \text{ W/m}^2 \times 1000 \text{ m}^2 \times 0.30 \times 1.0 = 408.3 \text{ kW}$$</p>
+
+    <h3>2.2 Lunar Day/Night Cycle Challenge</h3>
+    <p>The ~14-day lunar night presents the greatest challenge for solar power. Energy storage requirements can be calculated as:</p>
+    
+    <p>$$E_{storage} = P_{required} \times t_{night}$$</p>
+    
+    <p>For a medium base requiring 150 kW continuous power:</p>
+    
+    <p>$$E_{storage} = 150 \text{ kW} \times 336 \text{ hours} = 50,400 \text{ kWh}$$</p>
+    
+    <p>This is approximately 40 times larger than the Tesla Megapack 2XL commercial battery system (1.28 MWh), demonstrating the enormous scale of energy storage required.</p>
+
+    <h3>2.3 Potential Configurations and Strategies</h3>
+    
+    <h4>2.3.1 Equatorial Solar Farm</h4>
+    <p>A flat array deployed near the lunar equator would experience the full day/night cycle and require massive energy storage.</p>
+    
+    <h4>2.3.2 Polar Solar Farm</h4>
+    <p>Lunar poles have "peaks of eternal light" where certain elevated locations receive nearly continuous sunlight. A solar farm on these peaks could theoretically operate at 70-80% capacity continuously, requiring much less energy storage.</p>
+    
+    <h4>2.3.3 Distributed Solar Network</h4>
+    <p>Multiple solar farms could be placed around the lunar circumference, connected by power transmission lines, providing continuous power as different regions experience daylight. This would require approximately:</p>
+    
+    <p>$$N_{minimum} = \frac{t_{lunar\_cycle}}{t_{lunar\_day}} = \frac{27.3 \text{ days}}{13.65 \text{ days}} \approx 3 \text{ interconnected stations}$$</p>
+
+    <h3>2.4 Technical Implementation</h3>
+    
+    <h4>2.4.1 Solar Panel Technologies</h4>
+    <ul>
+        <li><strong>Thin-film flexible arrays:</strong> Lower efficiency (15-20%) but lightweight for transport</li>
+        <li><strong>Multi-junction photovoltaics:</strong> Higher efficiency (30-40%) but heavier and more costly</li>
+        <li><strong>Concentrated solar:</strong> Uses mirrors to focus light onto high-efficiency cells</li>
+    </ul>
+    
+    <h4>2.4.2 Energy Storage Options</h4>
+    <ul>
+        <li><strong>Lithium-ion batteries:</strong> Current technology, but mass-inefficient for lunar night duration</li>
+        <li><strong>Regenerative fuel cells:</strong> Use electrolysis to produce hydrogen and oxygen during daylight, then generate electricity during darkness</li>
+        <li><strong>Flywheel energy storage:</strong> Mechanical energy storage with lower mass requirements than batteries</li>
+        <li><strong>Thermal energy storage:</strong> Molten salt or similar medium to store heat for thermal generators</li>
+    </ul>
+    
+    <h4>2.4.3 Transport and Deployment Considerations</h4>
+    <p>For a 1 MW peak solar farm (sufficient for a medium-sized base with energy storage):</p>
+    <ul>
+        <li>Area required: ~3,000-5,000 m² depending on efficiency</li>
+        <li>Mass of panels: ~15-25 metric tons</li>
+        <li>Mass of support structures: ~5-10 metric tons</li>
+        <li>Mass of energy storage (regenerative fuel cells): ~30-50 metric tons</li>
+    </ul>
+    
+    <p>Total launch mass: ~50-85 metric tons</p>
+    
+    <h3>2.5 Solar Farm Analysis</h3>
+    
+    <div class="pros-cons">
+        <div class="pros">
+            <h4>Advantages</h4>
+            <ul>
+                <li>No fuel requirements</li>
+                <li>Modular and scalable architecture</li>
+                <li>Well-understood technology</li>
+                <li>Long operational lifetime (20+ years)</li>
+                <li>No radioactive materials or waste</li>
+                <li>Passive operation with minimal moving parts</li>
+            </ul>
+        </div>
+        <div class="cons">
+            <h4>Challenges</h4>
+            <ul>
+                <li>Massive energy storage requirements</li>
+                <li>Large surface area required</li>
+                <li>Vulnerability to micrometeoroid damage</li>
+                <li>Dust accumulation reducing efficiency</li>
+                <li>Equatorial locations require ~14 days of energy storage</li>
+                <li>Polar locations have limited suitable terrain</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>3. Nuclear Power on the Moon</h2>
+    
+    <h3>3.1 Nuclear Energy Potential</h3>
+    <p>Nuclear fission releases energy according to Einstein's mass-energy equivalence:</p>
+    
+    <p>$$E = mc^2$$</p>
+    
+    <p>The energy density for uranium-235 is approximately:</p>
+    
+    <p>$$E_{density} = 80,620,000 \text{ MJ/kg}$$</p>
+    
+    <p>Compared to chemical batteries at ~0.5-1 MJ/kg, nuclear fuel provides approximately 8 orders of magnitude more energy per unit mass.</p>
+
+    <h3>3.2 Reactor Types and Configurations</h3>
+    
+    <h4>3.2.1 Small Modular Reactors (SMRs)</h4>
+    <p>Current SMR designs range from 10-300 MWe and could be adapted for lunar use. For lunar applications, smaller 1-10 MWe versions would be more appropriate.</p>
+    
+    <h4>3.2.2 Kilopower and KRUSTY</h4>
+    <p>NASA's Kilopower project has demonstrated a 1-10 kWe fission power system specifically designed for space applications. The KRUSTY (Kilopower Reactor Using Stirling Technology) prototype successfully completed ground testing in 2018.</p>
+    
+    <p>Key specifications for a scaled Kilopower system:</p>
+    <ul>
+        <li>Power output: 1-10 kWe per unit</li>
+        <li>Mass: ~1,500 kg per unit</li>
+        <li>Volume: ~2 m³ per unit</li>
+        <li>Operational lifetime: 10-15 years</li>
+        <li>Multiple units can be combined to scale power output</li>
+    </ul>
+    
+    <h4>3.2.3 Heat-to-Power Conversion Systems</h4>
+    <ul>
+        <li><strong>Stirling engines:</strong> Closed-cycle heat engines with high efficiency but moving parts</li>
+        <li><strong>Brayton cycle:</strong> Gas turbine system with good efficiency and medium complexity</li>
+        <li><strong>Rankine cycle:</strong> Uses liquid-vapor phase change, similar to Earth power plants</li>
+        <li><strong>Thermoelectric conversion:</strong> Solid-state, lower efficiency but extremely reliable</li>
+    </ul>
+    
+    <p>Efficiency comparison:</p>
+    <ul>
+        <li>Stirling: 25-30% thermal to electric</li>
+        <li>Brayton: 20-25% thermal to electric</li>
+        <li>Rankine: 20-30% thermal to electric</li>
+        <li>Thermoelectric: 5-10% thermal to electric</li>
+    </ul>
+
+    <h3>3.3 Thermal Management in Lunar Environment</h3>
+    <p>Heat rejection in vacuum is governed by the Stefan-Boltzmann law:</p>
+    
+    <p>$$P = \varepsilon \sigma A T^4$$</p>
+    
+    <p>Where:</p>
+    <ul>
+        <li>$P$ = power radiated (W)</li>
+        <li>$\varepsilon$ = emissivity of the radiator surface</li>
+        <li>$\sigma$ = Stefan-Boltzmann constant (5.67 × 10⁻⁸ W/m²K⁴)</li>
+        <li>$A$ = radiator area (m²)</li>
+        <li>$T$ = absolute temperature (K)</li>
+    </ul>
+    
+    <p>For a 1 MWe reactor with 30% efficiency, the waste heat to be rejected is:</p>
+    
+    <p>$$P_{waste} = P_{electric} \times \left(\frac{1}{\eta} - 1\right) = 1 \text{ MW} \times \left(\frac{1}{0.3} - 1\right) = 2.33 \text{ MW}$$</p>
+    
+    <p>Radiator area required at 600K operating temperature:</p>
+    
+    <p>$$A = \frac{P_{waste}}{\varepsilon \sigma T^4} = \frac{2.33 \times 10^6 \text{ W}}{0.9 \times 5.67 \times 10^{-8} \text{ W/m}^2\text{K}^4 \times (600 \text{ K})^4} \approx 175 \text{ m}^2$$</p>
+
+    <h3>3.4 Deployment and Operation</h3>
+    
+    <h4>3.4.1 Transport Considerations</h4>
+    <p>A 1 MWe modular reactor system would require approximately:</p>
+    <ul>
+        <li>Reactor core mass: ~10-15 metric tons</li>
+        <li>Shielding mass: ~10-20 metric tons</li>
+        <li>Power conversion system: ~5-10 metric tons</li>
+        <li>Radiators and thermal management: ~5-10 metric tons</li>
+        <li>Control systems and auxiliary equipment: ~5 metric tons</li>
+    </ul>
+    
+    <p>Total launch mass: ~35-60 metric tons</p>
+    
+    <h4>3.4.2 Installation Strategy</h4>
+    <p>Options include:</p>
+    <ul>
+        <li><strong>Buried installation:</strong> Using regolith for radiation shielding, reducing transported mass</li>
+        <li><strong>Surface installation with engineered shielding:</strong> Faster deployment but higher launch mass</li>
+        <li><strong>Crater rim placement:</strong> Using natural terrain for partial shielding</li>
+    </ul>
+    
+    <h4>3.4.3 Refueling and Maintenance</h4>
+    <p>For a 1 MWe reactor operating continuously:</p>
+    <ul>
+        <li>Annual fuel consumption: ~5-10 kg of enriched uranium</li>
+        <li>Expected core replacement: Every 10-15 years</li>
+        <li>Maintenance requirements: Primarily for heat conversion systems rather than core</li>
+    </ul>
+
+    <h3>3.5 Nuclear Reactor Analysis</h3>
+    
+    <div class="pros-cons">
+        <div class="pros">
+            <h4>Advantages</h4>
+            <ul>
+                <li>Continuous power independent of day/night cycle</li>
+                <li>Compact footprint relative to power output</li>
+                <li>Unaffected by dust accumulation</li>
+                <li>Minimal consumables (years of operation per fueling)</li>
+                <li>Can provide both electrical power and thermal energy</li>
+                <li>Reliable operation in extreme conditions</li>
+            </ul>
+        </div>
+        <div class="cons">
+            <h4>Challenges</h4>
+            <ul>
+                <li>Higher technological complexity</li>
+                <li>Radiation shielding requirements increase mass</li>
+                <li>Heat rejection requires large radiators</li>
+                <li>Potential safety concerns for crewed operations</li>
+                <li>International regulatory considerations</li>
+                <li>Long-term waste management strategy required</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>4. Comparative Analysis</h2>
+    
+    <table>
+        <tr>
+            <th>Parameter</th>
+            <th>Solar Farm</th>
+            <th>Nuclear Reactor</th>
+        </tr>
+        <tr>
+            <td>Power density (kW/m²)</td>
+            <td>0.1-0.2</td>
+            <td>5-10 (including radiators)</td>
+        </tr>
+        <tr>
+            <td>Mass-to-power ratio (kg/kW)</td>
+            <td>50-85 (including storage)</td>
+            <td>35-60</td>
+        </tr>
+        <tr>
+            <td>Initial deployment complexity</td>
+            <td>Medium (large area, simple systems)</td>
+            <td>High (compact, complex systems)</td>
+        </tr>
+        <tr>
+            <td>Operational complexity</td>
+            <td>Low (minimal moving parts)</td>
+            <td>Medium (active thermal management)</td>
+        </tr>
+        <tr>
+            <td>Maintenance requirements</td>
+            <td>Regular dust removal, occasional panel replacement</td>
+            <td>Periodic inspection, coolant system maintenance</td>
+        </tr>
+        <tr>
+            <td>Scalability</td>
+            <td>Highly modular, linear scaling</td>
+            <td>Step-wise scaling with reactor size</td>
+        </tr>
+        <tr>
+            <td>Power continuity</td>
+            <td>Dependent on storage or location</td>
+            <td>Continuous regardless of location</td>
+        </tr>
+        <tr>
+            <td>Operational lifetime</td>
+            <td>20+ years (panels), 5-10 years (storage)</td>
+            <td>10-15 years (core), 30+ years (facility)</td>
+        </tr>
+        <tr>
+            <td>Technology readiness level</td>
+            <td>High (TRL 7-9)</td>
+            <td>Medium (TRL 5-7 for space reactors)</td>
+        </tr>
+    </table>
+
+    <h3>4.1 Cost Efficiency Analysis</h3>
+    <p>Launch cost dominates the economics of lunar power systems. At current launch costs of approximately $10,000/kg to lunar surface:</p>
+    
+    <h4>Solar Farm (1 MW peak capacity with storage)</h4>
+    <ul>
+        <li>Transport cost: ~$500M-$850M</li>
+        <li>Manufacturing cost: ~$50M-$100M</li>
+        <li>Deployment cost: ~$50M-$100M</li>
+        <li>Total: ~$600M-$1.05B</li>
+    </ul>
+    
+    <h4>Nuclear Reactor (1 MW continuous capacity)</h4>
+    <ul>
+        <li>Transport cost: ~$350M-$600M</li>
+        <li>Manufacturing cost: ~$100M-$200M</li>
+        <li>Deployment cost: ~$100M-$150M</li>
+        <li>Total: ~$550M-$950M</li>
+    </ul>
+    
+    <p>Levelized cost of energy (LCOE) over 20-year lifetime:</p>
+    <ul>
+        <li>Solar Farm: ~$0.35-$0.60/kWh</li>
+        <li>Nuclear Reactor: ~$0.30-$0.55/kWh</li>
+    </ul>
+
+    <h3>4.2 Risk Assessment</h3>
+    
+    <h4>Solar Farm Risks</h4>
+    <ul>
+        <li><strong>High:</strong> Energy storage failure during lunar night (critical)</li>
+        <li><strong>Medium:</strong> Dust accumulation reducing output</li>
+        <li><strong>Medium:</strong> Micrometeoroid damage</li>
+        <li><strong>Low:</strong> Panel degradation from radiation</li>
+    </ul>
+    
+    <h4>Nuclear Reactor Risks</h4>
+    <ul>
+        <li><strong>High:</strong> Cooling system failure (critical)</li>
+        <li><strong>Medium:</strong> Radiator damage</li>
+        <li><strong>Medium:</strong> Control system failure</li>
+        <li><strong>Low:</strong> Core containment breach</li>
+    </ul>
+
+    <h2>5. Hybrid System Potential</h2>
+    
+    <p>A hybrid power system could leverage the advantages of both technologies:</p>
+    
+    <ul>
+        <li><strong>Primary nuclear baseline:</strong> 500 kW - 1 MW continuous power for critical systems</li>
+        <li><strong>Solar augmentation:</strong> 1-2 MW peak capacity for daytime operations and energy storage recharging</li>
+        <li><strong>Reduced storage:</strong> 100-200 kWh for critical redundancy only</li>
+    </ul>
+    
+    <p>Benefits of the hybrid approach:</p>
+    <ul>
+        <li>Redundancy through diverse generation methods</li>
+        <li>Optimized for both continuous and peak power needs</li>
+        <li>Reduced energy storage requirements</li>
+        <li>Phased deployment possibility (solar first, nuclear later)</li>
+        <li>Flexibility to handle varying mission profiles</li>
+    </ul>
+
+    <h2>6. Implementation Roadmap</h2>
+    
+    <h3>6.1 Phased Development Approach</h3>
+    
+    <h4>Phase 1: Initial Outpost (Years 0-2)</h4>
+    <ul>
+        <li>Deploy 50-100 kW solar array with 3-5 days of energy storage</li>
+        <li>Suitable for intermittent occupation during lunar daytime</li>
+        <li>Test dust mitigation strategies and energy management systems</li>
+    </ul>
+    
+    <h4>Phase 2: Permanent Base (Years 3-5)</h4>
+    <ul>
+        <li>Deploy first 250-500 kW nuclear reactor</li>
+        <li>Expand solar capacity to 500 kW peak</li>
+        <li>Develop power transmission network</li>
+        <li>Enable continuous occupation and expanded operations</li>
+    </ul>
+    
+    <h4>Phase 3: Colony Expansion (Years 6-10)</h4>
+    <ul>
+        <li>Scale to 2-5 MW total capacity through modular additions</li>
+        <li>Implement ISRU for construction materials for power system expansion</li>
+        <li>Develop maintenance and repair capabilities</li>
+    </ul>
+    
+    <h4>Phase 4: Industrial Capability (Years 11+)</h4>
+    <ul>
+        <li>Expand to 10+ MW capacity</li>
+        <li>Develop fuel recycling for nuclear systems</li>
+        <li>Begin manufacturing solar components on the lunar surface</li>
+    </ul>
+
+    <h3>6.2 Technology Development Priorities</h3>
+    <ul>
+        <li><strong>High priority:</strong> Dust-resistant solar panel coatings and cleaning systems</li>
+        <li><strong>High priority:</strong> Compact, high-density energy storage</li>
+        <li><strong>High priority:</strong> Space-rated fission reactor with passive safety features</li>
+        <li><strong>Medium priority:</strong> High-efficiency thermal-to-electric conversion</li>
+        <li><strong>Medium priority:</strong> Lightweight radiator technologies</li>
+        <li><strong>Medium priority:</strong> Automated deployment systems</li>
+    </ul>
+
+    <h2>7. Conclusions and Recommendations</h2>
+    
+    <div class="conclusion">
+        <h3>7.1 Key Findings</h3>
+        <ul>
+            <li>Both solar and nuclear power systems are technically feasible for lunar colonies.</li>
+            <li>Nuclear power offers superior continuity and reduced mass-to-power ratio when energy storage is considered.</li>
+            <li>Solar power provides excellent modularity and simplicity but requires massive energy storage for continuous operation.</li>
+            <li>Launch mass is the dominant cost factor for both systems.</li>
+            <li>A hybrid approach combining both technologies offers the most robust solution.</li>
+        </ul>
+        
+        <h3>7.2 Recommended Strategy</h3>
+        <p><strong>Primary Recommendation:</strong> Implement a phased hybrid system that begins with solar and transitions to nuclear as the colony grows.</p>
+        
+        <p><strong>Initial deployment (small outpost):</strong> Solar-primary with battery storage for critical systems during shorter-duration missions.</p>
+        
+        <p><strong>Permanent base:</strong> Deploy first small nuclear reactor (250-500 kW) for baseline power while maintaining solar capacity for redundancy and peak power.</p>
+        
+        <p><strong>Expanded settlement:</strong> Scale nuclear capacity to meet growing baseline demands while using solar for non-critical daytime operations.</p>
+        
+        <p><strong>Special Considerations:</strong></p>
+        <ul>
+            <li>Polar locations dramatically improve the viability of solar power if geographically feasible for the mission.</li>
+            <li>International cooperation may be required for nuclear deployment due to policy considerations.</li>
+            <li>Investment in high-capacity energy storage technology development would significantly improve solar viability.</li>
+        </ul>
+    </div>
+
+    <h2>8. References and Further Reading</h2>
+    
+    <div class="reference">Rubanenko, L., Venkatraman, J., & Paige, D. A. (2020). "Thick ice deposits in shallow simple craters on the Moon and Mercury". Nature Communications, 11(1), 1-7.</div>
+    <div class="reference">NASA Kilopower Project (2018). "Kilopower Reactor Using Stirling Technology (KRUSTY) Nuclear Ground Test Results and Lessons Learned". NASA.</div>
+    <div class="reference">Gibson, M. A., Oleson, S. R., Poston, D. I., & McClure, P. (2017). "NASA's Kilopower Reactor Development and the Path to Higher Power Missions". IEEE Aerospace Conference.</div>
+    <div class="reference">IAEA (2023). "Advances in Small Modular Reactor Technology Developments". International Atomic Energy Agency.</div>
+    <div class="reference">ESA (2022). "Moon Village: A Global Vision for Post-ISS Human Space Exploration". European Space Agency.</div>
+    <div class="reference">Landis, G. A. (2017). "Solar Cell Selection for Mars". NASA Glenn Research Center.</div>
+    <div class="reference">Carpenter, J., Fisackerly, R., & Houdou, B. (2016). "Establishing lunar resource viability". Space Policy, 37, 52-57.</div>
+</body>
+</html>
