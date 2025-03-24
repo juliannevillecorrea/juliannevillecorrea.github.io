@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PFEIFER Mini Power Whistle - Technical Analysis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1, h2 { color: #2c3e50; }
+        .equation { margin: 20px 0; padding: 10px; background-color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>The PFEIFER Mini Power Whistle: Engineering and Acoustics</h1>
+    
+    <h2>Introduction</h2>
+    <p>The PFEIFER Mini Power Whistle represents a remarkable fusion of compact design and acoustic efficiency. This article explores its technical specifications, mathematical modeling of its acoustic properties, and practical applications.</p>
+
+    <h2>Design Specifications</h2>
+    <ul>
+        <li>Dimensions: 35mm × 25mm × 15mm</li>
+        <li>Weight: 12 grams</li>
+        <li>Material: High-impact polycarbonate</li>
+        <li>Frequency range: 3.5kHz - 4.2kHz</li>
+        <li>Sound pressure level: 115 dB @ 1m</li>
+    </ul>
+
+    <h2>Acoustic Principles</h2>
+    <div class="equation">
+        The fundamental frequency (\(f\)) of the whistle can be calculated using:
+        \[
+        f = \frac{v}{4L}
+        \]
+        Where:<br>
+        \(v\) = speed of sound in air (343 m/s at 20°C)<br>
+        \(L\) = effective length of the resonant chamber
+    </div>
+
+    <p>For the PFEIFER Mini Power Whistle with \(L = 24.5\text{mm}\):</p>
+    <div class="equation">
+        \[
+        f = \frac{343}{4 \times 0.0245} \approx 3500\text{Hz}
+        \]
+    </div>
+
+    <h2>Sound Propagation</h2>
+    <p>The sound intensity (\(I\)) at distance \(r\) follows the inverse square law:</p>
+    <div class="equation">
+        \[
+        I(r) = \frac{P}{4\pi r^2}
+        \]
+        Where \(P\) = acoustic power output
+    </div>
+
+    <h2>Decibel Level Calculation</h2>
+    <p>Sound pressure level (SPL) in decibels:</p>
+    <div class="equation">
+        \[
+        \text{SPL} = 20 \log_{10}\left(\frac{p}{p_0}\right)
+        \]
+        \(p\) = measured sound pressure (20 μPa for 115 dB)<br>
+        \(p_0\) = reference pressure (20 μPa)
+    </div>
+
+    <h2>Air Flow Dynamics</h2>
+    <p>The required air flow velocity (\(u\)) through the whistle aperture:</p>
+    <div class="equation">
+        \[
+        u = \sqrt{\frac{2\Delta P}{\rho}}
+        \]
+        Where:<br>
+        \(\Delta P\) = pressure differential<br>
+        \(\rho\) = air density (1.225 kg/m³ at sea level)
+    </div>
+
+    <h2>Applications</h2>
+    <ul>
+        <li>Sports officiating</li>
+        <li>Emergency signaling</li>
+        <li>Outdoor safety</li>
+        <li>Animal training</li>
+    </ul>
+
+    <h2>Mathematical Model of Effectiveness</h2>
+    <p>The detection range (\(D\)) can be approximated by:</p>
+    <div class="equation">
+        \[
+        D = \sqrt{\frac{P \cdot 10^{\text{SPL}/10}}{4\pi I_{\text{threshold}}}}
+        \]
+        Where \(I_{\text{threshold}}\) = minimum detectable intensity (~10⁻¹² W/m² for human hearing)
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>The PFEIFER Mini Power Whistle demonstrates sophisticated acoustic engineering in a compact form factor. Its mathematical modeling reveals careful optimization of frequency selection, sound projection, and ergonomic design, making it an effective tool for various applications requiring reliable audible signaling.</p>
+</body>
+</html>
