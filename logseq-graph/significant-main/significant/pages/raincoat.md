@@ -1,0 +1,3 @@
+- must stitch a raincoat
+- tailor [[jeans rubber]]
+-
