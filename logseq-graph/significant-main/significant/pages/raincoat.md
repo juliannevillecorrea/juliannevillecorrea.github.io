@@ -1,3 +1,4 @@
 - must stitch a raincoat
 - tailor [[jeans rubber]]
--
+- cool weather today [[wet wet]]
+- hello is there any body out there [[wet wet]]
