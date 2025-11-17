@@ -1,0 +1,233 @@
+<!--
+Minimalist Typing Tutor - Single-file HTML app
+Author: ChatGPT (GPT-5 Thinking mini)
+Usage: Save as index.html and host on GitHub Pages.
+Design goals: Minimal UX, keyboard-first, fast feedback (WPM, accuracy), lightweight, responsive.
+Features:
+- Practice by words, sentences, or custom text
+- Live WPM, CPM, accuracy, elapsed time
+- Immediate character-level feedback and caret
+- Short modes: 15s/30s/60s or type-all exercises
+- Save best scores locally
+- Clean, minimalist UI suitable for GitHub Pages
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Minimal Typing Tutor</title>
+<style>
+  :root{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;--bg:#ffffff;--fg:#0f1724;--muted:#6b7280;--accent:#111827}
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);}
+  .wrap{max-width:900px;margin:40px auto;padding:28px;display:flex;flex-direction:column;gap:18px}
+  header{display:flex;justify-content:space-between;align-items:center}
+  h1{font-size:18px;margin:0;font-weight:600}
+  .controls{display:flex;gap:8px;align-items:center}
+  select,input[type=number]{padding:8px;border-radius:8px;border:1px solid #e6e9ee;background:transparent}
+  button{background:var(--accent);color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+  button.ghost{background:transparent;color:var(--muted);border:1px solid #eef2f7}
+  .panel{background:#fbfdff;border-radius:12px;padding:18px;border:1px solid #eef2f7;box-shadow:0 6px 18px rgba(16,24,40,0.04)}
+  .prompt{font-size:20px;line-height:1.6;padding:14px;border-radius:10px;background:transparent;color:var(--fg);min-height:72px}
+  .prompt .char{padding:0 2px}
+  .char.correct{color:#0ea5a0}
+  .char.incorrect{color:#ef4444}
+  .char.current{background:rgba(6,182,212,0.12);border-radius:4px}
+  .stats{display:flex;gap:20px;align-items:center;font-weight:600}
+  .small{font-size:13px;color:var(--muted);font-weight:500}
+  .footer{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+  .input-hidden{position:absolute;left:-9999px}
+  @media (max-width:640px){.wrap{padding:16px;margin:18px}.prompt{font-size:18px}}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Minimal Typing Tutor</h1>
+      <div class="controls">
+        <label class="small">Mode</label>
+        <select id="mode">
+          <option value="sentences">Sentences</option>
+          <option value="words">Words</option>
+          <option value="custom">Custom</option>
+        </select>
+        <label class="small">Length</label>
+        <select id="length">
+          <option value="15">15s</option>
+          <option value="30" selected>30s</option>
+          <option value="60">60s</option>
+          <option value="0">Type-all</option>
+        </select>
+        <button id="start">Start</button>
+        <button id="restart" class="ghost">Reset</button>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div id="prompt" class="prompt" aria-live="polite"></div>
+      <textarea id="customText" placeholder="Paste your text here (visible when Custom mode selected)" style="width:100%;margin-top:10px;display:none;padding:8px;border-radius:8px;border:1px solid #e6e9ee"></textarea>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+        <div class="stats">
+          <div>WPM <div id="wpm">0</div></div>
+          <div>CPM <div id="cpm">0</div></div>
+          <div>Acc <div id="acc">100%</div></div>
+          <div>Time <div id="time">00:00</div></div>
+        </div>
+        <div class="small">Best WPM: <span id="best">—</span></div>
+      </div>
+    </section>
+
+    <div class="small">Type the text above. Focus will be captured when you press <strong>Start</strong>. Backspace allowed. Incorrect characters count against accuracy.</div>
+
+    <div class="footer">
+      <div class="small">Local-only — no network required</div>
+      <div>
+        <button id="download" class="ghost">Export Results</button>
+      </div>
+    </div>
+
+    <!-- Hidden input to capture keystrokes while keeping UI clean -->
+    <input id="hiddenInput" class="input-hidden" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  </main>
+
+<script>
+(() => {
+  // Minimalist Typing Tutor logic
+  const promptEl = document.getElementById('prompt');
+  const hidden = document.getElementById('hiddenInput');
+  const modeEl = document.getElementById('mode');
+  const lenEl = document.getElementById('length');
+  const startBtn = document.getElementById('start');
+  const restartBtn = document.getElementById('restart');
+  const wpmEl = document.getElementById('wpm');
+  const cpmEl = document.getElementById('cpm');
+  const accEl = document.getElementById('acc');
+  const timeEl = document.getElementById('time');
+  const bestEl = document.getElementById('best');
+  const customText = document.getElementById('customText');
+  const downloadBtn = document.getElementById('download');
+
+  // samples
+  const SENTENCES = [
+    'Practice makes perfect.',
+    'The quick brown fox jumps over the lazy dog.',
+    'Typing is a useful and practical skill.',
+    'Keep your eyes on the screen, not the keyboard.'
+  ];
+  const WORDS = ['example','random','keyboard','typing','practice','speed','accuracy','focus','habit','method'];
+
+  let text = '';
+  let chars = []; // {char, status: 'pending'|'correct'|'incorrect'}
+  let pos = 0;
+  let startTime = null;
+  let elapsed = 0;
+  let timerId = null;
+  let targetSeconds = 30; // default
+  let running = false;
+  let typedCount = 0, correctCount = 0;
+
+  function loadBest(){ const v = localStorage.getItem('typing_best'); if(v) bestEl.textContent = v; else bestEl.textContent = '—'; }
+  function saveBest(v){ const cur = parseInt(localStorage.getItem('typing_best')||0,10); if(v>cur) localStorage.setItem('typing_best', String(v)); loadBest(); }
+
+  function makeText(){
+    const mode = modeEl.value;
+    if(mode==='custom'){ text = customText.value.trim() || 'Type something!'; }
+    else if(mode==='words'){
+      const count = 40; // generate words
+      const arr = Array.from({length:count},()=>WORDS[Math.floor(Math.random()*WORDS.length)]);
+      text = arr.join(' ');
+    } else {
+      // sentences mode
+      const copies = 6;
+      text = Array.from({length:copies},()=>SENTENCES[Math.floor(Math.random()*SENTENCES.length)]).join(' ');
+    }
+    chars = text.split('').map(ch=>({char:ch,status:'pending'}));
+    pos=0; typedCount=0; correctCount=0; renderPrompt();
+  }
+
+  function renderPrompt(){
+    // show with spans
+    promptEl.innerHTML = '';
+    chars.forEach((c,i)=>{
+      const span = document.createElement('span'); span.className='char'; span.textContent = c.char;
+      if(i<pos) span.classList.add(c.status==='correct'?'correct':'incorrect');
+      if(i===pos) span.classList.add('current');
+      promptEl.appendChild(span);
+    });
+  }
+
+  function updateStats(){
+    const ms = running ? (Date.now()-startTime) : elapsed;
+    const mins = Math.max(ms/60000, 1/60000);
+    const wpm = Math.round((correctCount/5)/ (ms/60000) || 0);
+    const cpm = Math.round((typedCount) / (ms/60000) || 0);
+    const acc = typedCount ? Math.round((correctCount/typedCount)*100) : 100;
+    wpmEl.textContent = wpm;
+    cpmEl.textContent = cpm;
+    accEl.textContent = acc + '%';
+    timeEl.textContent = formatTime(ms);
+    return {wpm,cpm,acc,ms};
+  }
+
+  function formatTime(ms){ const s = Math.floor(ms/1000); const mm = Math.floor(s/60); const ss = s%60; return String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0'); }
+
+  function tick(){ updateStats(); if(targetSeconds>0){ const passed = (Date.now()-startTime)/1000; if(passed>=targetSeconds) finish(); }}
+
+  function start(){ if(running) return; makeText(); targetSeconds = parseInt(lenEl.value,10)||0; startTime = Date.now(); running=true; hidden.focus(); timerId = setInterval(tick,200); updateStats(); }
+
+  function finish(){ if(!running) return; running=false; clearInterval(timerId); elapsed = Date.now()-startTime; updateStats(); const result = updateStats(); saveBest(result.wpm); alert('Session complete — WPM: '+result.wpm+'  Accuracy: '+result.acc+'%'); }
+
+  function reset(){ running=false; clearInterval(timerId); startTime=null; elapsed=0; pos=0; typedCount=0; correctCount=0; makeText(); updateStats(); }
+
+  function handleKey(ch){ if(!running) return; // accept printable characters, backspace
+    if(ch === 'Backspace'){
+      if(pos>0){ pos--; // revert counts if we had recorded this char
+        const prev = chars[pos]; if(prev.status!=='pending'){ typedCount--; if(prev.status==='correct') correctCount--; prev.status='pending'; }
+        renderPrompt(); updateStats(); }
+      return;
+    }
+    // only process if still within text
+    if(pos >= chars.length){ // extra typing after end, count as typed/incorrect
+      typedCount++; // incorrect beyond end
+      return;
+    }
+    const expected = chars[pos].char;
+    typedCount++;
+    if(ch === expected){ chars[pos].status='correct'; correctCount++; }
+    else { chars[pos].status='incorrect'; }
+    pos++; renderPrompt(); updateStats();
+    // if typing finishes all chars in type-all mode
+    if(targetSeconds===0 && pos>=chars.length) finish();
+  }
+
+  // capture physical keyboard events
+  hidden.addEventListener('keydown', e=>{
+    if(e.key === 'Tab') { e.preventDefault(); return; }
+    if(e.key.length === 1 || e.key === 'Backspace'){
+      e.preventDefault(); handleKey(e.key);
+    }
+  });
+
+  // UI wiring
+  startBtn.addEventListener('click', ()=>{ start(); });
+  restartBtn.addEventListener('click', ()=>{ if(confirm('Reset session?')) reset(); });
+  modeEl.addEventListener('change', ()=>{ customText.style.display = modeEl.value==='custom' ? 'block' : 'none'; });
+  downloadBtn.addEventListener('click', ()=>{
+    const stats = updateStats(); const payload = {wpm:stats.wpm,cpm:stats.cpm,acc:stats.acc,time:Math.round(stats.ms/1000),date:new Date().toISOString()};
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='typing-result.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  });
+
+  // init
+  loadBest(); makeText(); renderPrompt(); updateStats();
+  // focus helper: click anywhere to focus hidden input for immediate typing
+  document.addEventListener('click', ()=>{ if(running) hidden.focus(); });
+  // expose for debug
+  window.TUTOR = {start,reset,chars};
+})();
+</script>
+</body>
+</html>

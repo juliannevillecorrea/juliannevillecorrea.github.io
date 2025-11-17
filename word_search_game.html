@@ -1,0 +1,475 @@
+<!--
+Word Search Game - Single-file HTML app
+Author: ChatGPT (GPT-5 Thinking mini)
+Usage: Save this file as word-search-game.html and host on GitHub Pages or any static host.
+Features:
+- Generate word-search grid from user-provided or preset word list
+- Place words in 8 directions with collision handling
+- Interactive selection via mouse and touch (drag or click)
+- Highlight found words; track remaining words and score
+- Difficulty options: grid size, allow backwards/diagonals, density
+- Save/restore progress via localStorage
+- Reveal solution / reset / shuffle
+- Responsive, accessible, keyboard navigation support
+- Printable puzzle view
+
+To host on GitHub Pages:
+1. Create a new repository (e.g., username.github.io) or add to existing repo
+2. Add this file to the repository (e.g., index.html)
+3. Enable GitHub Pages in repo settings (branch: main or gh-pages)
+4. Visit https://<your-username>.github.io/<repo-path>/
+
+Enjoy! If you want a React version or extra styling/themes, tell me what you prefer.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Word Search Game</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#06b6d4; --muted:#94a3b8; --found:#10b981;
+      --cell-size:44px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071029 0%,var(--bg) 100%);color:#e6eef6}
+    .app{max-width:1100px;margin:24px auto;padding:20px;display:grid;grid-template-columns:360px 1fr;gap:20px}
+    header{grid-column:1/3;display:flex;align-items:center;justify-content:space-between}
+    h1{margin:0;font-size:20px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);}
+    .sidebar{display:flex;flex-direction:column;gap:12px}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input[type=text], textarea, select{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    textarea{min-height:120px;resize:vertical}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    button{background:var(--accent);border:0;padding:8px 12px;border-radius:10px;color:#031024;font-weight:600;cursor:pointer}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .status{display:flex;gap:12px;align-items:center}
+    .grid-area{display:flex;flex-direction:column;gap:12px}
+    .grid-wrap{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:14px;border-radius:12px;display:flex;flex-direction:column;align-items:center}
+    .puzzle{display:grid;gap:6px;touch-action: none}
+    .cell{width:var(--cell-size);height:var(--cell-size);display:grid;place-items:center;font-weight:700;border-radius:8px;cursor:pointer;user-select:none}
+    .cell:not(.empty){background:rgba(255,255,255,0.02)}
+    .cell.found{background:linear-gradient(90deg, rgba(16,185,129,0.16), rgba(6,182,212,0.08));color:var(--found)}
+    .cell.active{outline:3px solid rgba(6,182,212,0.18);transform:scale(1.02)}
+    .words{display:flex;flex-direction:column;gap:6px}
+    .word{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-radius:8px}
+    .word.found{background:rgba(16,185,129,0.08);color:var(--found)}
+    .meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    footer{grid-column:1/3;text-align:center;color:var(--muted);font-size:13px;margin-top:8px}
+    @media (max-width:900px){.app{grid-template-columns:1fr;}.sidebar{order:2}}
+    /* small UI helpers */
+    .controls .small{padding:6px 8px;font-size:13px}
+    .muted{color:var(--muted)}
+    .hint{font-size:13px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Word Search Game</h1>
+      <div class="status muted">Created for GitHub Pages • <span id="time-el"></span></div>
+    </header>
+
+    <aside class="sidebar">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <strong>Puzzle Settings</strong>
+          <small class="muted">save/load in browser</small>
+        </div>
+
+        <label for="words">Word list (one per line)</label>
+        <textarea id="words" placeholder="e.g. APPLE\nBANANA\nORANGE">APPLE
+BANANA
+ORANGE
+LEMON
+PEAR
+GRAPE</textarea>
+
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <div style="flex:1">
+            <label for="size">Grid size</label>
+            <select id="size"><option>12</option><option selected>14</option><option>16</option><option>18</option><option>20</option></select>
+          </div>
+          <div style="width:120px">
+            <label for="difficulty">Directions</label>
+            <select id="difficulty"><option value="4">Orthogonal</option><option value="6">Orth+Diag (no reverse)</option><option value="8" selected>All directions</option></select>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button id="generate">Generate</button>
+          <button class="secondary" id="shuffle">Shuffle</button>
+          <button class="secondary" id="reset">Reset</button>
+        </div>
+
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+          <button class="small" id="save">Save</button>
+          <button class="small" id="load">Load</button>
+          <button class="small" id="reveal">Reveal</button>
+        </div>
+
+        <div style="margin-top:12px">
+          <label class="hint">Options</label>
+          <div class="meta" style="margin-top:6px">
+            <label><input type="checkbox" id="allow-backwards" checked> Allow backwards</label>
+            <label><input type="checkbox" id="allow-overlap" checked> Allow overlap</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>Found Words</strong>
+        <div id="words-list" class="words" style="margin-top:8px;max-height:260px;overflow:auto"></div>
+      </div>
+
+      <div class="card">
+        <strong>Controls</strong>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button id="hint">Hint</button>
+          <button id="print" class="secondary">Print</button>
+        </div>
+        <p class="hint" style="margin-top:8px">Tip: select by dragging (desktop) or dragging with finger (mobile). Click start and enjoy!</p>
+      </div>
+    </aside>
+
+    <main class="grid-area">
+      <div class="card grid-wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
+          <div>
+            <div class="muted">Puzzle</div>
+            <strong id="puzzle-title">Word Search</strong>
+          </div>
+          <div class="meta">
+            <div class="muted">Time:</div>
+            <div id="timer">00:00</div>
+            <div class="muted">Score:</div>
+            <div id="score">0</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:12px;align-items:flex-start;flex-direction:column;width:100%">
+          <div id="puzzle-container" style="width:100%;display:flex;justify-content:center">
+            <!-- grid goes here -->
+            <div id="puzzle" class="puzzle" aria-label="Word search grid" role="grid" tabindex="0"></div>
+          </div>
+
+          <div style="width:100%;display:flex;justify-content:space-between;align-items:center">
+            <div class="muted">Click or drag letters to select. Double-click to select a whole word automatically.</div>
+            <div style="display:flex;gap:8px">
+              <button id="auto-fill" class="secondary">Auto-fill letters</button>
+              <button id="new-game">New Game</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        Built with ❤️ — Save file as <code>index.html</code> and publish to GitHub Pages.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+  // Word Search Game JavaScript - single-file
+  (function(){
+    // utilities
+    const $ = id => document.getElementById(id);
+    const rand = (n) => Math.floor(Math.random()*n);
+    const now = () => Date.now();
+
+    // state
+    let grid = [];
+    let placements = []; // {word, path:[{r,c}], found}
+    let size = 14;
+    let directions = [];
+    let selecting = false;
+    let selStart = null;
+    let selPath = [];
+    let startTime = null;
+    let timerInterval = null;
+    let score = 0;
+
+    // direction vectors
+    const DIRS8 = [
+      {dr:0,dc:1},{dr:0,dc:-1},{dr:1,dc:0},{dr:-1,dc:0}, // orthogonal
+      {dr:1,dc:1},{dr:1,dc:-1},{dr:-1,dc:1},{dr:-1,dc:-1} // diagonal
+    ];
+    const DIRS6 = [ // orthogonal + diagonals forward only
+      {dr:0,dc:1},{dr:0,dc:-1},{dr:1,dc:0},{dr:-1,dc:0},{dr:1,dc:1},{dr:1,dc:-1}
+    ];
+    const DIRS4 = [ {dr:0,dc:1},{dr:1,dc:0},{dr:0,dc:-1},{dr:-1,dc:0} ];
+
+    // elements
+    const puzzleEl = $('puzzle');
+    const wordsEl = $('words-list');
+    const wordsField = $('words');
+    const sizeEl = $('size');
+    const generateBtn = $('generate');
+    const resetBtn = $('reset');
+    const shuffleBtn = $('shuffle');
+    const saveBtn = $('save');
+    const loadBtn = $('load');
+    const revealBtn = $('reveal');
+    const timerEl = $('timer');
+    const scoreEl = $('score');
+    const hintBtn = $('hint');
+    const autoFillBtn = $('auto-fill');
+    const newGameBtn = $('new-game');
+    const printBtn = $('print');
+
+    function formatTime(ms){
+      const s = Math.floor(ms/1000), mm = Math.floor(s/60), ss = s%60;
+      return String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+    }
+
+    function startTimer(){
+      if(timerInterval) clearInterval(timerInterval);
+      startTime = startTime || now();
+      timerInterval = setInterval(()=>{
+        timerEl.textContent = formatTime(now()-startTime);
+      }, 250);
+    }
+    function stopTimer(){ if(timerInterval) clearInterval(timerInterval); timerInterval=null }
+
+    // grid helpers
+    function makeEmptyGrid(n){ grid = Array.from({length:n},()=>Array.from({length:n},()=>'')); }
+
+    function inBounds(r,c){ return r>=0 && c>=0 && r<size && c<size }
+
+    function placeWord(word, allowOverlap=true, allowBackwards=true, maxAttempts=500){
+      const w = word.toUpperCase();
+      for(let attempt=0; attempt<maxAttempts; attempt++){
+        const dir = directions[rand(directions.length)];
+        const len = w.length;
+        // choose start such that word fits
+        const dr = dir.dr, dc = dir.dc;
+        const r0 = rand(size), c0 = rand(size);
+        const rEnd = r0 + dr*(len-1);
+        const cEnd = c0 + dc*(len-1);
+        if(!inBounds(rEnd,cEnd)) continue;
+        // if backwards not allowed, ensure dr/dc combination doesn't create reversed word by random chance? We'll allow reverse by picking direction but optionally reverse string
+        let useBackwards = allowBackwards ? (Math.random()<0.5) : false;
+        const letters = useBackwards ? w.split('').reverse() : w.split('');
+        // check collisions
+        let ok=true; const path=[];
+        for(let i=0;i<len;i++){
+          const r = r0 + dr*i, c = c0 + dc*i;
+          path.push({r,c});
+          const cell = grid[r][c];
+          if(cell === '' || cell === letters[i]) continue;
+          if(!allowOverlap){ ok=false; break; }
+          // if overlap allowed but mismatch => reject
+          if(cell !== letters[i]){ ok=false; break }
+        }
+        if(!ok) continue;
+        // place
+        for(let i=0;i<len;i++){
+          const r=r0+dr*i, c=c0+dc*i; grid[r][c]=letters[i];
+        }
+        placements.push({word:w,path,found:false});
+        return true;
+      }
+      return false;
+    }
+
+    function fillRandom(){
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      for(let r=0;r<size;r++) for(let c=0;c<size;c++) if(!grid[r][c]) grid[r][c] = alphabet[rand(alphabet.length)];
+    }
+
+    function clearGridView(){ puzzleEl.innerHTML=''; }
+
+    function renderGrid(){
+      clearGridView();
+      puzzleEl.style.gridTemplateColumns = `repeat(${size}, var(--cell-size))`;
+      puzzleEl.setAttribute('data-size', size);
+      for(let r=0;r<size;r++){
+        for(let c=0;c<size;c++){
+          const div = document.createElement('div');
+          div.className = 'cell';
+          div.setAttribute('role','gridcell');
+          div.setAttribute('data-r',r); div.setAttribute('data-c',c);
+          div.tabIndex = 0;
+          div.textContent = grid[r][c] || '';
+          puzzleEl.appendChild(div);
+        }
+      }
+      updatePlacementStates();
+    }
+
+    function updatePlacementStates(){
+      // clear classes
+      document.querySelectorAll('.cell').forEach(el=>el.classList.remove('found','active'));
+      placements.forEach(p=>{
+        if(p.found) p.path.forEach(pt=>{
+          const el = cellAt(pt.r,pt.c); if(el) el.classList.add('found');
+        })
+      });
+    }
+
+    function cellAt(r,c){ return puzzleEl.querySelector(`.cell[data-r='${r}'][data-c='${c}']`); }
+
+    function renderWordsList(){
+      wordsEl.innerHTML='';
+      placements.forEach((p,i)=>{
+        const el = document.createElement('div'); el.className='word'+(p.found? ' found':'');
+        el.innerHTML = `<div>${p.word}</div><div class="muted">${p.found? 'Found':'-'}</div>`;
+        el.addEventListener('click',()=>{
+          // highlight path briefly
+          if(p.found) return;
+          p.path.forEach(pt=>{ const c=cellAt(pt.r,pt.c); if(c) c.classList.add('active'); });
+          setTimeout(()=>{ p.path.forEach(pt=>{ const c=cellAt(pt.r,pt.c); if(c) c.classList.remove('active'); }); },700);
+        });
+        wordsEl.appendChild(el);
+      });
+    }
+
+    function resetState(){ stopTimer(); score=0; scoreEl.textContent=score; timerEl.textContent='00:00'; startTime=null; placements=[]; }
+
+    function generateFromInput(){
+      resetState();
+      // read inputs
+      size = parseInt(sizeEl.value,10)||14;
+      const dirOpt = parseInt($('difficulty').value,10)||8;
+      const allowBackwards = $('allow-backwards').checked;
+      const allowOverlap = $('allow-overlap').checked;
+      if(dirOpt===4) directions = DIRS4; else if(dirOpt===6) directions = DIRS6; else directions = DIRS8;
+      makeEmptyGrid(size);
+      // parse words
+      const raw = wordsField.value.trim().split('\n').map(s=>s.trim()).filter(Boolean).map(s=>s.replace(/[^a-zA-Z]/g,'').toUpperCase());
+      // sort by length desc to place longer words first
+      raw.sort((a,b)=>b.length - a.length);
+      placements = [];
+      for(const w of raw){ if(w.length<=size){ const placed = placeWord(w, allowOverlap, allowBackwards); if(!placed) console.warn('Failed to place',w); } }
+      fillRandom();
+      renderGrid(); renderWordsList(); startTimer(); startTime = startTime || now();
+      startTimer();
+    }
+
+    // Selection logic (supports mouse and touch)
+    function startSelection(r,c){ selecting=true; selStart={r,c}; selPath=[{r,c}]; highlightSel(); }
+    function extendSelection(r,c){ if(!selecting) return; // compute straight-line path from start to current
+      const dr = r - selStart.r, dc = c - selStart.c;
+      let stepR = dr===0 ? 0 : dr/Math.abs(dr); let stepC = dc===0 ? 0 : dc/Math.abs(dc);
+      // if diagonal-like but not exactly diagonal: try to pick best direction along allowed dirs
+      if(Math.abs(dr)!==Math.abs(dc) && dr!==0 && dc!==0){
+        // snap to direction with larger magnitude to make selection predictable
+        if(Math.abs(dr) > Math.abs(dc)) stepC = 0; else stepR = 0;
+      }
+      // build path
+      const path = []; let rr = selStart.r, cc = selStart.c;
+      while(true){ path.push({r:rr,c:cc}); if(rr===r && cc===c) break; rr+=stepR; cc+=stepC; if(!inBounds(rr,cc)) break; }
+      selPath = path; highlightSel(); }
+    function endSelection(){ if(!selecting) return; selecting=false; // check if selection matches any placement
+      const normalized = selPath.map(p=>`${p.r},${p.c}`).join('|');
+      let matched=false;
+      for(const p of placements){ if(p.found) continue; const key = p.path.map(pt=>`${pt.r},${pt.c}`).join('|'); const keyRev = p.path.slice().reverse().map(pt=>`${pt.r},${pt.c}`).join('|');
+          if(normalized === key || normalized === keyRev){ p.found = true; matched=true; score += Math.max(1, Math.floor(p.word.length)); scoreEl.textContent = score; break; }
+      }
+      // clear selPath highlight
+      document.querySelectorAll('.cell').forEach(el=>el.classList.remove('active'));
+      renderWordsList(); updatePlacementStates();
+      // win check
+      if(placements.every(p=>p.found)){
+        stopTimer(); alert('🎉 You found all words! Time: '+timerEl.textContent+' Score: '+score);
+      }
+    }
+
+    function highlightSel(){ document.querySelectorAll('.cell').forEach(el=>el.classList.remove('active')); selPath.forEach(pt=>{ const el=cellAt(pt.r,pt.c); if(el) el.classList.add('active'); }); }
+
+    // event binding
+    function bindGridEvents(){
+      // mouse
+      puzzleEl.addEventListener('pointerdown', e=>{
+        const t = e.target.closest('.cell'); if(!t) return; puzzleEl.setPointerCapture(e.pointerId);
+        const r=parseInt(t.dataset.r,10), c=parseInt(t.dataset.c,10); startSelection(r,c);
+      });
+      puzzleEl.addEventListener('pointermove', e=>{
+        if(!selecting) return; const t = document.elementFromPoint(e.clientX,e.clientY); if(!t) return; const cell = t.closest('.cell'); if(!cell) return; const r=parseInt(cell.dataset.r,10), c=parseInt(cell.dataset.c,10); extendSelection(r,c);
+      });
+      puzzleEl.addEventListener('pointerup', e=>{ endSelection(); });
+
+      // double click to auto select whole word under cursor
+      puzzleEl.addEventListener('dblclick', e=>{
+        const t = e.target.closest('.cell'); if(!t) return; const r=parseInt(t.dataset.r,10), c=parseInt(t.dataset.c,10);
+        // find any placement that contains this cell
+        for(const p of placements){ if(p.found) continue; if(p.path.some(pt=>pt.r===r && pt.c===c)){ p.found=true; score += Math.max(1, Math.floor(p.word.length)); scoreEl.textContent=score; renderWordsList(); updatePlacementStates(); break; } }
+      });
+
+      // keyboard accessibility: use arrow keys to move selection start and space to toggle/submit
+      let kbPos = {r:0,c:0};
+      puzzleEl.addEventListener('keydown', e=>{
+        const cellCount = size;
+        if(e.key.startsWith('Arrow')){
+          e.preventDefault(); if(e.key==='ArrowUp') kbPos.r = Math.max(0,kbPos.r-1);
+          if(e.key==='ArrowDown') kbPos.r = Math.min(cellCount-1,kbPos.r+1);
+          if(e.key==='ArrowLeft') kbPos.c = Math.max(0,kbPos.c-1);
+          if(e.key==='ArrowRight') kbPos.c = Math.min(cellCount-1,kbPos.c+1);
+          // focus the cell
+          const el = cellAt(kbPos.r,kbPos.c); if(el) el.focus();
+        }
+        if(e.key===' ') { // start selection or submit
+          e.preventDefault(); if(!selecting){ startSelection(kbPos.r,kbPos.c); } else { endSelection(); }
+        }
+      });
+    }
+
+    // UI buttons
+    generateBtn.addEventListener('click', generateFromInput);
+    shuffleBtn.addEventListener('click', ()=>{ // reshuffle: re-generate with same words
+      generateFromInput();
+    });
+    resetBtn.addEventListener('click', ()=>{
+      if(confirm('Reset puzzle and clear progress?')){ localStorage.removeItem('wordsearch_save'); location.reload(); }
+    });
+    saveBtn.addEventListener('click', ()=>{
+      const state = {size, placements, grid, startTime, score, words: wordsField.value, options:{difficulty:$('difficulty').value,allowBackwards:$('allow-backwards').checked,allowOverlap:$('allow-overlap').checked}};
+      localStorage.setItem('wordsearch_save', JSON.stringify(state)); alert('Saved to browser localStorage');
+    });
+    loadBtn.addEventListener('click', ()=>{
+      const s = localStorage.getItem('wordsearch_save'); if(!s){ alert('No save found'); return; }
+      try{ const st = JSON.parse(s); size = st.size || size; grid = st.grid; placements = st.placements || []; startTime = st.startTime || now(); score = st.score || 0; wordsField.value = st.words || wordsField.value; sizeEl.value = size; renderGrid(); renderWordsList(); scoreEl.textContent = score; startTimer(); }catch(err){ alert('Failed to load save'); }
+    });
+    revealBtn.addEventListener('click', ()=>{
+      if(!confirm('Reveal all words? This will mark them found.')) return;
+      placements.forEach(p=>p.found=true); updatePlacementStates(); renderWordsList(); stopTimer();
+    });
+    hintBtn.addEventListener('click', ()=>{
+      const hidden = placements.filter(p=>!p.found); if(hidden.length===0) { alert('No words left'); return; }
+      const choice = hidden[rand(hidden.length)]; // reveal one letter sequence' center
+      // highlight the path briefly
+      choice.path.forEach(pt=>{ const el=cellAt(pt.r,pt.c); if(el) el.classList.add('active'); });
+      setTimeout(()=>{ choice.path.forEach(pt=>{ const el=cellAt(pt.r,pt.c); if(el) el.classList.remove('active'); }); },900);
+    });
+    autoFillBtn.addEventListener('click', ()=>{ // fill empty cells with random letters and render
+      fillRandom(); renderGrid(); });
+    newGameBtn.addEventListener('click', ()=>{ if(confirm('Start a new game using current word list?')) generateFromInput(); });
+    printBtn.addEventListener('click', ()=>{
+      // open new window with printable layout
+      const w = window.open('','_blank');
+      const doc = w.document; doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Printable Puzzle</title><style>body{font-family:Arial;color:#000} table{border-collapse:collapse} td{width:28px;height:28px;text-align:center;border:1px solid #333;font-weight:700}</style></head><body>');
+      doc.write('<h3>Word Search</h3>'); doc.write('<table>');
+      for(let r=0;r<size;r++){ doc.write('<tr>'); for(let c=0;c<size;c++){ doc.write('<td>'+ (grid[r][c]||'') +'</td>'); } doc.write('</tr>'); }
+      doc.write('</table><h4>Words</h4><ul>'); for(const p of placements) doc.write('<li>'+p.word+'</li>'); doc.write('</ul></body></html>'); doc.close(); w.print(); });
+
+    // init
+    function init(){
+      // show current time
+      $('time-el').textContent = new Date().toLocaleString();
+      bindGridEvents();
+      // initial generate
+      // allow user to modify words; generate on load with current words
+      generateFromInput();
+    }
+
+    // expose for debugging
+    window.WS = {generate:generateFromInput,placements,grid};
+    init();
+  })();
+  </script>
+</body>
+</html>
