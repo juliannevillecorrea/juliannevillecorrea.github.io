@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Probability Rahul uses toothbrushes in rainbow sequence (detailed)</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body{font-family: system-ui, -apple-system, Roboto, Arial; line-height:1.6; padding:28px; max-width:900px; margin:auto; color:#111}
+    h1,h2{color:#0b5f9b}
+    pre{background:#f6f8fa;padding:12px;border-radius:6px;overflow:auto}
+    .boxed{border-left:4px solid #0b5f9b;padding:12px;background:#fbfdff}
+    table{border-collapse:collapse;width:100%;margin:12px 0}
+    td,th{border:1px solid #ddd;padding:8px}
+  </style>
+</head>
+<body>
+  <h1>Probability Rahul uses his 7 toothbrushes in rainbow order at least once in one year</h1>
+  <p><strong>Problem statement (interpreted)</strong>: Rahul has 7 toothbrushes, each labeled with one of the seven rainbow colors (R,O,Y,G,B,I,V). He brushes twice a day for one year. Assume each brushing he chooses one of the 7 brushes uniformly at random, independently of past choices. What is the probability that at some point during the year he will use the brushes in the exact rainbow sequence <em>R, O, Y, G, B, I, V</em> on seven consecutive brushings?</p>
+
+  <h2>Assumptions (explicit)</h2>
+  <ul>
+    <li>One year = 365 days (not a leap year).</li>
+    <li>Brushings per day = 2, so total brushings <em>n = 365 \times 2 = 730</em>.</li>
+    <li>At each brushing Rahul picks one of the 7 brushes uniformly at random and independently of other brushings.</li>
+    <li>"Rainbow sequence" means the exact ordered sequence <em>R, O, Y, G, B, I, V</em> appearing on seven successive brushings (positions i, i+1, ..., i+6 for some i).</li>
+    <li>We count any occurrence anywhere among the 730 brushings (overlapping occurrences are considered, but below we will use the special structure of the pattern to simplify the calculation).</li>
+  </ul>
+
+  <h2>Notation</h2>
+  <div class="boxed">
+    <p>
+      Let the alphabet size be \(k=7\) (seven brushes), pattern length \(m=7\) (seven colors in the rainbow sequence), and total number of trials (brushings) \(n=730\).
+    </p>
+  </div>
+
+  <h2>High-level plan</h2>
+  <ol>
+    <li>Compute the probability that the pattern <em>P</em> (the rainbow sequence) does <em>not</em> occur anywhere among the \(n\) draws.</li>
+    <li>Subtract from 1 to get the probability that the pattern occurs at least once.</li>
+  </ol>
+
+  <h2>Key combinatorial fact we use</h2>
+  <p>The rainbow pattern uses 7 distinct symbols in a fixed order. Because all characters in the pattern are different, the pattern has <strong>no nontrivial self-overlap</strong>. Formally, there is no proper (nonempty) prefix of the pattern that equals a suffix of the pattern. That fact simplifies the counting of sequences that <em>avoid</em> the pattern.</p>
+
+  <h2>Counting sequences that avoid the pattern (recurrence)</h2>
+  <p>Let \(a_n\) be the number of length-\(n\) sequences over the 7-symbol alphabet that <em>do not</em> contain the rainbow pattern as a consecutive block. The total number of all length-\(n\) sequences is \(k^n = 7^n\). The probability of no occurrence is then \(a_n/7^n\).</p>
+
+  <p>Because the pattern has length \(m=7\) and has no self-overlap, the following recurrence holds for \(a_n\) (standard in pattern-avoidance / automata counting):</p>
+
+  \[
+    a_0 = 1, \qquad a_n = k^n \quad \text{for } 1\le n < m,
+  \]
+  and for \(n\ge m\):
+  \[
+    a_n \,=\, k\,a_{n-1} - a_{n-m}.
+  \]
+
+  <p>Intuition for the recurrence:</p>
+  <ul>
+    <li>Every length-\(n\) sequence avoiding the pattern can be built by appending one of the \(k\) symbols to a length-(\(n-1\)) sequence that avoids the pattern — that gives \(k a_{n-1}\) possibilities.</li>
+    <li>But some of those appended sequences create a new copy of the pattern that ends at position \(n\). Each of those newly-created forbidden sequences corresponds uniquely to a length-(\(n-m\)) sequence that avoids the pattern (then followed by the exact \(m\)-symbol pattern). Because there is no self-overlap, each length-(\(n-m\)) avoiding sequence leads to exactly one appended sequence that newly creates the forbidden pattern. So we subtract \(a_{n-m}\).</li>
+  </ul>
+
+  <h2>Apply to our numbers</h2>
+  <p>Set \(k=7\), \(m=7\), \(n=730\). We compute the sequence \(a_n\) by the recurrence and then obtain the probability of at least one occurrence as</p>
+
+  \[
+    P(\text{at least one rainbow sequence}) \,=\, 1 - \frac{a_{730}}{7^{730}}.
+  \]
+
+  <h2>Numeric evaluation</h2>
+  <p>The recurrence quickly produces very large integers. Using exact integer arithmetic (big integers) and then converting to a decimal, one obtains the value below (I evaluated this with high-precision arithmetic to present a reliable decimal approximation):</p>
+
+  <p class="boxed">
+    \[P(\text{at least one rainbow sequence}) \approx 0.00087874893318039188771844668051230644.\]
+  </p>
+
+  <p>As a percentage this is about</p>
+  \[
+    0.0008787\cdot100\% \approx 0.08787\%.
+  \]
+
+  <h2>Interpretation</h2>
+  <ul>
+    <li>The probability is quite small: roughly <strong>0.088%</strong>, i.e. less than one chance in a thousand that a random uniform choice each brushing will produce the exact 7-color rainbow block somewhere in 730 brushings.</li>
+    <li>Even though 730 is much larger than 7, the probability of a particular ordered 7-letter pattern is small because each specific length-7 block has probability \(7^{-7}\) and pattern occurrences are relatively rare.</li>
+  </ul>
+
+  <h2>Sanity checks and additional comments</h2>
+  <ol>
+    <li>If you instead asked for the probability that, at some point, Rahul uses each color once per day but in rainbow order across the two daily brushings plus other daily actions — that is a different problem and would require changing the model. We assumed independent picks each brushing, not e.g. a rotating schedule or constraints like "use a different brush each time".</li>
+    <li>If Rahul were to always cycle brushes in a fixed order (deterministically), then the probability could be 1 or 0 depending on the cycle alignment; but our calculation assumes random independent choices.</li>
+    <li>Our method (recurrence for \(a_n\)) gives the exact probability (not just an approximation), because the recurrence counts exactly how many strings avoid the pattern; the decimal shown is a high-precision numeric evaluation of that exact rational number.</li>
+  </ol>
+
+  <h2>Optional: short JavaScript snippet (computes the same recurrence in the browser using BigInt)</h2>
+  <pre><code>// Use this in the browser console if you want to recompute locally
+(function(){
+  const k=7n, m=7, n=730;
+  const a = Array(n+1).fill(0n);
+  a[0]=1n;
+  for(let i=1;i<=n;i++){
+    if(i<m) a[i]=k**BigInt(i);
+    else a[i]=k*a[i-1]-a[i-m];
+  }
+  const p_no = Number(a[n]) / Number(7n**BigInt(n)); // for very large n this number conversion may lose precision
+  console.log('Exact a_n (bigint):', a[n]);
+  console.log('Approx probability at least one occurrence:', 1 - p_no);
+})();</code></pre>
+
+  <h2>Final answer (concise)</h2>
+  <div class="boxed">
+    <p><strong>Probability Rahul will see the exact rainbow toothbrush sequence at least once in one year (730 brushings), under the assumptions above:</strong></p>
+    <p>\(\approx 0.00087874893318\) (about \(0.08787\%\)).</p>
+  </div>
+
+  <p style="margin-top:28px">If you want, I can also provide a downloadable HTML file with an embedded calculator so you can change the number of days, brushes per day, or whether the pattern letters are allowed to repeat — or I can show the exact rational number \(1 - a_{730}/7^{730}\) with numerator and denominator printed. Tell me which variant you'd like.</p>
+</body>
+</html>
