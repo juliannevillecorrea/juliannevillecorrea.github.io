@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Rainbow Toothbrush Probability</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #16a085;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .highlight {
+            background-color: #e8f6f3;
+            padding: 15px;
+            border-left: 5px solid #1abc9c;
+            margin: 20px 0;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>The Rainbow Toothbrush Problem</h1>
+    
+    <p>
+        Rahul has 7 toothbrushes, each corresponding to a color of the rainbow (Red, Orange, Yellow, Green, Blue, Indigo, Violet). 
+        We are asked to calculate the probability that he uses them in the specific "Rainbow Sequence" (ROYGBIV) within a span of one year, 
+        assuming he brushes twice a day.
+    </p>
+
+    <div class="highlight">
+        <strong>The Core Question:</strong> What is the likelihood that the sequence \( \{R, O, Y, G, B, I, V\} \) appears consecutively in a random sequence of brushing events?
+    </div>
+
+    <h2>1. Assumptions and Parameters</h2>
+    <p>To solve this mathematically, we must formalize the real-world scenario into statistical parameters:</p>
+    
+    <ul>
+        <li><strong>Time Span:</strong> We assume a standard non-leap year consisting of \( 365 \) days.</li>
+        <li><strong>Frequency:</strong> Rahul brushes twice a day.</li>
+        <li><strong>Total Trials (\(N\)):</strong> The total number of brushing events in the year is:
+            $$ N = 365 \times 2 = 730 $$
+        </li>
+        <li><strong>The Set (\(S\)):</strong> There are \( k = 7 \) distinct toothbrushes. \( S = \{R, O, Y, G, B, I, V\} \).</li>
+        <li><strong>Selection Logic:</strong> We assume <em>Selection with Replacement</em>. For the sequence to be random and for probability to apply, we assume Rahul picks one toothbrush blindly from the cup each time he brushes. This means the probability of picking any specific color is uniform.</li>
+    </ul>
+
+    <h2>2. Probability of a Single Event</h2>
+    <p>
+        For any single brushing session, the probability of picking a specific color (e.g., Red) is:
+    </p>
+    $$ P(\text{Color}) = \frac{1}{7} $$
+
+    <h2>3. Probability of the Target Sequence</h2>
+    <p>
+        We are looking for the specific sequence: <strong>Red \(\to\) Orange \(\to\) Yellow \(\to\) Green \(\to\) Blue \(\to\) Indigo \(\to\) Violet</strong>.
+    </p>
+    <p>
+        Since each choice is independent, the probability of this specific 7-length sequence occurring at any specific starting point is:
+    </p>
+    $$ P(\text{Seq}) = \left(\frac{1}{7}\right) \times \left(\frac{1}{7}\right) \times \left(\frac{1}{7}\right) \times \left(\frac{1}{7}\right) \times \left(\frac{1}{7}\right) \times \left(\frac{1}{7}\right) \times \left(\frac{1}{7}\right) $$
+    $$ P(\text{Seq}) = \left(\frac{1}{7}\right)^7 $$
+    
+    <p>Let's calculate this value:</p>
+    $$ 7^7 = 823,543 $$
+    $$ p = P(\text{Seq}) = \frac{1}{823,543} \approx 1.214 \times 10^{-6} $$
+
+    <h2>4. The "Sliding Window" Calculation</h2>
+    <p>
+        We have a total sequence of \( N = 730 \) events. We want to find the probability that our pattern appears <strong>at least once</strong>.
+    </p>
+
+    <h3>Number of Opportunities</h3>
+    <p>
+        A sequence of length 7 can start at index 1, index 2, etc. The last possible starting index is \( 730 - 7 + 1 = 724 \).
+    </p>
+    <p>
+        Let \( M \) be the number of possible starting positions:
+        $$ M = 724 $$
+    </p>
+
+    <h3>The Calculation</h3>
+    <p>
+        Calculating the probability of "at least one success" is difficult because sequences can overlap. However, for the sequence "ROYGBIV", overlaps are impossible (you cannot start "ROYGBIV" in the middle of another "ROYGBIV" because the colors are distinct). Therefore, we can treat the trials as nearly independent.
+    </p>
+    <p>
+        It is much easier to calculate the probability that the sequence <strong>never</strong> happens, and subtract that from 1.
+    </p>
+
+    $$ P(\text{Success}) = 1 - P(\text{Failure}) $$
+
+    <p>
+        The probability that the sequence does <strong>not</strong> start at a specific position \( i \) is \( (1 - p) \).
+        Across \( M \) opportunities:
+    </p>
+
+    $$ P(\text{Success}) \approx 1 - (1 - p)^M $$
+    
+    <p>Substituting our values:</p>
+    $$ P(\text{Success}) = 1 - \left(1 - \frac{1}{823,543}\right)^{724} $$
+
+    <h2>5. Final Computation</h2>
+    <p>
+        Because \( p \) is very small and \( M \) is large, we can use the approximation \( (1-x)^n \approx e^{-nx} \).
+    </p>
+
+    $$ P(\text{Success}) \approx 1 - e^{-\frac{724}{823,543}} $$
+    
+    <p>Alternatively, using the binomial approximation for very small \( p \):</p>
+    $$ P(\text{Success}) \approx M \times p $$
+    $$ P(\text{Success}) \approx \frac{724}{823,543} $$
+
+    $$ P(\text{Success}) \approx 0.0008791 $$
+
+    <div class="highlight">
+        <h3>The Result</h3>
+        <p>The probability that Rahul brushes his teeth in the exact Rainbow Sequence at least once during the year is approximately:</p>
+        $$ \mathbf{0.088\%} $$
+        <p>Or roughly <strong>1 in 1,137</strong>.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>
+        Even though Rahul is a "good boy" and brushes 730 times a year, the sheer number of combinations possible with 7 toothbrushes (\( 7^7 \)) is vast. The chance of hitting that specific order by random chance is quite low, occurring less than one-tenth of one percent of the time.
+    </p>
+
+</div>
+
+</body>
+</html>

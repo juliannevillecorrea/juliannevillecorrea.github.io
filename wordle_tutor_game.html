@@ -1,0 +1,211 @@
+<!--
+Wordle Tutor — Minimal UX single-file HTML
+Author: ChatGPT (GPT-5 Thinking mini)
+Usage: Save as index.html (or wordle-tutor.html) and host on GitHub Pages.
+Design goals: Minimal, keyboard-first, teaching-focused. Lightweight, no external libs.
+Features:
+- Classic 5-letter Wordle board with 6 attempts
+- Hints and teaching mode: explains feedback (green/yellow/gray) and suggests next guess based on feedback
+- Two modes: Play (normal Wordle) and Tutor (shows reasoning & candidate list)
+- Minimal UI: keyboard + board + small sidebar for controls and tutor explanations
+- Local dictionary (small word list embedded) and optional custom target
+- Accessibility: keyboard input, aria labels
+- Saves progress in localStorage
+
+Notes: This is a single-file static app optimized for GitHub Pages.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Wordle Tutor — Minimal</title>
+<style>
+  :root{--bg:#ffffff;--fg:#0a0a0a;--muted:#6b7280;--accent:#111827;--green:#16a34a;--yellow:#f59e0b;--gray:#94a3b8}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--fg)}
+  .container{max-width:920px;margin:28px auto;padding:18px;display:grid;grid-template-columns:1fr 300px;gap:20px}
+  header{grid-column:1/3;display:flex;justify-content:space-between;align-items:center}
+  h1{font-size:16px;margin:0}
+  .board{background:#fff;border-radius:10px;padding:18px;border:1px solid #f1f5f9}
+  .row{display:flex;gap:8px;margin-bottom:8px}
+  .cell{width:56px;height:56px;border-radius:6px;border:2px solid #e6eef6;display:grid;place-items:center;font-weight:700;font-size:20px}
+  .cell.filled{border-color:#cbd5e1}
+  .cell.green{background:var(--green);color:#fff;border-color:var(--green)}
+  .cell.yellow{background:var(--yellow);color:#fff;border-color:var(--yellow)}
+  .cell.gray{background:#e6eef6;color:var(--muted);border-color:#e6eef6}
+  .kbd{display:flex;flex-wrap:wrap;gap:6px;padding:10px}
+  .key{padding:8px 12px;border-radius:6px;border:1px solid #e6eef6;background:#fff;cursor:pointer;user-select:none}
+  .key.wide{padding:8px 18px}
+  .sidebar{display:flex;flex-direction:column;gap:12px}
+  .card{padding:12px;border-radius:10px;border:1px solid #f1f5f9;background:#fff}
+  .muted{color:var(--muted);font-size:13px}
+  .tiny{font-size:12px;color:var(--muted)}
+  .controls{display:flex;gap:8px}
+  input[type=text]{padding:8px;border-radius:8px;border:1px solid #eef2f7}
+  button{background:var(--accent);color:#fff;border:0;padding:8px 10px;border-radius:8px;cursor:pointer}
+  .ghost{background:transparent;border:1px solid #eef2f7;color:var(--muted)}
+  .hint-list{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow:auto}
+  pre{white-space:pre-wrap;font-family:inherit;font-size:13px}
+  @media (max-width:800px){.container{grid-template-columns:1fr;}.sidebar{order:2}}
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Wordle Tutor — Minimal</h1>
+      <div class="muted">Keyboard-first • Tutor mode suggests next moves</div>
+    </header>
+
+    <main>
+      <section class="board card" aria-label="Wordle board">
+        <div id="board"></div>
+        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+          <div class="muted">Attempts: <span id="attempts">0</span>/6</div>
+          <div class="controls">
+            <button id="new" class="ghost">New</button>
+            <button id="reveal" class="ghost">Reveal</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" class="kbd" role="application" aria-label="On-screen keyboard" id="keyboard"></div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>Mode</strong>
+            <select id="mode">
+              <option value="play">Play</option>
+              <option value="tutor" selected>Tutor</option>
+            </select>
+          </div>
+          <div style="margin-top:8px" class="muted tiny">In Tutor mode the app narrows candidate words and suggests the best next guess, and explains why.</div>
+
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <input id="custom" placeholder="Custom target (5 letters)" maxlength="5" style="text-transform:uppercase">
+            <button id="set" class="ghost">Set</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <strong>Tutor</strong>
+          <div class="muted tiny" style="margin-top:6px">Feedback explanation</div>
+          <div id="explain" style="margin-top:8px;font-size:13px">Make a guess to see explanations here.</div>
+        </div>
+
+        <div class="card">
+          <strong>Suggestions</strong>
+          <div id="suggestions" class="hint-list muted tiny" style="margin-top:8px">No suggestions yet.</div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+<script>
+// Minimal Wordle Tutor
+(function(){
+  // small embedded word list (answers + allowed guesses). In production swap with larger lists.
+  const ANSWERS = ["CRANE","SLATE","BRICK","PLANT","GRACE","MIGHT","SHARE","LIGHT","TRINE","GHOST","PRIDE","FORGE","CLOUD","FAVOR","BLINK"];
+  const GUESSES = ANSWERS.concat(["ABOUT","OTHER","WHILE","THEIR","WORDS","PARTY","COULD","SHOULD","WATER","QUICK","BROWN","JUMPS","LAUGH","SPORE","ANGLE"]);
+
+  // state
+  let target = pick(ANSWERS);
+  let board = Array.from({length:6},()=>Array(5).fill(''));
+  let colors = Array.from({length:6},()=>Array(5).fill(''));
+  let attempt = 0; let col = 0; let finished=false; let mode = 'tutor';
+
+  const boardEl = document.getElementById('board');
+  const attemptsEl = document.getElementById('attempts');
+  const keyboardEl = document.getElementById('keyboard');
+  const explainEl = document.getElementById('explain');
+  const suggestionsEl = document.getElementById('suggestions');
+  const modeEl = document.getElementById('mode');
+  const newBtn = document.getElementById('new');
+  const revealBtn = document.getElementById('reveal');
+  const customEl = document.getElementById('custom');
+  const setBtn = document.getElementById('set');
+
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+  function renderBoard(){ boardEl.innerHTML=''; for(let r=0;r<6;r++){ const row = document.createElement('div'); row.className='row'; for(let c=0;c<5;c++){ const cell = document.createElement('div'); cell.className='cell'; const ch = board[r][c]; if(ch) cell.textContent=ch; if(colors[r][c]) cell.classList.add(colors[r][c]); if(ch) cell.classList.add('filled'); row.appendChild(cell); } boardEl.appendChild(row); } attemptsEl.textContent = attempt; }
+
+  function renderKeyboard(){ keyboardEl.innerHTML=''; const rows = ['QWERTYUIOP','ASDFGHJKL','ZXCVBNM']; rows.forEach((r,ri)=>{ for(const k of r){ const btn = document.createElement('div'); btn.className='key'; btn.textContent=k; btn.addEventListener('click', ()=>pressLetter(k)); keyboardEl.appendChild(btn); } if(ri<rows.length-1) keyboardEl.appendChild(document.createElement('br')); }); const enter = document.createElement('div'); enter.className='key wide'; enter.textContent='ENTER'; enter.addEventListener('click', submitGuess); const del = document.createElement('div'); del.className='key wide'; del.textContent='DEL'; del.addEventListener('click', ()=>backspace()); keyboardEl.appendChild(enter); keyboardEl.appendChild(del); }
+
+  function pressLetter(ch){ if(finished) return; if(col<5){ board[attempt][col]=ch; col++; renderBoard(); } }
+  function backspace(){ if(finished) return; if(col>0){ col--; board[attempt][col]=''; renderBoard(); } }
+
+  function submitGuess(){ if(finished) return; if(col<5) return flash('Complete the word'); const guess = board[attempt].join(''); if(!GUESSES.includes(guess)) return flash('Not in word list'); const feedback = scoreGuess(guess, target); colors[attempt] = feedback.map(s=> s==='g'?'green': s==='y'?'yellow':'gray'); renderBoard(); explain(guess,feedback); attempt++; col=0; saveState(); if(guess===target){ finished=true; flash('Correct!'); } else if(attempt>=6){ finished=true; flash('No more attempts — target: '+target); } updateSuggestions(); }
+
+  function scoreGuess(guess, target){ // returns array of 'g','y','-' length 5
+    const res = Array(5).fill('-'); const t = target.split(''); const g = guess.split('');
+    // first pass greens
+    for(let i=0;i<5;i++){ if(g[i]===t[i]){ res[i]='g'; t[i]=null; } }
+    // second pass yellows
+    for(let i=0;i<5;i++){ if(res[i]==='-'){ const idx = t.indexOf(g[i]); if(idx>=0){ res[i]='y'; t[idx]=null; } } }
+    return res;
+  }
+
+  function explain(guess, feedback){ // tutor explanation
+    if(mode!=='tutor'){ explainEl.textContent = 'Switch to Tutor mode to see explanations.'; return; }
+    const parts = [];
+    for(let i=0;i<5;i++){
+      const g = guess[i], f = feedback[i];
+      if(f==='g') parts.push(`${g}: Correct position (green)`);
+      else if(f==='y') parts.push(`${g}: Present in word, wrong position (yellow)`);
+      else parts.push(`${g}: Not present (gray)`);
+    }
+    explainEl.innerHTML = '<pre>'+parts.join('\n')+'</pre>';
+  }
+
+  function updateSuggestions(){ if(mode!=='tutor'){ suggestionsEl.textContent='Tutor off'; return; }
+    // narrow candidate list based on all feedback so far
+    let candidates = GUESSES.filter(w=>w.length===5).map(s=>s.toUpperCase());
+    for(let r=0;r<6;r++){ if(board[r].join('').trim()==='') break; const g = board[r].join(''); const fb = colors[r].map(cl=> cl==='green'?'g': cl==='yellow'?'y':'-'); candidates = candidates.filter(c=> matchFeedback(g,c,fb)); }
+    // show top 8 suggestions (simple heuristic: maximize unique letters)
+    candidates = Array.from(new Set(candidates));
+    candidates.sort((a,b)=> scoreWord(b) - scoreWord(a));
+    suggestionsEl.innerHTML = candidates.slice(0,12).map(s=>'<div>'+s+'</div>').join('') || '—';
+  }
+
+  function matchFeedback(guess, candidate, fb){ // simulate scoring of guess vs candidate should equal fb
+    const sim = scoreGuess(guess,candidate);
+    return sim.join('') === fb.join('');
+  }
+
+  function scoreWord(w){ // heuristic: count unique letters
+    return new Set(w).size;
+  }
+
+  function flash(msg){ // small ephemeral message in explain area
+    const prev = explainEl.innerHTML; explainEl.textContent = msg; setTimeout(()=>{ if(!finished) explainEl.innerHTML = prev; },1200); }
+
+  function newGame(){ target = pick(ANSWERS); board = Array.from({length:6},()=>Array(5).fill('')); colors = Array.from({length:6},()=>Array(5).fill('')); attempt=0; col=0; finished=false; explainEl.textContent='Make a guess to see explanations.'; suggestionsEl.textContent='No suggestions yet.'; renderBoard(); updateSuggestions(); saveState(); }
+
+  function reveal(){ alert('Target: '+target); }
+
+  function saveState(){ try{ localStorage.setItem('wordle_state', JSON.stringify({target,board,colors,attempt,col,finished})); }catch(e){} }
+  function loadState(){ try{ const s = JSON.parse(localStorage.getItem('wordle_state')||'null'); if(s){ target=s.target; board=s.board; colors=s.colors; attempt=s.attempt; col=s.col; finished=s.finished; } }catch(e){} }
+
+  function matchFeedback(guess,candidate,fb){ // duplicate safe local function (declared earlier) - keep unified
+    const sim = scoreGuess(guess,candidate); return sim.join('') === fb.join(''); }
+
+  // keyboard handling
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') { submitGuess(); }
+    else if(e.key === 'Backspace') { backspace(); }
+    else if(e.key.length===1 && /[a-zA-Z]/.test(e.key)){ pressLetter(e.key.toUpperCase()); }
+  });
+
+  modeEl.addEventListener('change', ()=>{ mode = modeEl.value; updateSuggestions(); });
+  newBtn.addEventListener('click', newGame);
+  revealBtn.addEventListener('click', reveal);
+  setBtn.addEventListener('click', ()=>{ const v = customEl.value.trim().toUpperCase(); if(v.length===5 && ANSWERS.includes(v)) { target=v; newGame(); } else alert('Custom target must be a 5-letter word from allowed answers in the list (case-insensitive).'); });
+
+  // init
+  loadState(); renderBoard(); renderKeyboard(); updateSuggestions();
+})();
+</script>
+</body>
+</html>
