@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hangman</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0; /* Slate 200 */
+            touch-action: manipulation;
+        }
+
+        /* Chalkboard effect for the drawing area */
+        .chalkboard {
+            background-color: #1e293b;
+            border: 4px solid #334155;
+            border-radius: 8px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Letter slots */
+        .letter-slot {
+            border-bottom: 3px solid #94a3b8;
+            min-width: 2rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 0.25rem;
+            height: 3rem;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            padding-bottom: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .letter-slot.filled {
+            border-color: #38bdf8; /* Sky 400 */
+            color: #38bdf8;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .letter-slot.missing {
+            color: #ef4444; /* Red 500 */
+            border-color: #ef4444;
+        }
+
+        /* Keyboard Keys */
+        .key {
+            background-color: #334155;
+            border-bottom: 4px solid #1e293b;
+            transition: all 0.1s;
+        }
+        .key:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+        .key.correct {
+            background-color: #15803d; /* Green 700 */
+            border-color: #14532d;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .key.wrong {
+            background-color: #b91c1c; /* Red 700 */
+            border-color: #7f1d1d;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Header -->
+    <header class="w-full max-w-2xl flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-sky-400 tracking-tighter">HANGMAN</h1>
+            <p class="text-xs text-slate-500 mt-1">THE CLASSIC WORD GAME</p>
+        </div>
+        <div class="text-right">
+            <div class="text-sm text-slate-400">Streak</div>
+            <div class="text-2xl font-bold text-green-400" id="streak">0</div>
+        </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main class="w-full max-w-2xl flex flex-col gap-6">
+        
+        <!-- Top Section: Drawing & Category -->
+        <div class="flex flex-col sm:flex-row gap-6">
+            <!-- Canvas -->
+            <div class="flex justify-center">
+                <canvas id="hangmanCanvas" width="200" height="200" class="chalkboard"></canvas>
+            </div>
+
+            <!-- Info & Controls -->
+            <div class="flex-1 flex flex-col justify-between py-2">
+                <div>
+                    <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Category</div>
+                    <div class="text-xl text-yellow-400 font-bold mb-4" id="categoryDisplay">Loading...</div>
+                    
+                    <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Lives</div>
+                    <div class="flex gap-1 text-red-500 text-xl" id="livesDisplay">
+                        ❤❤❤❤❤❤
+                    </div>
+                </div>
+                
+                <button onclick="initGame()" class="mt-4 sm:mt-0 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors border-b-4 border-slate-800 active:border-b-2 active:translate-y-[2px] self-start">
+                    NEW WORD
+                </button>
+            </div>
+        </div>
+
+        <!-- Word Display -->
+        <div class="flex flex-wrap justify-center gap-y-2 min-h-[4rem] px-4 py-6 bg-slate-800/50 rounded-xl" id="wordContainer">
+            <!-- Letters injected here -->
+        </div>
+
+        <!-- Keyboard -->
+        <div class="grid grid-cols-10 gap-1.5 sm:gap-2 select-none" id="keyboard">
+            <!-- Keys injected here -->
+        </div>
+
+    </main>
+
+    <!-- Game Over Modal -->
+    <div id="modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl max-w-sm w-full text-center shadow-2xl transform transition-all scale-100">
+            <div class="text-6xl mb-4" id="modalIcon">💀</div>
+            <h2 class="text-3xl font-bold text-white mb-2" id="modalTitle">Game Over</h2>
+            <p class="text-slate-400 mb-6" id="modalMsg">The word was <span class="text-sky-400 font-bold" id="revealWord">BANANA</span></p>
+            
+            <button onclick="initGame(); document.getElementById('modal').classList.add('hidden')" class="w-full bg-sky-600 hover:bg-sky-500 text-white py-3 rounded-xl font-bold text-lg shadow-lg transition-transform active:scale-95">
+                Play Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- Game Configuration ---
+        const MAX_LIVES = 6;
+        
+        // A small dictionary of words for the standalone version
+        const WORD_DATA = {
+            'Animals': ['ELEPHANT', 'GIRAFFE', 'PLATYPUS', 'SQUIRREL', 'DOLPHIN', 'KANGAROO', 'PENGUIN', 'CHEETAH'],
+            'Countries': ['JAPAN', 'BRAZIL', 'AUSTRALIA', 'EGYPT', 'ICELAND', 'CANADA', 'PORTUGAL', 'THAILAND'],
+            'Space': ['ASTEROID', 'NEBULA', 'GALAXY', 'JUPITER', 'ECLIPSE', 'ASTRONAUT', 'SUPERNOVA', 'ORBIT'],
+            'Coding': ['VARIABLE', 'FUNCTION', 'BROWSER', 'ALGORITHM', 'PYTHON', 'JAVASCRIPT', 'DATABASE', 'SYNTAX'],
+            'Movies': ['TITANIC', 'INCEPTION', 'GLADIATOR', 'MATRIX', 'AVATAR', 'ALIEN', 'JAWS', 'FROZEN']
+        };
+
+        // State
+        let currentWord = "";
+        let currentCategory = "";
+        let guessedLetters = new Set();
+        let wrongGuesses = 0;
+        let streak = 0;
+        let isGameOver = false;
+
+        // DOM Elements
+        const canvas = document.getElementById('hangmanCanvas');
+        const ctx = canvas.getContext('2d');
+        const wordContainer = document.getElementById('wordContainer');
+        const keyboardDiv = document.getElementById('keyboard');
+        const livesDisplay = document.getElementById('livesDisplay');
+        const streakDisplay = document.getElementById('streak');
+        
+        // --- Initialization ---
+
+        function initGame() {
+            // Pick random category and word
+            const categories = Object.keys(WORD_DATA);
+            currentCategory = categories[Math.floor(Math.random() * categories.length)];
+            const words = WORD_DATA[currentCategory];
+            currentWord = words[Math.floor(Math.random() * words.length)];
+
+            // Reset State
+            guessedLetters.clear();
+            wrongGuesses = 0;
+            isGameOver = false;
+
+            // Update UI
+            document.getElementById('categoryDisplay').innerText = currentCategory;
+            document.getElementById('modal').classList.add('hidden');
+            
+            renderWord();
+            renderKeyboard();
+            updateLives();
+            clearCanvas();
+            drawGallows();
+        }
+
+        // --- Core Logic ---
+
+        function guess(letter) {
+            if (isGameOver || guessedLetters.has(letter)) return;
+
+            guessedLetters.add(letter);
+
+            if (currentWord.includes(letter)) {
+                // Correct Guess
+                playSound(true);
+                renderWord();
+                updateKeyboard(letter, 'correct');
+                checkWin();
+            } else {
+                // Wrong Guess
+                wrongGuesses++;
+                playSound(false);
+                updateLives();
+                updateKeyboard(letter, 'wrong');
+                drawHangman(wrongGuesses);
+                checkLoss();
+            }
+        }
+
+        function checkWin() {
+            const isWon = currentWord.split('').every(l => guessedLetters.has(l));
+            if (isWon) {
+                isGameOver = true;
+                streak++;
+                streakDisplay.innerText = streak;
+                setTimeout(() => showModal(true), 500);
+            }
+        }
+
+        function checkLoss() {
+            if (wrongGuesses >= MAX_LIVES) {
+                isGameOver = true;
+                streak = 0;
+                streakDisplay.innerText = streak;
+                // Reveal missing letters in red
+                renderWord(true); 
+                setTimeout(() => showModal(false), 500);
+            }
+        }
+
+        // --- Rendering ---
+
+        function renderWord(reveal = false) {
+            wordContainer.innerHTML = '';
+            currentWord.split('').forEach(char => {
+                const span = document.createElement('div');
+                span.className = 'letter-slot';
+                
+                if (guessedLetters.has(char)) {
+                    span.innerText = char;
+                    span.classList.add('filled');
+                } else if (reveal) {
+                    span.innerText = char;
+                    span.classList.add('missing');
+                } else {
+                    span.innerText = '';
+                }
+                
+                wordContainer.appendChild(span);
+            });
+        }
+
+        function renderKeyboard() {
+            keyboardDiv.innerHTML = '';
+            // QWERTY Layout rows
+            const rows = [
+                'QWERTYUIOP',
+                'ASDFGHJKL',
+                'ZXCVBNM'
+            ];
+
+            rows.forEach((row, rowIndex) => {
+                // Add spacer for 2nd and 3rd row to center them effectively in grid
+                let spanClass = "col-span-1";
+                if(rowIndex === 1) spanClass = "col-span-1"; 
+                // Grid logic: 10 cols.
+                // Row 1: 10 keys (1 col each)
+                // Row 2: 9 keys (need centering). 
+                // We'll just use a flat list for simplicity with flex wrap or detailed grid
+                // Actually, let's just dump buttons and let CSS grid handle auto-flow or specific layout
+            });
+
+            // Simplified: Just A-Z flat list for easy responsiveness, 
+            // or we can map standard layout if we prefer. 
+            // Let's do standard A-Z for simplicity in logic, but styling them is easy.
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            
+            alphabet.forEach(char => {
+                const btn = document.createElement('button');
+                btn.innerText = char;
+                btn.className = `key h-12 w-full rounded font-bold text-slate-300 text-lg hover:bg-slate-700 active:bg-slate-600 focus:outline-none`;
+                btn.onclick = () => guess(char);
+                btn.id = `key-${char}`;
+                keyboardDiv.appendChild(btn);
+            });
+        }
+
+        function updateKeyboard(letter, status) {
+            const btn = document.getElementById(`key-${letter}`);
+            if (btn) {
+                btn.classList.add(status);
+            }
+        }
+
+        function updateLives() {
+            let hearts = '';
+            for(let i=0; i<MAX_LIVES; i++) {
+                if(i < (MAX_LIVES - wrongGuesses)) hearts += '❤';
+                else hearts += '<span class="text-slate-700">❤</span>';
+            }
+            livesDisplay.innerHTML = hearts;
+        }
+
+        function showModal(won) {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const msg = document.getElementById('modalMsg');
+            const icon = document.getElementById('modalIcon');
+            const reveal = document.getElementById('revealWord');
+
+            if (won) {
+                title.innerText = "Victory!";
+                title.className = "text-3xl font-bold text-green-400 mb-2";
+                msg.innerHTML = "You guessed the word correctly!";
+                icon.innerText = "🏆";
+            } else {
+                title.innerText = "Defeat";
+                title.className = "text-3xl font-bold text-red-500 mb-2";
+                reveal.innerText = currentWord;
+                msg.innerHTML = `The word was <span class="text-sky-400 font-bold">${currentWord}</span>`;
+                icon.innerText = "💀";
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function playSound(success) {
+            // Optional: Simple oscillator beeps
+            // Keeping it silent for now to avoid auto-play issues
+        }
+
+        // --- Canvas Drawing ---
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#e2e8f0'; // slate-200
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        function drawGallows() {
+            ctx.beginPath();
+            // Base
+            ctx.moveTo(20, 180);
+            ctx.lineTo(180, 180);
+            // Pole
+            ctx.moveTo(40, 180);
+            ctx.lineTo(40, 20);
+            // Top
+            ctx.moveTo(40, 20);
+            ctx.lineTo(120, 20);
+            // Rope
+            ctx.moveTo(120, 20);
+            ctx.lineTo(120, 40);
+            // Support beam
+            ctx.moveTo(40, 50);
+            ctx.lineTo(70, 20);
+            ctx.stroke();
+        }
+
+        function drawHangman(step) {
+            ctx.beginPath();
+            const headCenter = {x: 120, y: 60};
+            
+            switch(step) {
+                case 1: // Head
+                    ctx.arc(headCenter.x, headCenter.y, 20, 0, Math.PI * 2);
+                    break;
+                case 2: // Body
+                    ctx.moveTo(120, 80);
+                    ctx.lineTo(120, 130);
+                    break;
+                case 3: // Left Arm
+                    ctx.moveTo(120, 90);
+                    ctx.lineTo(90, 110);
+                    break;
+                case 4: // Right Arm
+                    ctx.moveTo(120, 90);
+                    ctx.lineTo(150, 110);
+                    break;
+                case 5: // Left Leg
+                    ctx.moveTo(120, 130);
+                    ctx.lineTo(100, 160);
+                    break;
+                case 6: // Right Leg
+                    ctx.moveTo(120, 130);
+                    ctx.lineTo(140, 160);
+                    
+                    // Draw dead eyes
+                    ctx.stroke(); // Finish body first
+                    ctx.beginPath();
+                    ctx.moveTo(113, 55); ctx.lineTo(119, 61);
+                    ctx.moveTo(119, 55); ctx.lineTo(113, 61);
+                    ctx.moveTo(123, 55); ctx.lineTo(129, 61);
+                    ctx.moveTo(129, 55); ctx.lineTo(123, 61);
+                    break;
+            }
+            ctx.stroke();
+        }
+
+        // --- Event Listeners ---
+
+        document.addEventListener('keydown', (e) => {
+            if (isGameOver) {
+                if(e.key === 'Enter') {
+                    initGame();
+                    document.getElementById('modal').classList.add('hidden');
+                }
+                return;
+            }
+            
+            const char = e.key.toUpperCase();
+            if (char.length === 1 && char >= 'A' && char <= 'Z') {
+                guess(char);
+            }
+        });
+
+        // Start
+        window.onload = initGame;
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printable Maze Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Print Specific Styles */
+        @media print {
+            @page {
+                margin: 0.5cm;
+                size: portrait;
+            }
+            body {
+                background: white;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            canvas {
+                max-width: 100%;
+                max-height: 100%;
+                border: 2px solid black;
+            }
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #4F46E5;
+            cursor: pointer;
+            margin-top: -6px; 
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #E5E7EB;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+    <!-- Header / Controls (Hidden on Print) -->
+    <header class="no-print bg-white border-b border-slate-200 shadow-sm sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800">Maze Generator</h1>
+                    <p class="text-sm text-slate-500">Generate, solve, and print.</p>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="generateMaze()" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm active:transform active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Generate New
+                    </button>
+                    
+                    <button onclick="toggleSolution()" id="solveBtn" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm active:transform active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span id="solveBtnText">Show Solution</span>
+                    </button>
+
+                    <button onclick="printMaze()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm active:transform active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                        Print
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings Tray -->
+            <div class="mt-6 p-4 bg-slate-50 rounded-xl border border-slate-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Algorithm Select -->
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">Algorithm</label>
+                    <select id="algorithmSelect" class="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="dfs">Recursive Backtracker (Classic)</option>
+                        <option value="prim">Randomized Prim's (Branching)</option>
+                        <option value="huntandkill">Hunt and Kill (Dense)</option>
+                    </select>
+                </div>
+
+                <!-- Width Control -->
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">Columns</label>
+                        <span id="widthVal" class="text-xs font-bold text-indigo-600">30</span>
+                    </div>
+                    <input type="range" id="widthRange" min="10" max="60" value="30" class="w-full" oninput="document.getElementById('widthVal').innerText = this.value">
+                </div>
+
+                <!-- Height Control -->
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">Rows</label>
+                        <span id="heightVal" class="text-xs font-bold text-indigo-600">20</span>
+                    </div>
+                    <input type="range" id="heightRange" min="10" max="60" value="20" class="w-full" oninput="document.getElementById('heightVal').innerText = this.value">
+                </div>
+
+                 <!-- Difficulty/Cell Size -->
+                 <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">Wall Thickness</label>
+                        <span id="thickVal" class="text-xs font-bold text-indigo-600">2px</span>
+                    </div>
+                    <input type="range" id="thickRange" min="1" max="6" value="2" class="w-full" oninput="document.getElementById('thickVal').innerText = this.value + 'px'">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Canvas Area -->
+    <main class="flex-grow flex items-center justify-center p-4 bg-slate-100 print-container">
+        <div class="bg-white p-4 rounded-lg shadow-lg print:shadow-none print:p-0">
+            <canvas id="mazeCanvas" class="block bg-white cursor-crosshair max-w-full h-auto"></canvas>
+            <div class="no-print mt-2 text-center text-xs text-slate-400">
+                Right-click image to save as PNG
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const canvas = document.getElementById('mazeCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Configuration
+        let cols, rows;
+        let cellSize = 20; // Base cell size, calculated dynamically usually
+        let wallThickness = 2;
+        let grid = [];
+        let current;
+        let stack = [];
+        let solutionPath = [];
+        let isSolving = false;
+        let showSolution = false;
+
+        // Constants
+        const WALL_TOP = 0;
+        const WALL_RIGHT = 1;
+        const WALL_BOTTOM = 2;
+        const WALL_LEFT = 3;
+
+        class Cell {
+            constructor(i, j) {
+                this.i = i;
+                this.j = j;
+                // walls: [top, right, bottom, left]
+                this.walls = [true, true, true, true];
+                this.visited = false;
+                this.inSolution = false;
+            }
+
+            checkNeighbors() {
+                let neighbors = [];
+                let top = grid[index(this.i, this.j - 1)];
+                let right = grid[index(this.i + 1, this.j)];
+                let bottom = grid[index(this.i, this.j + 1)];
+                let left = grid[index(this.i - 1, this.j)];
+
+                if (top && !top.visited) neighbors.push(top);
+                if (right && !right.visited) neighbors.push(right);
+                if (bottom && !bottom.visited) neighbors.push(bottom);
+                if (left && !left.visited) neighbors.push(left);
+
+                if (neighbors.length > 0) {
+                    let r = Math.floor(Math.random() * neighbors.length);
+                    return neighbors[r];
+                } else {
+                    return undefined;
+                }
+            }
+        }
+
+        function index(i, j) {
+            if (i < 0 || j < 0 || i > cols - 1 || j > rows - 1) return -1;
+            return i + j * cols;
+        }
+
+        function removeWalls(a, b) {
+            let x = a.i - b.i;
+            if (x === 1) {
+                a.walls[WALL_LEFT] = false;
+                b.walls[WALL_RIGHT] = false;
+            } else if (x === -1) {
+                a.walls[WALL_RIGHT] = false;
+                b.walls[WALL_LEFT] = false;
+            }
+            let y = a.j - b.j;
+            if (y === 1) {
+                a.walls[WALL_TOP] = false;
+                b.walls[WALL_BOTTOM] = false;
+            } else if (y === -1) {
+                a.walls[WALL_BOTTOM] = false;
+                b.walls[WALL_TOP] = false;
+            }
+        }
+
+        // --- ALGORITHMS ---
+
+        // 1. Recursive Backtracker
+        function generateDFS() {
+            // Setup
+            grid = [];
+            for (let j = 0; j < rows; j++) {
+                for (let i = 0; i < cols; i++) {
+                    grid.push(new Cell(i, j));
+                }
+            }
+            current = grid[0];
+            current.visited = true;
+            stack = [];
+
+            // Iterative implementation to avoid stack overflow
+            while (true) {
+                let next = current.checkNeighbors();
+                if (next) {
+                    next.visited = true;
+                    stack.push(current);
+                    removeWalls(current, next);
+                    current = next;
+                } else if (stack.length > 0) {
+                    current = stack.pop();
+                } else {
+                    break; // Finished
+                }
+            }
+        }
+
+        // 2. Randomized Prim's
+        function generatePrims() {
+            grid = [];
+            for (let j = 0; j < rows; j++) {
+                for (let i = 0; i < cols; i++) {
+                    let cell = new Cell(i, j);
+                    grid.push(cell);
+                }
+            }
+
+            let startCell = grid[0];
+            startCell.visited = true;
+            
+            // Frontier is a list of walls (or cells reachable)
+            // Simplified: Frontier list of cells adjacent to visited cells
+            let frontier = [];
+            const addFrontier = (cell) => {
+                const neighbors = [
+                    grid[index(cell.i, cell.j - 1)],
+                    grid[index(cell.i + 1, cell.j)],
+                    grid[index(cell.i, cell.j + 1)],
+                    grid[index(cell.i - 1, cell.j)]
+                ];
+                neighbors.forEach(n => {
+                    if (n && !n.visited && !frontier.includes(n)) {
+                        frontier.push(n);
+                    }
+                });
+            };
+
+            addFrontier(startCell);
+
+            while (frontier.length > 0) {
+                // Pick random cell from frontier
+                let randIndex = Math.floor(Math.random() * frontier.length);
+                let current = frontier[randIndex];
+                frontier.splice(randIndex, 1);
+                current.visited = true;
+
+                // Find a visited neighbor to connect to
+                let visitedNeighbors = [];
+                let top = grid[index(current.i, current.j - 1)];
+                let right = grid[index(current.i + 1, current.j)];
+                let bottom = grid[index(current.i, current.j + 1)];
+                let left = grid[index(current.i - 1, current.j)];
+
+                if (top && top.visited) visitedNeighbors.push(top);
+                if (right && right.visited) visitedNeighbors.push(right);
+                if (bottom && bottom.visited) visitedNeighbors.push(bottom);
+                if (left && left.visited) visitedNeighbors.push(left);
+
+                if (visitedNeighbors.length > 0) {
+                    let r = Math.floor(Math.random() * visitedNeighbors.length);
+                    let target = visitedNeighbors[r];
+                    removeWalls(current, target);
+                    addFrontier(current);
+                }
+            }
+        }
+
+        // 3. Hunt and Kill
+        function generateHuntAndKill() {
+            grid = [];
+            for (let j = 0; j < rows; j++) {
+                for (let i = 0; i < cols; i++) {
+                    grid.push(new Cell(i, j));
+                }
+            }
+
+            let current = grid[0];
+            current.visited = true;
+
+            while (current) {
+                let next = current.checkNeighbors();
+                if (next) {
+                    next.visited = true;
+                    removeWalls(current, next);
+                    current = next;
+                } else {
+                    // Hunt Mode
+                    current = null;
+                    for (let i = 0; i < grid.length; i++) {
+                        let cell = grid[i];
+                        if (!cell.visited) {
+                            let visitedNeighbors = [];
+                            let top = grid[index(cell.i, cell.j - 1)];
+                            let right = grid[index(cell.i + 1, cell.j)];
+                            let bottom = grid[index(cell.i, cell.j + 1)];
+                            let left = grid[index(cell.i - 1, cell.j)];
+
+                            if (top && top.visited) visitedNeighbors.push(top);
+                            if (right && right.visited) visitedNeighbors.push(right);
+                            if (bottom && bottom.visited) visitedNeighbors.push(bottom);
+                            if (left && left.visited) visitedNeighbors.push(left);
+
+                            if (visitedNeighbors.length > 0) {
+                                current = cell;
+                                current.visited = true;
+                                let r = Math.floor(Math.random() * visitedNeighbors.length);
+                                removeWalls(current, visitedNeighbors[r]);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- SOLVER ---
+        function solveMaze() {
+            // Simple DFS Solver
+            let start = grid[0];
+            let end = grid[grid.length - 1];
+            
+            // Reset solution state
+            grid.forEach(c => c.inSolution = false);
+            let visited = new Set();
+            let q = []; // Using as a stack for path
+            
+            function search(cell) {
+                if (cell === end) return true;
+                visited.add(cell);
+                
+                // Get accessible neighbors
+                let neighbors = [];
+                let idx = index(cell.i, cell.j);
+                
+                // Top
+                if (!cell.walls[WALL_TOP]) {
+                    let n = grid[index(cell.i, cell.j - 1)];
+                    if (n && !visited.has(n)) neighbors.push(n);
+                }
+                // Right
+                if (!cell.walls[WALL_RIGHT]) {
+                    let n = grid[index(cell.i + 1, cell.j)];
+                    if (n && !visited.has(n)) neighbors.push(n);
+                }
+                // Bottom
+                if (!cell.walls[WALL_BOTTOM]) {
+                    let n = grid[index(cell.i, cell.j + 1)];
+                    if (n && !visited.has(n)) neighbors.push(n);
+                }
+                // Left
+                if (!cell.walls[WALL_LEFT]) {
+                    let n = grid[index(cell.i - 1, cell.j)];
+                    if (n && !visited.has(n)) neighbors.push(n);
+                }
+
+                for (let next of neighbors) {
+                    if (search(next)) {
+                        next.inSolution = true;
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            if(search(start)) {
+                start.inSolution = true;
+            }
+        }
+
+        // --- DRAWING ---
+        function draw() {
+            // Clear
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Calculate cell size based on requested canvas width (fixed for high res print)
+            // Let's make the canvas large for printing (e.g., 2000px wide max)
+            // But we display it smaller via CSS.
+            
+            // Re-calc dimensions for drawing
+            const drawW = canvas.width;
+            const drawH = canvas.height;
+            const cw = drawW / cols;
+            const ch = drawH / rows;
+
+            ctx.lineWidth = wallThickness;
+            ctx.lineCap = 'square'; // Better corners
+
+            for (let i = 0; i < grid.length; i++) {
+                let cell = grid[i];
+                let x = cell.i * cw;
+                let y = cell.j * ch;
+
+                // Solution Path
+                if (showSolution && cell.inSolution) {
+                    ctx.fillStyle = '#fecaca'; // Light red
+                    ctx.fillRect(x, y, cw, ch);
+                    // Draw a smaller dot or line for path? 
+                    // Let's do a line through center
+                    // (Actually fill rect is easier to see)
+                }
+
+                // Walls
+                ctx.strokeStyle = '#000000';
+                ctx.beginPath();
+                if (cell.walls[WALL_TOP]) {
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + cw, y);
+                }
+                if (cell.walls[WALL_RIGHT]) {
+                    ctx.moveTo(x + cw, y);
+                    ctx.lineTo(x + cw, y + ch);
+                }
+                if (cell.walls[WALL_BOTTOM]) {
+                    ctx.moveTo(x + cw, y + ch);
+                    ctx.lineTo(x, y + ch);
+                }
+                if (cell.walls[WALL_LEFT]) {
+                    ctx.moveTo(x, y + ch);
+                    ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+
+            // Draw Markers
+            // Start
+            ctx.fillStyle = '#22c55e'; // Green
+            ctx.font = `bold ${cw * 0.6}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('S', (0 * cw) + cw/2, (0 * ch) + ch/2 + 2);
+
+            // End
+            ctx.fillStyle = '#ef4444'; // Red
+            ctx.fillText('E', ((cols-1) * cw) + cw/2, ((rows-1) * ch) + ch/2 + 2);
+        }
+
+        function generateMaze() {
+            // Get Values
+            cols = parseInt(document.getElementById('widthRange').value);
+            rows = parseInt(document.getElementById('heightRange').value);
+            wallThickness = parseInt(document.getElementById('thickRange').value);
+            const algorithm = document.getElementById('algorithmSelect').value;
+
+            // Set Canvas Size (High Res)
+            // We want roughly A4 aspect ratio or just fill available
+            // Let's use a fixed high pixel density for sharp printing
+            // A4 @ 150dpi is roughly 1200x1700
+            // We will scale relative to cols/rows to keep cells square
+            
+            const maxW = 2000;
+            const cellPixelSize = Math.floor(maxW / cols);
+            canvas.width = cellPixelSize * cols;
+            canvas.height = cellPixelSize * rows;
+
+            // Generate
+            if (algorithm === 'dfs') generateDFS();
+            else if (algorithm === 'prim') generatePrims();
+            else if (algorithm === 'huntandkill') generateHuntAndKill();
+
+            // Solve immediately internally (don't show yet)
+            solveMaze();
+            
+            // Reset View
+            showSolution = false;
+            document.getElementById('solveBtnText').innerText = "Show Solution";
+            document.getElementById('solveBtn').classList.remove('bg-rose-600', 'hover:bg-rose-700');
+            document.getElementById('solveBtn').classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+
+            draw();
+        }
+
+        function toggleSolution() {
+            showSolution = !showSolution;
+            const btnText = document.getElementById('solveBtnText');
+            const btn = document.getElementById('solveBtn');
+            
+            if (showSolution) {
+                btnText.innerText = "Hide Solution";
+                btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                btn.classList.add('bg-rose-600', 'hover:bg-rose-700');
+            } else {
+                btnText.innerText = "Show Solution";
+                btn.classList.remove('bg-rose-600', 'hover:bg-rose-700');
+                btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+            }
+            draw();
+        }
+
+        function printMaze() {
+            // Ensure solution is hidden before printing unless user wants it?
+            // Usually we print puzzle, so hide solution.
+            if(showSolution) {
+                if(!confirm("The solution is currently visible. Do you want to print the answer key? Cancel to print the empty maze.")) {
+                    toggleSolution();
+                }
+            }
+            window.print();
+        }
+
+        // Init
+        window.onload = generateMaze;
+
+    </script>
+</body>
+</html>

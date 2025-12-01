@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Printable Maze Generator with Solution</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #000000;
+      color: #ffd60a;
+    }
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #000000;
+      color: #ffd60a;
+    }
+    header {
+      padding: 1rem 1.5rem 0.5rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      letter-spacing: 0.03em;
+      color: #ffd60a;
+    }
+    header p {
+      margin: 0.2rem 0 0.8rem;
+      font-size: 0.85rem;
+      color: #ffea7a;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 0 1.5rem 1rem;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.85rem;
+      color: #ffea7a;
+    }
+    .control-group label {
+      margin-bottom: 0.2rem;
+    }
+    .control-group input,
+    .control-group select {
+      padding: 0.3rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid #ffd60a;
+      min-width: 4rem;
+      font-size: 0.9rem;
+      background: #000000;
+      color: #ffd60a;
+    }
+    button {
+      border-radius: 999px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: 1px solid #ffd60a;
+      background: #ffd60a;
+      color: #000000;
+    }
+    button.secondary {
+      background: #000000;
+      color: #ffd60a;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 1.5rem 1.5rem;
+      box-sizing: border-box;
+    }
+    canvas {
+      background: #ffffff;
+      box-shadow: 0 0 0 2px #ffd60a;
+      max-width: 100%;
+      height: auto;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #ffea7a;
+      padding: 0 0 0.75rem;
+    }
+
+    /* Print styles: maze only */
+    @media print {
+      :root, body {
+        background: #ffffff;
+        color: #000000;
+      }
+      header, .controls, footer {
+        display: none;
+      }
+      main {
+        padding: 0;
+        margin: 0;
+      }
+      canvas {
+        box-shadow: none;
+        width: 100vw;
+        height: 100vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Printable Maze Generator</h1>
+    <p>Choose an algorithm, generate a maze, optionally show the solution, then print and solve.</p>
+  </header>
+
+  <section class="controls">
+    <div class="control-group">
+      <label for="cols">Columns</label>
+      <input id="cols" type="number" min="5" max="100" value="25">
+    </div>
+    <div class="control-group">
+      <label for="rows">Rows</label>
+      <input id="rows" type="number" min="5" max="100" value="25">
+    </div>
+    <div class="control-group">
+      <label for="algorithm">Algorithm</label>
+      <select id="algorithm">
+        <option value="dfs">Recursive Backtracker (DFS)</option>
+        <option value="prim">Randomized Prim's</option>
+        <option value="kruskal">Randomized Kruskal's</option>
+      </select>
+    </div>
+    <button id="generate">Generate Maze</button>
+    <button id="toggleSolution" class="secondary">Show Solution</button>
+    <button id="print" class="secondary">Print Maze</button>
+  </section>
+
+  <main>
+    <canvas id="mazeCanvas"></canvas>
+  </main>
+
+  <footer>
+    Tip: Start is top-left, goal is bottom-right. Show the solution before printing if you want an answer key.
+  </footer>
+
+  <script>
+    // Direction bitmasks
+    const N = 1, E = 2, S = 4, W = 8;
+    const DX = { [E]: 1, [W]: -1, [N]: 0, [S]: 0 };
+    const DY = { [E]: 0, [W]: 0, [N]: -1, [S]: 1 };
+    const OPP = { [N]: S, [S]: N, [E]: W, [W]: E };
+
+    function indexOf(x, y, cols) {
+      return y * cols + x;
+    }
+
+    function inBounds(x, y, cols, rows) {
+      return x >= 0 && x < cols && y >= 0 && y < rows;
+    }
+
+    function createCellArray(cols, rows) {
+      // Each cell stores bitmask of connected directions (passages)
+      return new Array(cols * rows).fill(0);
+    }
+
+    function randomChoice(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // ---------- Algorithm 1: Recursive Backtracker (DFS) ----------
+    function generateDFS(cells, cols, rows) {
+      const visited = new Array(cols * rows).fill(false);
+      const stack = [];
+      let startX = 0, startY = 0;
+      visited[indexOf(startX, startY, cols)] = true;
+      stack.push({ x: startX, y: startY });
+
+      while (stack.length > 0) {
+        const current = stack[stack.length - 1];
+        const { x, y } = current;
+        const idx = indexOf(x, y, cols);
+
+        const neighbors = [];
+        for (const dir of [N, E, S, W]) {
+          const nx = x + DX[dir];
+          const ny = y + DY[dir];
+          if (inBounds(nx, ny, cols, rows)) {
+            const nidx = indexOf(nx, ny, cols);
+            if (!visited[nidx]) {
+              neighbors.push({ x: nx, y: ny, dir });
+            }
+          }
+        }
+
+        if (neighbors.length === 0) {
+          stack.pop();
+        } else {
+          const next = randomChoice(neighbors);
+          const nidx = indexOf(next.x, next.y, cols);
+          // Carve passage
+          cells[idx] |= next.dir;
+          cells[nidx] |= OPP[next.dir];
+          visited[nidx] = true;
+          stack.push({ x: next.x, y: next.y });
+        }
+      }
+    }
+
+    // ---------- Algorithm 2: Randomized Prim's ----------
+    function generatePrim(cells, cols, rows) {
+      const visited = new Array(cols * rows).fill(false);
+      const walls = [];
+
+      const startX = Math.floor(Math.random() * cols);
+      const startY = Math.floor(Math.random() * rows);
+      visited[indexOf(startX, startY, cols)] = true;
+
+      function addWalls(x, y) {
+        for (const dir of [N, E, S, W]) {
+          const nx = x + DX[dir];
+          const ny = y + DY[dir];
+          if (inBounds(nx, ny, cols, rows)) {
+            walls.push({ x, y, nx, ny, dir });
+          }
+        }
+      }
+      addWalls(startX, startY);
+
+      while (walls.length > 0) {
+        const i = Math.floor(Math.random() * walls.length);
+        const wall = walls[i];
+        walls.splice(i, 1);
+
+        const { x, y, nx, ny, dir } = wall;
+        const idx = indexOf(x, y, cols);
+        const nidx = indexOf(nx, ny, cols);
+        if (visited[nidx] && visited[idx]) {
+          continue;
+        }
+        if (!visited[nidx]) {
+          // Carve passage
+          cells[idx] |= dir;
+          cells[nidx] |= OPP[dir];
+          visited[nidx] = true;
+          addWalls(nx, ny);
+        } else if (!visited[idx]) {
+          // Or in case the frontier is reversed
+          cells[nidx] |= OPP[dir];
+          cells[idx] |= dir;
+          visited[idx] = true;
+          addWalls(x, y);
+        }
+      }
+    }
+
+    // ---------- Algorithm 3: Randomized Kruskal's ----------
+    function generateKruskal(cells, cols, rows) {
+      const parent = new Array(cols * rows);
+      const rank = new Array(cols * rows).fill(0);
+      for (let i = 0; i < parent.length; i++) parent[i] = i;
+
+      function find(a) {
+        if (parent[a] !== a) parent[a] = find(parent[a]);
+        return parent[a];
+      }
+
+      function union(a, b) {
+        const ra = find(a);
+        const rb = find(b);
+        if (ra === rb) return false;
+        if (rank[ra] < rank[rb]) {
+          parent[ra] = rb;
+        } else if (rank[ra] > rank[rb]) {
+          parent[rb] = ra;
+        } else {
+          parent[rb] = ra;
+          rank[ra]++;
+        }
+        return true;
+      }
+
+      // Build list of all possible edges between adjacent cells
+      const edges = [];
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const idx = indexOf(x, y, cols);
+          if (x + 1 < cols) {
+            edges.push({ idx, dir: E, nidx: indexOf(x + 1, y, cols) });
+          }
+          if (y + 1 < rows) {
+            edges.push({ idx, dir: S, nidx: indexOf(x, y + 1, cols) });
+          }
+        }
+      }
+
+      // Shuffle edges
+      for (let i = edges.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [edges[i], edges[j]] = [edges[j], edges[i]];
+      }
+
+      for (const e of edges) {
+        if (union(e.idx, e.nidx)) {
+          cells[e.idx] |= e.dir;
+          cells[e.nidx] |= OPP[e.dir];
+        }
+      }
+    }
+
+    // ---------- Maze Solver (start: top-left, end: bottom-right) ----------
+    function solveMaze(cells, cols, rows) {
+      const start = 0;
+      const goal = cells.length - 1;
+      const stack = [start];
+      const visited = new Array(cells.length).fill(false);
+      const parent = new Array(cells.length).fill(-1);
+      visited[start] = true;
+
+      while (stack.length > 0) {
+        const curr = stack.pop();
+        if (curr === goal) break;
+
+        const x = curr % cols;
+        const y = Math.floor(curr / cols);
+        const cell = cells[curr];
+
+        for (const dir of [N, E, S, W]) {
+          if (cell & dir) {
+            const nx = x + DX[dir];
+            const ny = y + DY[dir];
+            if (inBounds(nx, ny, cols, rows)) {
+              const nidx = indexOf(nx, ny, cols);
+              if (!visited[nidx]) {
+                visited[nidx] = true;
+                parent[nidx] = curr;
+                stack.push(nidx);
+              }
+            }
+          }
+        }
+      }
+
+      if (!visited[goal]) {
+        return [];
+      }
+
+      // Reconstruct path as array of {x, y}
+      const path = [];
+      let current = goal;
+      while (current !== -1) {
+        const x = current % cols;
+        const y = Math.floor(current / cols);
+        path.push({ x, y });
+        if (current === start) break;
+        current = parent[current];
+      }
+      path.reverse();
+      return path;
+    }
+
+    // ---------- Drawing ----------
+    const MAX_CANVAS_SIZE = 900;
+    const MARGIN = 20;
+
+    function getCellSize(cols, rows) {
+      const maxCells = Math.max(cols, rows);
+      return Math.max(5, Math.floor(MAX_CANVAS_SIZE / maxCells));
+    }
+
+    function drawMaze(cells, cols, rows, canvas) {
+      const ctx = canvas.getContext('2d');
+      const cellSize = getCellSize(cols, rows);
+
+      const width = cols * cellSize + MARGIN * 2;
+      const height = rows * cellSize + MARGIN * 2;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#000000";
+
+      ctx.beginPath();
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const idx = indexOf(x, y, cols);
+          const cell = cells[idx];
+          const x0 = MARGIN + x * cellSize;
+          const y0 = MARGIN + y * cellSize;
+          const x1 = x0 + cellSize;
+          const y1 = y0 + cellSize;
+
+          // Draw walls where there is NO passage
+          if (!(cell & N)) {
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y0);
+          }
+          if (!(cell & W)) {
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x0, y1);
+          }
+          if (!(cell & E)) {
+            ctx.moveTo(x1, y0);
+            ctx.lineTo(x1, y1);
+          }
+          if (!(cell & S)) {
+            ctx.moveTo(x0, y1);
+            ctx.lineTo(x1, y1);
+          }
+        }
+      }
+      ctx.stroke();
+    }
+
+    function drawSolution(path, cols, rows, canvas) {
+      if (!path || path.length === 0) return;
+      const ctx = canvas.getContext('2d');
+      const cellSize = getCellSize(cols, rows);
+
+      ctx.save();
+      ctx.strokeStyle = "#ffd60a"; // bright yellow path
+      ctx.lineWidth = Math.max(3, cellSize / 3);
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+
+      ctx.beginPath();
+      for (let i = 0; i < path.length; i++) {
+        const { x, y } = path[i];
+        const cx = MARGIN + x * cellSize + cellSize / 2;
+        const cy = MARGIN + y * cellSize + cellSize / 2;
+        if (i === 0) {
+          ctx.moveTo(cx, cy);
+        } else {
+          ctx.lineTo(cx, cy);
+        }
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // ---------- UI Wiring ----------
+    const canvas = document.getElementById('mazeCanvas');
+    const colsInput = document.getElementById('cols');
+    const rowsInput = document.getElementById('rows');
+    const algoSelect = document.getElementById('algorithm');
+    const generateBtn = document.getElementById('generate');
+    const printBtn = document.getElementById('print');
+    const toggleSolutionBtn = document.getElementById('toggleSolution');
+
+    let lastCells = null;
+    let lastCols = 0;
+    let lastRows = 0;
+    let lastPath = [];
+    let showSolution = false;
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function redraw() {
+      if (!lastCells) return;
+      drawMaze(lastCells, lastCols, lastRows, canvas);
+      if (showSolution && lastPath && lastPath.length > 0) {
+        drawSolution(lastPath, lastCols, lastRows, canvas);
+      }
+    }
+
+    function generateMaze() {
+      let cols = parseInt(colsInput.value, 10);
+      let rows = parseInt(rowsInput.value, 10);
+      if (isNaN(cols)) cols = 25;
+      if (isNaN(rows)) rows = 25;
+      cols = clamp(cols, parseInt(colsInput.min, 10), parseInt(colsInput.max, 10));
+      rows = clamp(rows, parseInt(rowsInput.min, 10), parseInt(rowsInput.max, 10));
+      colsInput.value = cols;
+      rowsInput.value = rows;
+
+      const cells = createCellArray(cols, rows);
+      const algo = algoSelect.value;
+
+      if (algo === 'dfs') {
+        generateDFS(cells, cols, rows);
+      } else if (algo === 'prim') {
+        generatePrim(cells, cols, rows);
+      } else if (algo === 'kruskal') {
+        generateKruskal(cells, cols, rows);
+      }
+
+      lastCells = cells;
+      lastCols = cols;
+      lastRows = rows;
+      lastPath = solveMaze(cells, cols, rows);
+
+      redraw();
+    }
+
+    generateBtn.addEventListener('click', generateMaze);
+    printBtn.addEventListener('click', () => {
+      window.print();
+    });
+
+    toggleSolutionBtn.addEventListener('click', () => {
+      showSolution = !showSolution;
+      toggleSolutionBtn.textContent = showSolution ? "Hide Solution" : "Show Solution";
+      redraw();
+    });
+
+    // Generate an initial maze on load
+    generateMaze();
+  </script>
+</body>
+</html>

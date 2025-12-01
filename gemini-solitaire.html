@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Solitaire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #15803d; /* Green felt color */
+            overflow: hidden; /* Prevent scrolling while dragging */
+            touch-action: none; /* Prevent standard touch actions */
+        }
+
+        /* Card Styles */
+        .card {
+            position: absolute;
+            width: 80px;
+            height: 112px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            user-select: none;
+            cursor: grab;
+            transition: box-shadow 0.1s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .card:active {
+            cursor: grabbing;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            z-index: 100 !important;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #1e3a8a 25%, transparent 25%) -10px 0,
+                        linear-gradient(225deg, #1e3a8a 25%, transparent 25%) -10px 0,
+                        linear-gradient(315deg, #1e3a8a 25%, transparent 25%),
+                        linear-gradient(45deg, #1e3a8a 25%, transparent 25%);
+            background-size: 20px 20px;
+            background-color: #3b82f6;
+            border: 2px solid white;
+        }
+
+        .card-red { color: #dc2626; }
+        .card-black { color: #1e293b; }
+
+        .card-center-icon {
+            font-size: 32px;
+            align-self: center;
+            margin-top: -10px;
+        }
+
+        .card-corner-bottom {
+            transform: rotate(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Placeholder Slots */
+        .slot {
+            position: absolute;
+            width: 80px;
+            height: 112px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+        }
+
+        .slot-refresh {
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .slot-refresh:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 640px) {
+            .card, .slot {
+                width: 12vw;
+                height: 16.8vw; /* Maintain aspect ratio roughly 1:1.4 */
+                font-size: 10px;
+            }
+            .card-center-icon {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body class="h-screen w-full flex flex-col text-white">
+
+    <!-- Header -->
+    <header class="h-14 bg-green-900/50 flex items-center justify-between px-4 border-b border-white/10 relative z-20">
+        <div class="flex items-center gap-4">
+            <h1 class="font-bold text-lg hidden sm:block">Solitaire</h1>
+            <button onclick="initGame()" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm font-medium transition-colors shadow-sm">New Game</button>
+        </div>
+        <div class="flex items-center gap-6 font-mono text-sm">
+            <div>Score: <span id="score">0</span></div>
+            <div>Time: <span id="timer">00:00</span></div>
+        </div>
+    </header>
+
+    <!-- Game Board -->
+    <main id="game-board" class="flex-grow relative w-full max-w-5xl mx-auto mt-4 px-2">
+        <!-- Top Row: Stock, Waste, Foundations -->
+        <!-- Positions will be calculated in JS to handle responsiveness -->
+    </main>
+
+    <!-- Win Modal -->
+    <div id="win-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div class="bg-white text-slate-900 p-8 rounded-xl shadow-2xl text-center max-w-sm mx-4">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-2xl font-bold mb-2">You Won!</h2>
+            <p class="text-slate-600 mb-6">Congratulations! You've cleared the board.</p>
+            <div class="flex justify-center gap-4">
+                <button onclick="initGame(); document.getElementById('win-modal').classList.add('hidden')" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Solitaire Game Logic
+         */
+
+        // --- Game State ---
+        const SUITS = ['♠', '♥', '♣', '♦'];
+        const COLORS = { '♠': 'black', '♣': 'black', '♥': 'red', '♦': 'red' };
+        const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+        let deck = [];
+        let piles = {
+            stock: [],
+            waste: [],
+            foundation: [[], [], [], []],
+            tableau: [[], [], [], [], [], [], []]
+        };
+        
+        let score = 0;
+        let timeStart = 0;
+        let timerInterval;
+        let draggedCards = [];
+        let dragSource = null; // { type: 'tableau', index: 0 }
+        let dragOffset = { x: 0, y: 0 };
+        
+        // DOM Elements
+        const boardEl = document.getElementById('game-board');
+        const scoreEl = document.getElementById('score');
+        const timerEl = document.getElementById('timer');
+        
+        // Layout Constants (Responsive)
+        let CARD_W = 80;
+        let CARD_H = 112;
+        let MARGIN = 10; // Space between piles
+        let VERTICAL_SPACING = 25; // Spacing in tableau
+
+        // --- Initialization ---
+
+        function initGame() {
+            // Reset state
+            deck = createDeck();
+            shuffle(deck);
+            piles = {
+                stock: [],
+                waste: [],
+                foundation: [[], [], [], []],
+                tableau: [[], [], [], [], [], [], []]
+            };
+            score = 0;
+            draggedCards = [];
+            
+            // Deal
+            // Tableau: 1 card in col 1, 2 in col 2...
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j <= i; j++) {
+                    let card = deck.pop();
+                    if (j === i) card.faceUp = true; // Top card face up
+                    piles.tableau[i].push(card);
+                }
+            }
+            piles.stock = deck; // Rest go to stock
+
+            // Timer
+            clearInterval(timerInterval);
+            timeStart = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+            updateScore(0);
+
+            // Initial Render
+            handleResize(); // Sets card sizes
+            render();
+            
+            document.getElementById('win-modal').classList.add('hidden');
+        }
+
+        function createDeck() {
+            let d = [];
+            for (let s of SUITS) {
+                for (let r = 0; r < RANKS.length; r++) {
+                    d.push({
+                        id: Math.random().toString(36).substr(2, 9),
+                        suit: s,
+                        rank: r + 1, // 1 (Ace) to 13 (King)
+                        rankDisplay: RANKS[r],
+                        color: COLORS[s],
+                        faceUp: false
+                    });
+                }
+            }
+            return d;
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function updateTimer() {
+            const delta = Math.floor((Date.now() - timeStart) / 1000);
+            const m = Math.floor(delta / 60).toString().padStart(2, '0');
+            const s = (delta % 60).toString().padStart(2, '0');
+            timerEl.textContent = `${m}:${s}`;
+        }
+
+        function updateScore(points) {
+            score += points;
+            score = Math.max(0, score); // No negative score
+            scoreEl.textContent = score;
+        }
+
+        // --- Rendering ---
+
+        function handleResize() {
+            const w = boardEl.clientWidth;
+            // Determine card size based on 7 columns + margins
+            // 7 cards + 6 gaps + 2 outer padding
+            const gap = w > 600 ? 16 : 8;
+            const availableW = w - (gap * 6);
+            CARD_W = Math.floor(availableW / 7);
+            CARD_H = Math.floor(CARD_W * 1.4);
+            MARGIN = gap;
+            VERTICAL_SPACING = Math.max(15, CARD_H * 0.25);
+        }
+
+        window.addEventListener('resize', () => {
+            handleResize();
+            render();
+        });
+
+        function getCardHTML(card, top, left, zIndex = 0) {
+            if (!card.faceUp) {
+                return `<div class="card card-back" id="${card.id}" 
+                        style="top:${top}px; left:${left}px; width:${CARD_W}px; height:${CARD_H}px; z-index:${zIndex}"
+                        data-id="${card.id}"></div>`;
+            }
+
+            return `
+                <div class="card card-${card.color}" id="${card.id}" 
+                     style="top:${top}px; left:${left}px; width:${CARD_W}px; height:${CARD_H}px; z-index:${zIndex}"
+                     data-id="${card.id}">
+                    <div class="text-left leading-none">
+                        <div>${card.rankDisplay}</div>
+                        <div>${card.suit}</div>
+                    </div>
+                    <div class="card-center-icon">${card.suit}</div>
+                    <div class="card-corner-bottom leading-none">
+                        <div>${card.rankDisplay}</div>
+                        <div>${card.suit}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function render() {
+            let html = '';
+
+            // 1. Stock (Top Left)
+            // If stock has cards, show back. If empty, show refresh slot.
+            const stockLeft = 0;
+            if (piles.stock.length > 0) {
+                // Top card (visually simulated stack)
+                piles.stock.forEach((c, idx) => {
+                    // Only render top few for performance/visuals, or just the top one
+                    if(idx === piles.stock.length - 1) {
+                         html += `<div class="card card-back" 
+                                    style="top:0px; left:${stockLeft}px; width:${CARD_W}px; height:${CARD_H}px;"
+                                    onclick="stockClicked()"></div>`;
+                    }
+                });
+            } else {
+                html += `<div class="slot slot-refresh" 
+                            style="top:0px; left:${stockLeft}px; width:${CARD_W}px; height:${CARD_H}px;"
+                            onclick="stockClicked()">↻</div>`;
+            }
+
+            // 2. Waste (Next to Stock)
+            const wasteLeft = CARD_W + MARGIN;
+            if (piles.waste.length === 0) {
+                html += `<div class="slot" style="top:0px; left:${wasteLeft}px; width:${CARD_W}px; height:${CARD_H}px;"></div>`;
+            } else {
+                // Show last 3 cards of waste fanned slightly
+                const showCount = 3;
+                const startIndex = Math.max(0, piles.waste.length - showCount);
+                for (let i = startIndex; i < piles.waste.length; i++) {
+                    const c = piles.waste[i];
+                    const offset = (i - startIndex) * (CARD_W * 0.2); // Fan right slightly
+                    html += getCardHTML(c, 0, wasteLeft + offset, i);
+                }
+            }
+
+            // 3. Foundations (Top Right)
+            // We align them to the right, or simply slot 4,5,6,7 positions
+            // To keep simple grid: Stock(0), Waste(1), Gap(2), F1(3), F2(4), F3(5), F4(6)
+            for (let i = 0; i < 4; i++) {
+                const left = (3 + i) * (CARD_W + MARGIN);
+                const pile = piles.foundation[i];
+                if (pile.length === 0) {
+                    html += `<div class="slot" style="top:0px; left:${left}px; width:${CARD_W}px; height:${CARD_H}px;" data-drop-target="foundation-${i}">
+                                <div class="w-full h-full flex items-center justify-center text-white/20 text-3xl font-bold">A</div>
+                             </div>`;
+                } else {
+                    const c = pile[pile.length - 1];
+                    html += getCardHTML(c, 0, left, 0); // Render base
+                    // Overlay invisible div for drop target handling if needed, 
+                    // but the card itself can act as target if we handle it in logic
+                }
+            }
+
+            // 4. Tableau (Bottom Rows)
+            const tableauTop = CARD_H + 30;
+            for (let i = 0; i < 7; i++) {
+                const left = i * (CARD_W + MARGIN);
+                const col = piles.tableau[i];
+                
+                // Empty slot base
+                html += `<div class="slot" style="top:${tableauTop}px; left:${left}px; width:${CARD_W}px; height:${CARD_H}px;" data-drop-target="tableau-${i}"></div>`;
+
+                // Cards
+                col.forEach((c, idx) => {
+                    const top = tableauTop + (idx * VERTICAL_SPACING);
+                    html += getCardHTML(c, top, left, idx + 10);
+                });
+            }
+
+            boardEl.innerHTML = html;
+            attachEventListeners();
+        }
+
+        // --- Interaction Logic ---
+
+        function attachEventListeners() {
+            // Mouse/Touch handlers on cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(el => {
+                // Only allow interaction if it has data-id (skip stock back)
+                if (el.dataset.id) {
+                    el.addEventListener('mousedown', onDragStart);
+                    el.addEventListener('touchstart', onDragStart, {passive: false});
+                    el.addEventListener('dblclick', onDoubleClick);
+                }
+            });
+        }
+
+        function stockClicked() {
+            if (piles.stock.length > 0) {
+                // Move 1 card from stock to waste
+                const card = piles.stock.pop();
+                card.faceUp = true;
+                piles.waste.push(card);
+            } else {
+                // Recycle waste to stock
+                while (piles.waste.length > 0) {
+                    const card = piles.waste.pop();
+                    card.faceUp = false;
+                    piles.stock.push(card);
+                }
+            }
+            render();
+        }
+
+        // --- Drag and Drop System ---
+
+        function findCardLocation(id) {
+            // Waste
+            if (piles.waste.length > 0 && piles.waste[piles.waste.length - 1].id === id) {
+                return { type: 'waste', index: piles.waste.length - 1 };
+            }
+            // Foundations
+            for(let i=0; i<4; i++) {
+                if(piles.foundation[i].length > 0) {
+                    if(piles.foundation[i][piles.foundation[i].length - 1].id === id) {
+                        return { type: 'foundation', pileIdx: i };
+                    }
+                }
+            }
+            // Tableau
+            for(let i=0; i<7; i++) {
+                const col = piles.tableau[i];
+                const idx = col.findIndex(c => c.id === id);
+                if (idx !== -1) {
+                    return { type: 'tableau', pileIdx: i, cardIdx: idx };
+                }
+            }
+            return null;
+        }
+
+        function onDragStart(e) {
+            if (e.type === 'touchstart') e.preventDefault(); // Stop scroll
+            
+            const id = e.target.closest('.card').dataset.id;
+            const loc = findCardLocation(id);
+            
+            if (!loc) return;
+
+            // Validation: Can we drag this?
+            let cardsToMove = [];
+            
+            if (loc.type === 'waste') {
+                cardsToMove = [piles.waste[piles.waste.length - 1]];
+            } else if (loc.type === 'foundation') {
+                // Usually allowed to drag back from foundation
+                cardsToMove = [piles.foundation[loc.pileIdx][piles.foundation[loc.pileIdx].length - 1]];
+            } else if (loc.type === 'tableau') {
+                const col = piles.tableau[loc.pileIdx];
+                const card = col[loc.cardIdx];
+                if (!card.faceUp) return; // Cannot drag face down
+                // Get this card and everything below it
+                cardsToMove = col.slice(loc.cardIdx);
+            }
+
+            if (cardsToMove.length === 0) return;
+
+            dragSource = loc;
+            draggedCards = cardsToMove;
+
+            // Calculate offset
+            const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+            
+            // Get initial visual position of the leading card
+            const el = document.getElementById(id);
+            const rect = el.getBoundingClientRect();
+            dragOffset.x = clientX - rect.left;
+            dragOffset.y = clientY - rect.top;
+
+            // Create Ghost Elements (Visuals only)
+            createGhosts(clientX, clientY);
+
+            // Global Listeners
+            document.addEventListener('mousemove', onDragMove);
+            document.addEventListener('touchmove', onDragMove, {passive: false});
+            document.addEventListener('mouseup', onDragEnd);
+            document.addEventListener('touchend', onDragEnd);
+        }
+
+        let ghostContainer = null;
+
+        function createGhosts(x, y) {
+            ghostContainer = document.createElement('div');
+            ghostContainer.style.position = 'fixed';
+            ghostContainer.style.zIndex = '1000';
+            ghostContainer.style.pointerEvents = 'none'; // Click through to detect drop targets
+            ghostContainer.style.left = (x - dragOffset.x) + 'px';
+            ghostContainer.style.top = (y - dragOffset.y) + 'px';
+            
+            draggedCards.forEach((c, i) => {
+                const div = document.createElement('div');
+                // Re-use HTML generator but force relative pos for ghost stack
+                div.innerHTML = getCardHTML(c, 0, 0); 
+                const inner = div.firstElementChild;
+                inner.style.position = 'absolute';
+                inner.style.top = (i * VERTICAL_SPACING) + 'px';
+                inner.style.left = '0px';
+                inner.style.boxShadow = '5px 5px 15px rgba(0,0,0,0.5)';
+                ghostContainer.appendChild(inner);
+                
+                // Hide original
+                const orig = document.getElementById(c.id);
+                if(orig) orig.style.opacity = '0';
+            });
+
+            document.body.appendChild(ghostContainer);
+        }
+
+        function onDragMove(e) {
+            if (e.type === 'touchmove') e.preventDefault();
+            const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+
+            if (ghostContainer) {
+                ghostContainer.style.left = (clientX - dragOffset.x) + 'px';
+                ghostContainer.style.top = (clientY - dragOffset.y) + 'px';
+            }
+        }
+
+        function onDragEnd(e) {
+            document.removeEventListener('mousemove', onDragMove);
+            document.removeEventListener('touchmove', onDragMove);
+            document.removeEventListener('mouseup', onDragEnd);
+            document.removeEventListener('touchend', onDragEnd);
+
+            // Determine drop target
+            // We use document.elementFromPoint on the center of the dragged card
+            const x = parseFloat(ghostContainer.style.left) + (CARD_W / 2);
+            const y = parseFloat(ghostContainer.style.top) + (CARD_H / 2);
+            
+            // Temporarily hide ghost to see what's under
+            ghostContainer.style.display = 'none';
+            const elBelow = document.elementFromPoint(x, y);
+            ghostContainer.style.display = 'block';
+
+            let moveMade = false;
+
+            if (elBelow) {
+                // Did we drop on a specific card?
+                const targetCardEl = elBelow.closest('.card');
+                const targetSlotEl = elBelow.closest('.slot');
+                
+                if (targetCardEl && targetCardEl.dataset.id) {
+                    // Dropped on a card
+                    const targetId = targetCardEl.dataset.id;
+                    const targetLoc = findCardLocation(targetId);
+                    if (targetLoc) {
+                        moveMade = attemptMove(draggedCards, targetLoc);
+                    }
+                } else if (targetSlotEl && targetSlotEl.dataset.dropTarget) {
+                    // Dropped on an empty slot
+                    const [type, idxStr] = targetSlotEl.dataset.dropTarget.split('-');
+                    const idx = parseInt(idxStr);
+                    moveMade = attemptMove(draggedCards, { type: type === 'foundation' ? 'foundation' : 'tableau', pileIdx: idx, empty: true });
+                }
+            }
+
+            // Cleanup
+            document.body.removeChild(ghostContainer);
+            ghostContainer = null;
+            draggedCards = [];
+            dragSource = null;
+
+            // Re-render to show cards (either in new spot or back in old spot)
+            render();
+            checkWin();
+        }
+
+        // --- Rules & Movement ---
+
+        function attemptMove(cards, targetLoc) {
+            const leader = cards[0];
+
+            // 1. Target is Foundation
+            if (targetLoc.type === 'foundation') {
+                if (cards.length > 1) return false; // Can only move 1 card to foundation
+                
+                const pile = piles.foundation[targetLoc.pileIdx];
+                
+                // Rule: Ascending Order, Same Suit
+                if (pile.length === 0) {
+                    if (leader.rank === 1) { // Ace
+                        executeMove('foundation', targetLoc.pileIdx, cards);
+                        return true;
+                    }
+                } else {
+                    const top = pile[pile.length - 1];
+                    if (leader.suit === top.suit && leader.rank === top.rank + 1) {
+                        executeMove('foundation', targetLoc.pileIdx, cards);
+                        return true;
+                    }
+                }
+            }
+
+            // 2. Target is Tableau
+            if (targetLoc.type === 'tableau') {
+                const pile = piles.tableau[targetLoc.pileIdx];
+                
+                if (targetLoc.empty || pile.length === 0) {
+                    // Rule: Only King on empty spot
+                    if (leader.rank === 13) {
+                        executeMove('tableau', targetLoc.pileIdx, cards);
+                        return true;
+                    }
+                } else {
+                    // Rule: Descending Order, Alternating Color
+                    const top = pile[pile.length - 1];
+                    // Ensure we are dropping on the top card
+                    // (The hit test might hit a card buried in stack, but logic usually requires moving to end of stack)
+                    // For simplicity, we assume if they dropped on the column, they meant the top card.
+                    if (leader.color !== top.color && leader.rank === top.rank - 1) {
+                        executeMove('tableau', targetLoc.pileIdx, cards);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        function executeMove(targetType, targetIdx, cards) {
+            // Remove from source
+            if (dragSource.type === 'waste') {
+                piles.waste.pop();
+            } else if (dragSource.type === 'foundation') {
+                piles.foundation[dragSource.pileIdx].pop();
+                updateScore(-15);
+            } else if (dragSource.type === 'tableau') {
+                const col = piles.tableau[dragSource.pileIdx];
+                col.splice(dragSource.cardIdx, cards.length); // Remove packet
+                
+                // Flip new top card if face down
+                if (col.length > 0) {
+                    const newTop = col[col.length - 1];
+                    if (!newTop.faceUp) {
+                        newTop.faceUp = true;
+                        updateScore(5);
+                    }
+                }
+            }
+
+            // Add to target
+            if (targetType === 'foundation') {
+                piles.foundation[targetIdx].push(cards[0]);
+                updateScore(10);
+            } else if (targetType === 'tableau') {
+                piles.tableau[targetIdx].push(...cards);
+            }
+        }
+
+        // --- Double Click Shortcut ---
+        function onDoubleClick(e) {
+            const id = e.currentTarget.dataset.id;
+            const loc = findCardLocation(id);
+            if (!loc) return;
+
+            // Only top card can auto-move usually
+            let card;
+            if (loc.type === 'waste') card = piles.waste[piles.waste.length - 1];
+            else if (loc.type === 'tableau') {
+                const col = piles.tableau[loc.pileIdx];
+                if (loc.cardIdx !== col.length - 1) return; // Must be last card
+                card = col[loc.cardIdx];
+            } else return;
+
+            // Try to find a foundation spot
+            for (let i = 0; i < 4; i++) {
+                const pile = piles.foundation[i];
+                if (pile.length === 0) {
+                    if (card.rank === 1) { // Ace
+                        // Manually construct 'cards' and 'dragSource' for executeMove
+                        dragSource = loc;
+                        executeMove('foundation', i, [card]);
+                        render();
+                        checkWin();
+                        return;
+                    }
+                } else {
+                    const top = pile[pile.length - 1];
+                    if (card.suit === top.suit && card.rank === top.rank + 1) {
+                        dragSource = loc;
+                        executeMove('foundation', i, [card]);
+                        render();
+                        checkWin();
+                        return;
+                    }
+                }
+            }
+        }
+
+        function checkWin() {
+            // Win if all foundations have 13 cards
+            let total = 0;
+            piles.foundation.forEach(p => total += p.length);
+            if (total === 52) {
+                clearInterval(timerInterval);
+                document.getElementById('win-modal').classList.remove('hidden');
+            }
+        }
+
+        // Start
+        window.onload = () => {
+            handleResize();
+            initGame();
+        };
+
+    </script>
+</body>
+</html>
