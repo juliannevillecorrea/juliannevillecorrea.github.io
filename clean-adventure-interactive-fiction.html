@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Daily Quest for Cleanliness</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Changed font family to a monospace/typewriter stack */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #ffffff; /* White Background */
+            color: #000000; /* Pure Black Text */
+            line-height: 1.6;
+            font-size: 1.125rem; /* Increased base font size (text-lg equivalent) for better legibility */
+        }
+
+        .game-container {
+            /* Setting to pure white, removing borders and shadows for a minimalist look */
+            background-color: #ffffff;
+            border: none;
+        }
+
+        .game-log {
+            /* Setting to pure white, removing padding and border to blend with container */
+            white-space: pre-wrap;
+            min-height: 400px;
+            max-height: 60vh;
+            overflow-y: auto;
+            border-radius: 0;
+            padding: 0;
+            background-color: #ffffff;
+            border: none;
+        }
+
+        .prompt-input {
+            background-color: #ffffff;
+            /* Removed border and shadow for a cleaner look */
+            border: none;
+            border-bottom: 1px solid #000000; /* Keep a subtle line for input field clarity */
+            color: #000000;
+            transition: all 0.1s;
+            font-size: 1.125rem;
+        }
+
+        .prompt-input:focus {
+            outline: none;
+            /* Keep focus indicator subtle black */
+            border-bottom: 2px solid #000000;
+            box-shadow: none;
+        }
+
+        .action-link {
+            cursor: pointer;
+            color: #000000; /* Black link text */
+            text-decoration: none; /* Removed underline/line */
+            font-weight: normal; /* Ensured no bold font */
+            transition: color 0.1s;
+        }
+        /* Use gray on hover to indicate interactivity without using lines or colors */
+        .action-link:hover {
+            color: #333333; 
+        }
+        
+        /* Adjusting specific element sizes for the larger base font */
+        #gameLog p {
+            font-size: 1.125rem;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl game-container p-6">
+        <!-- Removed bold, changed color to black -->
+        <h1 class="text-3xl text-black text-center mb-6 tracking-wider font-normal">
+            THE DAILY QUEST
+        </h1>
+
+        <!-- Game Log -->
+        <div id="gameLog" class="game-log mb-4">
+            <!-- Game text will be injected here -->
+        </div>
+
+        <!-- Current Status - Removed background, border, and secondary text color/weight -->
+        <div class="text-base mb-4 p-0">
+            <span class="text-black font-normal">Level: <span id="currentLevelDisplay">0</span> / 12</span> |
+            <span class="text-black font-normal">Grime Level: <span id="grimeLevelDisplay">0</span></span>
+        </div>
+
+        <!-- Input Form -->
+        <form id="commandForm" class="flex gap-2">
+            <!-- Removed rounded and uppercase classes from Tailwind -->
+            <input type="text" id="commandInput" class="prompt-input flex-grow p-3" placeholder="Type your command or click an option..." autocomplete="off">
+            <!-- Changed button color and removed bold -->
+            <button type="submit" class="bg-black hover:bg-gray-800 text-white py-3 px-4 transition-colors font-normal">
+                Go
+            </button>
+        </form>
+
+    </div>
+
+    <script>
+        // --- Game Data: 12 Levels of Hygiene ---
+        const levels = {
+            1: {
+                title: "The Alarm's Call (Get up or Snooze?)",
+                text: "The day begins. Your alarm screams at 6:00 AM. Your mouth feels like a dry sock factory. You must rise and face the day, but first, the soft gravitational pull of your bed calls to you. The path to cleanliness starts now.",
+                options: ["[GET UP]", "[SNOOZE]"],
+                actions: {
+                    "GET UP": { nextLevel: 2, message: "A hero's start! You defeat the duvet. Momentum gained." },
+                    "SNOOZE": { fail: true, message: "You succumb to 10 more minutes. The grime does not wait. You're sluggish." },
+                    "DEFAULT": { fail: true, message: "You stand there, debating. The clock ticks. Decide: [GET UP] or [SNOOZE]?" }
+                }
+            },
+            2: {
+                title: "The Dental Dilemma (How to address the morning breath?)",
+                text: "You stand before the mirror. The lingering taste of sleep demands attention. A fresh start requires a sparkling foundation.",
+                options: ["[BRUSH TEETH]", "[RINSE MOUTH]", "[SKIP]"],
+                actions: {
+                    "BRUSH TEETH": { nextLevel: 3, message: "Minty fresh victory! A perfect two-minute clean. +10 clean points." },
+                    "RINSE MOUTH": { fail: true, message: "You only rinse. It's a temporary truce with bacteria, not a win. +1 Grime." },
+                    "SKIP": { fail: true, message: "You skip this vital step. Your breath is a tactical vulnerability. +2 Grime." }
+                }
+            },
+            3: {
+                title: "The Face Frontier (Cleanse the skin or not?)",
+                text: "Your skin needs purification from the night's oils and dust. The right treatment prevents future breakouts.",
+                options: ["[WASH FACE WITH SOAP]", "[SPLASH WATER ONLY]", "[TOWEL WIPE]"],
+                actions: {
+                    "WASH FACE WITH SOAP": { nextLevel: 4, message: "Clean pores secured. Your skin is ready for the world. Great job!" },
+                    "SPLASH WATER ONLY": { fail: true, message: "Insufficient cleansing. The oils remain in strategic locations. +1 Grime." },
+                    "TOWEL WIPE": { fail: true, message: "That's just moving dirt around. A crucial failure. +2 Grime." }
+                }
+            },
+            4: {
+                title: "The Morning Shower (Choose your cleaning level)",
+                text: "A new day requires a new you. The shower is a sacred space for total reset and germ elimination.",
+                options: ["[FULL SHOWER]", "[QUICK RINSE]", "[APPLY DEODORANT ONLY]"],
+                actions: {
+                    "FULL SHOWER": { nextLevel: 5, message: "Complete system scrub. You emerge renewed, a paragon of personal hygiene." },
+                    "QUICK RINSE": { fail: true, message: "The soap did not fully circulate. Some residual funk remains. +1 Grime." },
+                    "APPLY DEODORANT ONLY": { fail: true, message: "A tactical blunder. You tried to cover the problem, not eliminate it. This is a severe failure. +3 Grime." }
+                }
+            },
+            5: {
+                title: "Hair and Mane Maintenance (How to treat your hair?)",
+                text: "Your hair requires attention. Neglect leads to build-up and an unpleasant texture.",
+                options: ["[SHAMPOO AND CONDITION]", "[COMB ONLY]", "[WEAR HAT]"],
+                actions: {
+                    "SHAMPOO AND CONDITION": { nextLevel: 6, message: "Your hair is a fortress of freshness. Sparkling clean." },
+                    "COMB ONLY": { fail: true, message: "You smoothed the surface, but the root problem persists. +1 Grime." },
+                    "WEAR HAT": { fail: true, message: "The hat traps the oil, accelerating the inevitable. You'll regret this by noon. +2 Grime." }
+                }
+            },
+            6: {
+                title: "The Pre-Meal Protocol (Clean your hands for breakfast)",
+                text: "It's time for breakfast. You must sanitize your hands before touching any food or utensils. Microbes are watching.",
+                options: ["[WASH HANDS PROPERLY]", "[USE HAND SANITIZER]", "[WIPE ON PANTS]"],
+                actions: {
+                    "WASH HANDS PROPERLY": { nextLevel: 7, message: "20 seconds of perfection. Pathogens neutralized. Food safe." },
+                    "USE HAND SANITIZER": { fail: true, message: "A good effort, but not a full wash. You missed some corners. +1 Grime." },
+                    "WIPE ON PANTS": { fail: true, message: "This is a biohazard. Your food is now a vector for yesterday's mistakes. +3 Grime." }
+                }
+            },
+            7: {
+                title: "The Clothing Choice (What to wear today?)",
+                text: "You need clothes for the day. Your choices are the pile on the floor or the fresh basket.",
+                options: ["[LAUNDRY BIN TO MACHINE]", "[PICK UP FLOOR SHIRT]", "[FRESH CLOTHES]"],
+                actions: {
+                    "LAUNDRY BIN TO MACHINE": { nextLevel: 8, message: "You start a load of laundry. Long-term cleanliness achieved! (But wear fresh clothes today)" },
+                    "PICK UP FLOOR SHIRT": { fail: true, message: "The shirt carries the funk of previous wear. You feel slightly itchy. +2 Grime." },
+                    "FRESH CLOTHES": { nextLevel: 8, message: "Fresh fibers deployed. You feel crisp and ready for action." }
+                }
+            },
+            8: {
+                title: "The Kitchen Sink (Deal with the breakfast dishes)",
+                text: "Breakfast is over. The dishes are in the sink. The faster you deal with them, the less attractive they are to pests and mold.",
+                options: ["[WASH DISHES IMMEDIATELY]", "[LEAVE TO SOAK]", "[JUST RINSE AND STACK]"],
+                actions: {
+                    "WASH DISHES IMMEDIATELY": { nextLevel: 9, message: "Counter-attack successful. The kitchen is clean and safe." },
+                    "LEAVE TO SOAK": { fail: true, message: "Soaking water is a potent breeding ground. You've delayed, but not defeated. +1 Grime." },
+                    "JUST RINSE AND STACK": { fail: true, message: "Food residue hardens, making the job harder later. Future you will resent this. +2 Grime." }
+                }
+            },
+            9: {
+                title: "Post-Meal Detail Work (Extra dental care needed?)",
+                text: "You already brushed, but a quick dental check after eating is a key part of advanced hygiene maintenance.",
+                options: ["[FLOSS]", "[MOUTH WASH]", "[DO NOTHING]"],
+                actions: {
+                    "FLOSS": { nextLevel: 10, message: "The ultimate dental defense. Hidden debris eliminated." },
+                    "MOUTH WASH": { fail: true, message: "A temporary shield, but the physical debris remains. +1 Grime." },
+                    "DO NOTHING": { fail: true, message: "Food particles begin their decay process. You could be better. +1 Grime." }
+                }
+            },
+            10: {
+                title: "Workspace Disinfection (Clean your high-touch surfaces)",
+                text: "Your desk is a high-touch area, a silent collector of germs. A quick wipe-down is necessary for a hygienic workspace.",
+                options: ["[WIPE WITH DISINFECTANT]", "[ORGANIZE CLUTTER]", "[IGNORE AND WORK]"],
+                actions: {
+                    "WIPE WITH DISINFECTANT": { nextLevel: 11, message: "Surfaces sterilized. Your keyboard is now a clean zone." },
+                    "ORGANIZE CLUTTER": { fail: true, message: "Tidiness gained, but germs untouched. A partial victory. +1 Grime." },
+                    "IGNORE AND WORK": { fail: true, message: "You are actively interacting with a zone of contagion. +2 Grime." }
+                }
+            },
+            11: {
+                title: "The Evening Wind Down (Ready for bed prep)",
+                text: "The day is ending. You need to ensure your physical person is ready for the final reset. Check critical areas.",
+                options: ["[WASH FEET]", "[FRESH SOCKS AND DEO]", "[LOUNGE ON SOFA]"],
+                actions: {
+                    "WASH FEET": { nextLevel: 12, message: "Foot hygiene secured. You are ready to enter the clean sheets zone." },
+                    "FRESH SOCKS AND DEO": { nextLevel: 12, message: "A decent preventative measure, but a quick wash is superior." },
+                    "LOUNGE ON SOFA": { fail: true, message: "You transfer the day's residue to your soft furnishings. Poor decision. +1 Grime." }
+                }
+            },
+            12: {
+                title: "Final Reset (Do you have any final tasks?)",
+                text: "You have completed the quest. The only remaining task is the final preparation for a restful and hygienic sleep.",
+                options: ["[FINAL FACE WASH]", "[CHECK BED SHEETS]", "[GO STRAIGHT TO BED]"],
+                actions: {
+                    "FINAL FACE WASH": { final: true, success: true, message: "Double-cleanse complete. Your skin thanks you. Proceed to sleep." },
+                    "CHECK BED SHEETS": { final: true, success: false, message: "Sheets are fine, but you brought the day's germs to them. A missed opportunity." },
+                    "GO STRAIGHT TO BED": { final: true, success: false, message: "A small layer of grit from the day is now on your pillow. You could have done better." }
+                }
+            }
+        };
+
+        // --- Game State ---
+        let gameState = {
+            currentLevel: 1,
+            grimeLevel: 0,
+            log: []
+        };
+        const MAX_GRIME = 5;
+
+        // --- DOM Elements ---
+        const gameLogEl = document.getElementById('gameLog');
+        const commandForm = document.getElementById('commandForm');
+        const commandInput = document.getElementById('commandInput');
+        const currentLevelDisplay = document.getElementById('currentLevelDisplay');
+        const grimeLevelDisplay = document.getElementById('grimeLevelDisplay');
+
+        // --- Core Functions ---
+
+        function updateDisplay() {
+            gameLogEl.innerHTML = gameState.log.join('');
+            gameLogEl.scrollTop = gameLogEl.scrollHeight; // Scroll to bottom
+            currentLevelDisplay.textContent = gameState.currentLevel;
+            grimeLevelDisplay.textContent = gameState.grimeLevel;
+
+            // Grime level is now always black, removing all color logic
+            grimeLevelDisplay.classList.remove('text-red-700', 'text-yellow-700', 'font-bold');
+
+            // Disable input if game over
+            const current = levels[gameState.currentLevel];
+            commandInput.disabled = current && current.actions && current.actions.final;
+            commandInput.placeholder = commandInput.disabled ? "Game Over! Press NEW GAME." : "Type your command or click an option...";
+
+            // Update UI for end state
+            if (!current || (current.actions && current.actions.final)) {
+                commandInput.placeholder = "The quest is complete. Press NEW GAME.";
+                commandInput.disabled = true;
+            }
+        }
+        
+        function appendToLog(text) {
+            // All text is now pure black and not bold
+            const colorClass = 'text-black font-normal';
+            gameState.log.push(`<p class="mb-2 ${colorClass}">${text}</p>`);
+        }
+
+        function displayLevel() {
+            const level = levels[gameState.currentLevel];
+            if (!level) {
+                endGame(true);
+                return;
+            }
+
+            // Removed horizontal rule
+            // Removed :: from title
+            appendToLog(`LEVEL ${gameState.currentLevel}: ${level.title}`);
+            
+            // Display clickable options, stripping the square brackets
+            const optionsHtml = level.options.map(opt => {
+                const command = opt.replace(/[[\]]/g, '');
+                // Display the command text without the brackets
+                return `<span class="action-link" onclick="handleLinkClick('${command}')">${command}</span>`;
+            }).join(' / '); // Using a forward slash as a separator
+
+            // Display options
+            appendToLog(`\n<p class="text-base text-black mt-3">Options: ${optionsHtml}</p>`);
+            commandInput.focus();
+        }
+
+        function handleLinkClick(command) {
+            commandInput.value = command;
+            processCommand(command);
+        }
+
+        function processCommand(input) {
+            if (commandInput.disabled) return;
+
+            const command = input.toUpperCase().trim();
+            commandInput.value = '';
+
+            const level = levels[gameState.currentLevel];
+            if (!level) return;
+
+            const action = level.actions[command] || level.actions["DEFAULT"];
+
+            if (action) {
+                appendToLog(`> ${command}`);
+
+                // --- Execute Action ---
+                let nextLevel = gameState.currentLevel;
+
+                if (action.final) {
+                    endGame(action.success);
+                    return;
+                }
+                
+                if (action.fail) {
+                    gameState.grimeLevel += (action.message.includes('+1 Grime') ? 1 : 
+                                            action.message.includes('+2 Grime') ? 2 : 
+                                            action.message.includes('+3 Grime') ? 3 : 0);
+                    
+                    if (gameState.grimeLevel >= MAX_GRIME) {
+                        appendToLog(`[FAILURE] ${action.message}`);
+                        endGame(false);
+                        return;
+                    }
+
+                    // For fails that keep you on the same level (e.g., SNOOZE)
+                    if (!action.nextLevel) {
+                        appendToLog(`[WARNING] ${action.message}`);
+                        displayLevel(); // Redisplay level title and options
+                        return;
+                    }
+                }
+                
+                if (action.nextLevel) {
+                    nextLevel = action.nextLevel;
+                    appendToLog(`[SUCCESS] ${action.message}`);
+                } else {
+                    // Default/Unrecognized command, but a fallback action exists
+                    appendToLog(`[INFO] ${action.message}`);
+                }
+
+                // Check for level advancement
+                if (nextLevel > gameState.currentLevel) {
+                    gameState.currentLevel = nextLevel;
+                    displayLevel();
+                } else if (level.actions[command] === undefined) {
+                     appendToLog(`[ERROR] Unrecognized command. Choose from the available options.`);
+                }
+
+
+            } else {
+                appendToLog(`[ERROR] Unrecognized command. Choose from the available options.`);
+            }
+
+            updateDisplay();
+        }
+
+        function endGame(success) {
+            commandInput.disabled = true;
+            
+            // Removed horizontal rule
+            
+            if (success && gameState.grimeLevel < MAX_GRIME) {
+                appendToLog("--- VICTORY! HYGIENE MASTER ACHIEVED ---");
+                appendToLog("You successfully navigated the 12 levels of the Daily Quest for Cleanliness.");
+                appendToLog(`Your Final Grime Level was: ${gameState.grimeLevel}. You win the day!`);
+                appendToLog(`<p class="text-xl text-black mt-4">GAME COMPLETE</p>`);
+            } else {
+                appendToLog("--- FAILURE: GRIME OVERLOAD ---");
+                appendToLog(`You failed to maintain control. Your Grime Level reached ${gameState.grimeLevel} (Max: ${MAX_GRIME}).`);
+                appendToLog("You are defeated by the day's residue. The quest must be restarted.");
+                appendToLog(`<p class="text-xl text-black mt-4">GAME OVER</p>`);
+            }
+            
+            // Add New Game Button
+            const newGameButton = document.createElement('p');
+            newGameButton.innerHTML = `<span class="action-link" onclick="startGame()">NEW GAME</span>`;
+            gameState.log.push(newGameButton.outerHTML);
+            updateDisplay();
+        }
+
+        function startGame() {
+            gameState.currentLevel = 1;
+            gameState.grimeLevel = 0;
+            gameState.log = [];
+            commandInput.disabled = false;
+            
+            appendToLog("Welcome, Challenger, to the DAILY QUEST FOR CLEANLINESS.");
+            appendToLog(`Your mission is to complete 12 levels of personal and environmental hygiene. You will only see the title of the challenge and your options.`);
+            
+            displayLevel();
+            updateDisplay();
+        }
+
+        // --- Event Listener Setup ---
+        commandForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            processCommand(commandInput.value);
+        });
+
+        // --- Initial Call ---
+        window.onload = startGame;
+    </script>
+</body>
+</html>
