@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practical Skill Assessment: Project Estimation</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            font-size: 1.4em;
+        }
+        h3 {
+            color: #16a085;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        .scenario-box {
+            background-color: #e8f6f3;
+            border-left: 5px solid #16a085;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .solution-step {
+            border: 1px solid #e1e1e1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #d35400;
+        }
+        .license-block {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+            font-size: 0.8em;
+            color: #777;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        ul {
+            list-style-type: square;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button onclick="window.print()">Print Assessment</button>
+
+    <h1>Competency Assessment: Material Estimation & Costing</h1>
+    <p><strong>Subject:</strong> Civil Construction & Project Management<br>
+    <strong>Level:</strong> Advanced Vocational Application</p>
+
+    <div class="scenario-box">
+        <h3>Scenario Description</h3>
+        <p>You are the site supervisor for a rural infrastructure project. You have been tasked with constructing a <strong>cylindrical concrete water tank</strong>. Your objective is to calculate the precise volume of wet concrete required, determine the dry volume of materials needed based on standard shrinkage factors, and generate a final Cost Estimate (Bill of Quantities) for the client.</p>
+    </div>
+
+    <h2>1. Technical Specifications</h2>
+    <table class="data-table">
+        <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Inner Radius of Tank ($r$)</td>
+            <td>2.0 meters</td>
+        </tr>
+        <tr>
+            <td>Inner Height of Tank ($h$)</td>
+            <td>3.5 meters</td>
+        </tr>
+        <tr>
+            <td>Thickness of Walls ($t_w$)</td>
+            <td>0.15 meters (15 cm)</td>
+        </tr>
+        <tr>
+            <td>Thickness of Base Slab ($t_b$)</td>
+            <td>0.20 meters (20 cm)</td>
+        </tr>
+        <tr>
+            <td>Concrete Mix Ratio (Cement : Sand : Aggregate)</td>
+            <td>1 : 1.5 : 3 (M20 Grade equivalent)</td>
+        </tr>
+        <tr>
+            <td>Dry Volume Coefficient</td>
+            <td>1.54 (Standard safety factor for voids/shrinkage)</td>
+        </tr>
+    </table>
+
+    <h2>2. Market Rates (Current Fiscal Quarter)</h2>
+    <ul style="margin-bottom: 30px;">
+        <li><strong>Cement:</strong> $8.00 per bag (50kg bag = 0.0347 cubic meters)</li>
+        <li><strong>Sand:</strong> $45.00 per cubic meter</li>
+        <li><strong>Aggregate (Gravel):</strong> $40.00 per cubic meter</li>
+        <li><strong>Labor Charge:</strong> $120.00 per cubic meter of concrete poured</li>
+        <li><strong>Contingency Tax:</strong> 5% of total material + labor cost</li>
+    </ul>
+
+    <hr>
+
+    <h1>Detailed Solution & Methodology</h1>
+
+    <div class="solution-step">
+        <h3>Step 1: Calculate Total Concrete Volume ($V_{total}$)</h3>
+        
+        <p>We must calculate the volume of the base slab and the volume of the hollow cylindrical walls separately.</p>
+        
+        <p><strong>A. Base Slab Volume ($V_{base}$)</strong><br>
+        The base extends to the outer edge of the walls. Therefore, the Outer Radius ($R$) is the Inner Radius ($r$) + Wall Thickness ($t_w$).</p>
+        
+        $$R = 2.0m + 0.15m = 2.15m$$
+        
+        $$V_{base} = \pi \times R^2 \times t_b$$
+        $$V_{base} = 3.1416 \times (2.15)^2 \times 0.20$$
+        $$V_{base} \approx 2.904 \, m^3$$
+
+        <p><strong>B. Wall Volume ($V_{walls}$)</strong><br>
+        The walls are a hollow cylinder. We calculate the area of the ring annulus and multiply by height.</p>
+        
+        $$V_{walls} = \pi \times (R^2 - r^2) \times h$$
+        $$V_{walls} = 3.1416 \times (2.15^2 - 2.0^2) \times 3.5$$
+        $$V_{walls} = 3.1416 \times (4.6225 - 4.0) \times 3.5$$
+        $$V_{walls} = 3.1416 \times 0.6225 \times 3.5$$
+        $$V_{walls} \approx 6.845 \, m^3$$
+
+        <p><strong>C. Total Wet Volume</strong></p>
+        $$V_{total} = 2.904 + 6.845 = \mathbf{9.749 \, m^3}$$
+    </div>
+
+    <div class="solution-step">
+        <h3>Step 2: Calculate Dry Volume of Materials</h3>
+        <p>Wet concrete shrinks when it dries. To find the quantity of raw materials to purchase, we multiply the wet volume by the Dry Volume Coefficient (1.54).</p>
+        
+        $$V_{dry} = 9.749 \times 1.54 = \mathbf{15.013 \, m^3}$$
+    </div>
+
+    <div class="solution-step">
+        <h3>Step 3: Material Breakdown (Ratio Analysis)</h3>
+        <p>The mix ratio is 1 : 1.5 : 3. The sum of the ratio parts is:</p>
+        $$Sum = 1 + 1.5 + 3 = 5.5$$
+
+        <p><strong>A. Cement Quantity</strong></p>
+        $$Volume_{cement} = \frac{1}{5.5} \times 15.013 = 2.729 \, m^3$$
+        <p>To convert to bags (1 bag $\approx$ 0.0347 $m^3$):</p>
+        $$Bags = \frac{2.729}{0.0347} \approx 78.6$$
+        <p><em>Note: Always round up for procurement.</em> <strong>Total: 79 Bags.</strong></p>
+
+        <p><strong>B. Sand Quantity</strong></p>
+        $$Volume_{sand} = \frac{1.5}{5.5} \times 15.013 = 4.094 \, m^3$$
+
+        <p><strong>C. Aggregate Quantity</strong></p>
+        $$Volume_{agg} = \frac{3}{5.5} \times 15.013 = 8.189 \, m^3$$
+    </div>
+
+    <div class="solution-step">
+        <h3>Step 4: Cost Estimation (Bill of Quantities)</h3>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Total Cost ($)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cement</td>
+                    <td>79 Bags</td>
+                    <td>$8.00 / bag</td>
+                    <td>$632.00</td>
+                </tr>
+                <tr>
+                    <td>Sand</td>
+                    <td>4.094 $m^3$</td>
+                    <td>$45.00 / $m^3$</td>
+                    <td>$184.23</td>
+                </tr>
+                <tr>
+                    <td>Aggregate</td>
+                    <td>8.189 $m^3$</td>
+                    <td>$40.00 / $m^3$</td>
+                    <td>$327.56</td>
+                </tr>
+                <tr>
+                    <td><strong>Material Subtotal</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>$1,143.79</strong></td>
+                </tr>
+                <tr>
+                    <td>Labor</td>
+                    <td>9.749 $m^3$ (wet)</td>
+                    <td>$120.00 / $m^3$</td>
+                    <td>$1,169.88</td>
+                </tr>
+                <tr>
+                    <td><strong>Gross Total</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>$2,313.67</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>Final Calculation with Contingency Tax (5%)</strong></p>
+        $$Final Cost = 2313.67 \times 1.05 = \mathbf{\$2,429.35}$$
+    </div>
+
+    <div class="license-block">
+        <p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+            <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
+                <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" style="border-style: none;" alt="CC0" />
+            </a>
+            <br />
+            To the extent possible under law, the author has waived all copyright and related or neighboring rights to this educational work.
+            This work is published from: <span property="vcard:Country" datatype="dct:ISO3166" content="IN" about="www.example.com">India</span>.
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>
