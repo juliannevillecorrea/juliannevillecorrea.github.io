@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Architecture of Air - Full Screenplay</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f4;
+            --paper: #ffffff;
+            --text: #222;
+            --courier: "Courier Prime", "Courier New", Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--courier);
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .script-container {
+            background-color: var(--paper);
+            width: 100%;
+            max-width: 850px; /* Standard A4/Letter width constraint */
+            padding: 1in;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+        }
+
+        /* Screenplay Elements */
+        .slugline {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .action {
+            margin-bottom: 16px;
+            line-height: 1.2;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .character-cue {
+            text-align: center;
+            width: 60%;
+            margin: 24px auto 0 auto;
+            text-transform: uppercase;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .parenthetical {
+            text-align: center;
+            width: 50%;
+            margin: 0 auto;
+            font-size: 14px;
+        }
+
+        .dialogue {
+            text-align: left;
+            width: 70%;
+            margin: 0 auto 16px auto;
+            line-height: 1.2;
+            font-size: 16px;
+        }
+
+        .transition {
+            text-align: right;
+            text-transform: uppercase;
+            margin-top: 40px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .center-text {
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-decoration: underline;
+        }
+
+        /* Title Page Styling */
+        .title-page {
+            text-align: center;
+            margin-bottom: 200px;
+            padding-top: 100px;
+        }
+
+        .title-main {
+            font-size: 32px;
+            text-decoration: underline;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .credits {
+            margin-bottom: 20px;
+        }
+
+        hr {
+            border: 0;
+            border-bottom: 1px solid #ddd;
+            margin: 60px 0;
+        }
+
+        @media screen and (max-width: 768px) {
+            .script-container {
+                padding: 20px;
+            }
+            .dialogue {
+                width: 90%;
+            }
+            .character-cue {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="script-container">
+
+    <div class="title-page">
+        <div class="title-main">THE ARCHITECTURE OF AIR</div>
+        <div class="credits">Written by<br>Gemini</div>
+        <div class="credits">Draft Date: January 16, 2026</div>
+        <br><br>
+        <div><i>A Feature Treatment on the Philosophy of Mastery</i></div>
+    </div>
+
+    <div class="slugline">EXT. THE RUSTY SPOON CIRCUS - NIGHT</div>
+    <div class="action">Rain lashes against the faded canvas of a third-rate circus tent. The neon sign buzzes and dies, buzzes and dies.</div>
+
+    <div class="slugline">INT. THE CENTER RING - NIGHT</div>
+    <div class="action">PIPO (45) stands alone. He is dressed in "The Weeping Fool" attire—baggy trousers, suspended by rope, a tear painted permanently on his left cheek. But Pipo is not performing. He is at war.</div>
+    <div class="action">He holds five heavy iron spheres. They are not props; they are cannonballs.</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="parenthetical">(Gritting teeth)</div>
+    <div class="dialogue">The pattern is the truth. The pattern is the truth.</div>
+
+    <div class="action">He heaves them into the air. One. Two. Three. Four. The rhythm is violent. His veins bulge. The fifth ball rises, hits the apex, and descends. Pipo lunges. His foot slips on the wet sawdust. CLANG.</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="parenthetical">(Screaming)</div>
+    <div class="dialogue">DAMN YOU!</div>
+
+    <div class="action">He falls to his knees, shaking. His hands are raw, wrapped in bloody tape.</div>
+
+    <div class="character-cue">VOICE (O.S.)</div>
+    <div class="dialogue">The physics remain unchanged, Pipo. Only the juggler rots.</div>
+
+    <div class="action">MR. SILAS (50s), a loan shark in a velvet suit, steps out of the shadows. He chews a toothpick.</div>
+
+    <div class="character-cue">SILAS</div>
+    <div class="dialogue">Three days, Pipo. The bank takes the tent. I take the rest. Unless you can do "The Lazzo Infinity."</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="dialogue">It’s impossible. My father died trying to do the Infinity. Seven balls, continuous cascade, blindfolded.</div>
+
+    <div class="character-cue">SILAS</div>
+    <div class="dialogue">Then prepare to lose your home. You’re a good clown, Pipo. But you’re a terrible mathematician.</div>
+
+    <div class="action">Silas leaves. Pipo stares at the iron balls.</div>
+
+    <div class="slugline">INT. THE TRAIN CARRIAGE - DAY</div>
+    <div class="action">Pipo sits on a wooden bench. The landscape blurs—grey cities turning into green foothills, then jagged mountains. He holds a crumpled map. He looks at his hands. They tremble.</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="parenthetical">(To himself)</div>
+    <div class="dialogue">I have forgotten how to hold.</div>
+
+    <div class="slugline">EXT. THE MOUNTAIN OF SILENCE - DAY</div>
+    <div class="action">The air is thin here. Pipo climbs a stone staircase that seems to go on forever. At the summit sits a structure that is half-temple, half-junkyard. Clock gears, wind chimes, and water wheels spin in perfect unison.</div>
+    <div class="action">MOTO (80) is crouched by a stream, washing a single grain of rice. He does not look like a master. He looks like a beggar.</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="parenthetical">(Gasps for air)</div>
+    <div class="dialogue">I seek Moto. The Clockmaker. The Juggler of Spirits.</div>
+
+    <div class="character-cue">MOTO</div>
+    <div class="parenthetical">(Without turning)</div>
+    <div class="dialogue">Moto is dead. I am just a man washing his lunch.</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="dialogue">I am Pipo Lazzo. I have practiced the cascade for twenty years. But when I try to add the weight... it falls.</div>
+
+    <div class="action">Moto stands. He walks over to Pipo and pokes him in the chest.</div>
+
+    <div class="character-cue">MOTO</div>
+    <div class="dialogue">You are full of noise. You vibrate like a broken string.</div>
+
+    <div class="slugline">INT. MOTO'S WORKSHOP - CONTINUOUS</div>
+    <div class="action">The room is filled with pendulums. Hundreds of them. All swinging in different rhythms, yet somehow never colliding.</div>
+
+    <div class="character-cue">MOTO</div>
+    <div class="dialogue">You want to juggle the world, Clown. But you cannot even juggle your own breath.</div>
+
+    <div class="action">Moto picks up two oranges. He eats one. He tosses the other to Pipo.</div>
+
+    <div class="character-cue">MOTO (CONT'D)</div>
+    <div class="dialogue">Show me.</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="dialogue">I need three to show the pattern.</div>
+
+    <div class="character-cue">MOTO</div>
+    <div class="parenthetical">(Snaps)</div>
+    <div class="dialogue">STOP. The "Three" is a myth. There is no three. There is only One. And then another One. And then another One.</div>
+
+    <div class="action">Moto grabs Pipo’s left hand and ties it behind his back with a silk sash.</div>
+
+    <div class="character-cue">MOTO (CONT'D)</div>
+    <div class="dialogue">You are a cripple now. You have one hand. You have two balls. The exercise is "The Piston." Straight up. Straight down.</div>
+
+    <div class="action">Pipo tosses the two balls in one hand. It’s messy. The balls collide. Splat. Orange juice on the floor.</div>
+
+    <div class="character-cue">MOTO (CONT'D)</div>
+    <div class="dialogue">You see? You are looking at the catch. We do not keep them up. We let them fall with grace.</div>
+
+    <div class="slugline">EXT. THE WORKSHOP - MONTAGE</div>
+    <div class="center-text">DAY 1</div>
+    <div class="action">Pipo stands in the rain. Right hand only. Two balls. He screams.</div>
+
+    <div class="center-text">DAY 3 (NIGHT)</div>
+    <div class="action">Pipo is exhausted. Suddenly, he stops trying to catch them. He focuses only on the release. The "Apex" of the throw. The balls begin to land in his hand automatically. Thwump. Thwump.</div>
+
+    <div class="slugline">INT. MOTO'S WORKSHOP - DAY 4</div>
+    <div class="character-cue">PIPO</div>
+    <div class="dialogue">I have eaten the first morsel. The right hand knows the gravity.</div>
+
+    <div class="character-cue">MOTO</div>
+    <div class="dialogue">Good. Now the left. Symmetry is the law of the universe. If you build a tower on a slanted foundation, it will fall.</div>
+
+    <div class="action">Moto holds up his hand. The pinky and ring finger are missing.</div>
+
+    <div class="character-cue">MOTO (CONT'D)</div>
+    <div class="dialogue">I moved faster than my spirit could follow. Incremental improvement is not just a method. It is a safety rail for the soul.</div>
+
+    <div class="slugline">INT. THE WORKSHOP - NIGHT (THE FINAL LESSON)</div>
+    <div class="action">Pipo is juggling two balls in his left hand, and two in his right. They are separate columns.</div>
+
+    <div class="character-cue">MOTO</div>
+    <div class="dialogue">Now. The Crossing. The Cascade.</div>
+
+    <div class="action">Pipo takes a deep breath. He launches a ball from the right. As it peaks, he launches from the left. The pattern emerges.</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="dialogue">It feels... empty.</div>
+
+    <div class="character-cue">MOTO</div>
+    <div class="dialogue">Yes. When the skill is mastered, the effort disappears. You are doing nothing. The balls are juggling themselves.</div>
+
+    <div class="slugline">EXT. THE RUSTY SPOON CIRCUS - NIGHT (THE RETURN)</div>
+    <div class="action">The tent is packed with Silas’s goons. Silas sits in the front row.</div>
+
+    <div class="character-cue">SILAS</div>
+    <div class="dialogue">Time’s up, Clown. Give us the Infinity or give us the deed.</div>
+
+    <div class="action">Pipo steps into the ring. He opens his trunk. He takes out three simple, white spheres.</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="dialogue">I will show you the impossible. I will show you a man who is not afraid to drop them.</div>
+
+    <div class="action">Pipo starts. A simple three-ball cascade. He accelerates. He throws a ball high. Then the second. Then the third. For a moment, Pipo is standing with empty hands. Then—snap, snap, snap. He catches them.</div>
+    
+    <div class="action">He adds a fourth ball. Then a fifth. The pattern becomes a blur of white light.</div>
+
+    <div class="character-cue">PIPO (CONT'D)</div>
+    <div class="dialogue">One bite at a time, Silas.</div>
+
+    <div class="action">He suddenly stops. He catches all five balls on the back of his neck and arms. Total stillness.</div>
+
+    <div class="character-cue">SILAS</div>
+    <div class="dialogue">Keep the tent. The math... checks out.</div>
+
+    <div class="slugline">EXT. THE CIRCUS - LATER</div>
+    <div class="action">Pipo stands outside. He picks up a pebble. He tosses it up. Catches it.</div>
+
+    <div class="character-cue">PIPO</div>
+    <div class="parenthetical">(Whispering)</div>
+    <div class="dialogue">Stage one.</div>
+
+    <div class="transition">FADE OUT.</div>
+
+</div>
+
+</body>
+</html>
