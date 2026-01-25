@@ -23,7 +23,7 @@
         }
 
         body {
-            background-color: #333;
+            background-color: #333; /* Dark background for web view */
             font-family: 'Courier Prime', 'Courier New', Courier, monospace;
             font-size: var(--font-size);
             line-height: 1;
@@ -167,7 +167,20 @@ SOLOMON
 Ten dollars?
 That's a bit steep. Can you give me a better price?`;
 
-        // 2. MINI PARSER (No external dependencies)
+        // 2. SECURITY: HTML SANITIZER (Fixes XSS)
+        // This ensures that any <, >, or & characters in the text are displayed as text,
+        // rather than being interpreted as HTML tags.
+        function escapeHtml(text) {
+            if (!text) return text;
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // 3. MINI PARSER (No external dependencies)
         function parseFountain(text) {
             const lines = text.split(/\r?\n/);
             let html = "";
@@ -175,64 +188,60 @@ That's a bit steep. Can you give me a better price?`;
             let isTitlePage = true;
 
             lines.forEach((line, index) => {
-                line = line.trim();
-                
+                const rawLine = line.trim();
+                const safeLine = escapeHtml(rawLine); // Sanitize content immediately
+
                 // Handle Title Page (Key: Value)
                 if (isTitlePage) {
-                    if (line.includes(':') && !line.startsWith('INT.') && !line.startsWith('EXT.')) {
-                        const parts = line.split(':');
-                        const key = parts[0].trim();
-                        const val = parts.slice(1).join(':').trim();
+                    if (rawLine.includes(':') && !rawLine.startsWith('INT.') && !rawLine.startsWith('EXT.')) {
+                        const parts = rawLine.split(':');
+                        const key = escapeHtml(parts[0].trim());
+                        const val = escapeHtml(parts.slice(1).join(':').trim());
                         titlePage += `<div class="${key.toLowerCase().replace(' ','-')}">${val}</div>`;
                         return;
-                    } else if (line === "") {
-                        return; // Skip empty lines in title page
+                    } else if (rawLine === "") {
+                        return; 
                     } else {
                         isTitlePage = false;
                         if (titlePage) html += `<div class="title-page">${titlePage}</div>`;
                     }
                 }
 
-                if (line === "") return;
+                if (rawLine === "") return;
 
-                // Scene Headings (INT./EXT.)
-                if (line.startsWith("INT") || line.startsWith("EXT") || line.startsWith("EST")) {
-                    html += `<div class="scene-header">${line}</div>`;
+                // Determine element type and wrap safe content
+                if (rawLine.startsWith("INT") || rawLine.startsWith("EXT") || rawLine.startsWith("EST")) {
+                    html += `<div class="scene-header">${safeLine}</div>`;
                 } 
-                // Characters (All Caps, not transitions)
-                else if (line === line.toUpperCase() && !line.includes(":") && line.length < 50) {
-                    html += `<div class="character">${line}</div>`;
+                else if (rawLine === rawLine.toUpperCase() && !rawLine.includes(":") && rawLine.length < 50) {
+                    html += `<div class="character">${safeLine}</div>`;
                 }
-                // Transitions (All Caps + Colon, or TO:)
-                else if (line.endsWith("TO:") || (line === line.toUpperCase() && line.includes(":"))) {
-                    html += `<div class="transition">${line}</div>`;
+                else if (rawLine.endsWith("TO:") || (rawLine === rawLine.toUpperCase() && rawLine.includes(":"))) {
+                    html += `<div class="transition">${safeLine}</div>`;
                 }
-                // Parentheticals
-                else if (line.startsWith("(") && line.endsWith(")")) {
-                    html += `<div class="parenthetical">${line}</div>`;
+                else if (rawLine.startsWith("(") && rawLine.endsWith(")")) {
+                    html += `<div class="parenthetical">${safeLine}</div>`;
                 }
-                // Dialogue vs Action
-                // If previous line was Character or Parenthetical, this is Dialogue
                 else {
                     let prevLine = lines[index - 1] ? lines[index - 1].trim() : "";
                     if (prevLine === prevLine.toUpperCase() && prevLine !== "" && !prevLine.startsWith("INT") && !prevLine.startsWith("EXT")) {
-                        html += `<div class="dialogue">${line}</div>`;
+                        html += `<div class="dialogue">${safeLine}</div>`;
                     } else if (prevLine.startsWith("(") && prevLine.endsWith(")")) {
-                        html += `<div class="dialogue">${line}</div>`;
+                        html += `<div class="dialogue">${safeLine}</div>`;
                     } else {
-                        html += `<div class="action">${line}</div>`;
+                        html += `<div class="action">${safeLine}</div>`;
                     }
                 }
             });
             return html;
         }
 
-        // 3. EXECUTE
+        // 4. EXECUTE
         try {
             const output = parseFountain(scriptText);
             document.getElementById('script-container').innerHTML = output;
         } catch (e) {
-            document.getElementById('script-container').innerHTML = "Error parsing script: " + e.message;
+            document.getElementById('script-container').innerText = "Error parsing script: " + e.message;
         }
     </script>
 </body>
