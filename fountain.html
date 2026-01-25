@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- SCREENPLAY CSS (The Visuals) --- */
+        /* --- VISUAL SETUP --- */
         :root {
             --paper-width: 8.5in;
             --paper-height: 11in;
@@ -19,11 +19,11 @@
             --margin-left: 1.5in;
             --margin-right: 1in;
             --font-size: 12pt;
-            --line-height: 12pt; /* Exact single spacing */
+            --line-height: 12pt; 
         }
 
         body {
-            background-color: #555; /* Dark background for web view (easier on eyes) */
+            background-color: #333; /* Dark background for web view */
             font-family: 'Courier Prime', 'Courier New', Courier, monospace;
             font-size: var(--font-size);
             line-height: 1;
@@ -42,111 +42,32 @@
             box-sizing: border-box;
         }
 
-        /* --- FOUNTAIN ELEMENT STYLES --- */
+        /* --- SCRIPT ELEMENTS --- */
+        .title-page { text-align: center; margin-top: 3in; margin-bottom: 4in; page-break-after: always; }
+        .title-page .title { font-weight: bold; text-decoration: underline; text-transform: uppercase; margin-bottom: 1em; }
+        .title-page .author { margin-bottom: 1em; }
         
-        /* General Spacing */
-        p { margin: 0 0 var(--line-height) 0; } 
-        
-        /* Title Page */
-        #script-title-page {
-            text-align: center;
-            margin-top: 3in; /* Push title down */
-            margin-bottom: 4in; /* Space after title page */
-            page-break-after: always; /* Force new page after title */
-        }
-        .title-page h1 { font-weight: bold; text-decoration: underline; text-transform: uppercase; margin-bottom: 1em; font-size: inherit; }
-        .title-page p { margin-bottom: 1em; }
+        .scene-header { font-weight: bold; text-transform: uppercase; margin-top: 24pt; margin-bottom: 12pt; }
+        .action { margin-bottom: 12pt; }
+        .character { margin-left: 2.0in; width: 4in; text-transform: uppercase; margin-top: 12pt; }
+        .parenthetical { margin-left: 1.5in; width: 3.5in; }
+        .dialogue { margin-left: 1.0in; width: 3.5in; margin-bottom: 12pt; white-space: pre-wrap; }
+        .transition { text-align: right; text-transform: uppercase; margin-bottom: 12pt; }
 
-        /* Scene Headings */
-        .scene-header {
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-top: calc(var(--line-height) * 2);
-            margin-bottom: var(--line-height);
-        }
-
-        /* Action */
-        .action { margin-bottom: var(--line-height); }
-
-        /* Dialogue Blocks */
-        .dialogue {
-            display: table;
-            width: 100%; 
-            break-inside: avoid; 
-            margin-bottom: var(--line-height);
-        }
-
-        /* Character Name */
-        .character {
-            margin-left: 2.0in; /* Visual indentation */
-            width: 4in;
-            text-transform: uppercase;
-        }
-
-        /* Parenthetical */
-        .parenthetical {
-            margin-left: 1.5in;
-            width: 3.5in;
-        }
-
-        /* Dialogue Text */
-        .lines {
-            margin-left: 1.0in;
-            width: 3.5in; 
-            white-space: pre-wrap;
-        }
-
-        /* Transitions */
-        .transition {
-            text-align: right;
-            text-transform: uppercase;
-            margin-bottom: var(--line-height);
-        }
-
-        /* Page Breaks */
-        .page-break {
-            page-break-after: always;
-            border-bottom: 1px dashed #ccc;
-            margin: 20px 0;
-            color: #ccc;
-            text-align: center;
-            font-size: 10px;
-        }
-
-        /* --- PRINT MEDIA QUERY (For PDF Export) --- */
+        /* --- PRINT SETTINGS --- */
         @media print {
-            @page {
-                size: letter;
-                margin: 0;
-            }
-
-            body {
-                background-color: white;
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: block;
-            }
-
-            #script-container {
-                width: 100%;
-                box-shadow: none;
-                margin: 0;
-                padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
-            }
-
-            .page-break { border: none; margin: 0; height: 0; }
+            @page { size: letter; margin: 0; }
+            body { background-color: white; padding: 0; margin: 0; width: 100%; }
+            #script-container { width: 100%; box-shadow: none; margin: 0; padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left); }
         }
     </style>
 </head>
 <body>
 
-    <div id="script-container"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/fountain-js/dest/fountain.min.js"></script>
+    <div id="script-container">Rendering...</div>
 
     <script>
-        // YOUR SCRIPT CONTENT [cite: 1]
+        // 1. THE SCRIPT CONTENT
         const scriptText = `Title: something-fishy
 Credit: written by
 Author: Julian Correa
@@ -154,24 +75,21 @@ Source: treatment
 Version: 1.0
 Notes:	
 	FINAL PRODUCTION DRAFT
-	includes post-production dialogue 
-	and omitted scenes
 Copyright: (c) Julian Correa 2026
 Date: 21/01/2026
 Watermark: something-fishy.fountain
 
 INT. APARTMENT - NIGHT
 
-SOLOMON (30s) is sitting on his couch, scrolling through his phone. The room is dimly lit, with a single lamp casting a warm glow.
-
+SOLOMON (30s) is sitting on his couch, scrolling through his phone.
+The room is dimly lit, with a single lamp casting a warm glow.
 Suddenly, he remembers, he had to purchase some items for his mommy. From the bazaar.
-
 He stands up, grabs his wallet, and heads out the door.
 
 EXT. BAZAAR - NIGHT
 
-The bazaar is bustling with activity. Vendors shout out their wares, and colorful lights illuminate the stalls.
-
+The bazaar is bustling with activity.
+Vendors shout out their wares, and colorful lights illuminate the stalls.
 Solomon walks through the crowd, looking for the items on his list. Suddenly, he spots the vegetable vendor with potatoes.
 
 SOLOMON 
@@ -194,15 +112,16 @@ See you. Thank you my friend.
 
 INT. APARTMENT - NIGHT
 
-Solomon returns to his apartment, carrying a bag of groceries. He places the bag on the kitchen counter and begins to unpack it.
-
+Solomon returns to his apartment, carrying a bag of groceries.
+He places the bag on the kitchen counter and begins to unpack it.
 As he takes out the potatoes, he notices something strange.
 
 MOMMY
 Hey Solomon, did you get the potatoes? 
 
 SOLOMON
-Yes, Mommy. Here they are.
+Yes, Mommy.
+Here they are.
 
 MOMMY
 Thank you, Solomon. You're such a good son.
@@ -214,10 +133,12 @@ MOMMY
 By the way, did you remember to get the fish?
 
 SOLOMON
-Fish? Oh no, I completely forgot. I'll go back to the bazaar and get it right away.
+Fish? Oh no, I completely forgot.
+I'll go back to the bazaar and get it right away.
 
 MOMMY
-Please hurry, Solomon. I can't wait to have my favorite fish dish.
+Please hurry, Solomon.
+I can't wait to have my favorite fish dish.
 
 SOLOMON
 OK mom, I'll get the fish right away. 
@@ -233,7 +154,8 @@ See you.
 
 EXT. BAZAAR - NIGHT
 
-Solomon rushes back to the bazaar, determined to get the fish for his mommy. He weaves through the crowd, searching for the fish vendor. Finally, he spots him.
+Solomon rushes back to the bazaar, determined to get the fish for his mommy.
+He weaves through the crowd, searching for the fish vendor. Finally, he spots him.
 
 SOLOMON
 Hello, how much for a kilo of gobro?
@@ -242,21 +164,85 @@ FISH VENDOR
 For you, my friend, only ten dollars.
 
 SOLOMON
-Ten dollars? That's a bit steep. Can you give me a better price?`;
+Ten dollars?
+That's a bit steep. Can you give me a better price?`;
 
-        document.addEventListener("DOMContentLoaded", function() {
-            fountain.parse(scriptText, true, function (result) {
-                if (result && result.html) {
-                    // Separate title page if it exists
-                    let output = "";
-                    if (result.title_page_html) {
-                        output += `<div id="script-title-page" class="title-page">${result.title_page_html.join('')}</div>`;
+        // 2. SECURITY: HTML SANITIZER (Fixes XSS)
+        // This ensures that any <, >, or & characters in the text are displayed as text,
+        // rather than being interpreted as HTML tags.
+        function escapeHtml(text) {
+            if (!text) return text;
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // 3. MINI PARSER (No external dependencies)
+        function parseFountain(text) {
+            const lines = text.split(/\r?\n/);
+            let html = "";
+            let titlePage = "";
+            let isTitlePage = true;
+
+            lines.forEach((line, index) => {
+                const rawLine = line.trim();
+                const safeLine = escapeHtml(rawLine); // Sanitize content immediately
+
+                // Handle Title Page (Key: Value)
+                if (isTitlePage) {
+                    if (rawLine.includes(':') && !rawLine.startsWith('INT.') && !rawLine.startsWith('EXT.')) {
+                        const parts = rawLine.split(':');
+                        const key = escapeHtml(parts[0].trim());
+                        const val = escapeHtml(parts.slice(1).join(':').trim());
+                        titlePage += `<div class="${key.toLowerCase().replace(' ','-')}">${val}</div>`;
+                        return;
+                    } else if (rawLine === "") {
+                        return; 
+                    } else {
+                        isTitlePage = false;
+                        if (titlePage) html += `<div class="title-page">${titlePage}</div>`;
                     }
-                    output += result.html.script;
-                    document.getElementById('script-container').innerHTML = output;
+                }
+
+                if (rawLine === "") return;
+
+                // Determine element type and wrap safe content
+                if (rawLine.startsWith("INT") || rawLine.startsWith("EXT") || rawLine.startsWith("EST")) {
+                    html += `<div class="scene-header">${safeLine}</div>`;
+                } 
+                else if (rawLine === rawLine.toUpperCase() && !rawLine.includes(":") && rawLine.length < 50) {
+                    html += `<div class="character">${safeLine}</div>`;
+                }
+                else if (rawLine.endsWith("TO:") || (rawLine === rawLine.toUpperCase() && rawLine.includes(":"))) {
+                    html += `<div class="transition">${safeLine}</div>`;
+                }
+                else if (rawLine.startsWith("(") && rawLine.endsWith(")")) {
+                    html += `<div class="parenthetical">${safeLine}</div>`;
+                }
+                else {
+                    let prevLine = lines[index - 1] ? lines[index - 1].trim() : "";
+                    if (prevLine === prevLine.toUpperCase() && prevLine !== "" && !prevLine.startsWith("INT") && !prevLine.startsWith("EXT")) {
+                        html += `<div class="dialogue">${safeLine}</div>`;
+                    } else if (prevLine.startsWith("(") && prevLine.endsWith(")")) {
+                        html += `<div class="dialogue">${safeLine}</div>`;
+                    } else {
+                        html += `<div class="action">${safeLine}</div>`;
+                    }
                 }
             });
-        });
+            return html;
+        }
+
+        // 4. EXECUTE
+        try {
+            const output = parseFountain(scriptText);
+            document.getElementById('script-container').innerHTML = output;
+        } catch (e) {
+            document.getElementById('script-container').innerText = "Error parsing script: " + e.message;
+        }
     </script>
 </body>
 </html>
