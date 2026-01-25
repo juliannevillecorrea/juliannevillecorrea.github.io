@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Something Fishy - Script</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- SCREENPLAY CSS (The Visuals) --- */
+        :root {
+            --paper-width: 8.5in;
+            --paper-height: 11in;
+            --margin-top: 1in;
+            --margin-bottom: 1in;
+            --margin-left: 1.5in;
+            --margin-right: 1in;
+            --font-size: 12pt;
+            --line-height: 12pt; /* Exact single spacing */
+        }
+
+        body {
+            background-color: #555; /* Dark background for web view (easier on eyes) */
+            font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+            font-size: var(--font-size);
+            line-height: 1;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #script-container {
+            background-color: white;
+            width: var(--paper-width);
+            min-height: var(--paper-height);
+            padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
+
+        /* --- FOUNTAIN ELEMENT STYLES --- */
+        
+        /* General Spacing */
+        p { margin: 0 0 var(--line-height) 0; } 
+        
+        /* Title Page */
+        #script-title-page {
+            text-align: center;
+            margin-top: 3in; /* Push title down */
+            margin-bottom: 4in; /* Space after title page */
+            page-break-after: always; /* Force new page after title */
+        }
+        .title-page h1 { font-weight: bold; text-decoration: underline; text-transform: uppercase; margin-bottom: 1em; font-size: inherit; }
+        .title-page p { margin-bottom: 1em; }
+
+        /* Scene Headings */
+        .scene-header {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: calc(var(--line-height) * 2);
+            margin-bottom: var(--line-height);
+        }
+
+        /* Action */
+        .action { margin-bottom: var(--line-height); }
+
+        /* Dialogue Blocks */
+        .dialogue {
+            display: table;
+            width: 100%; 
+            break-inside: avoid; 
+            margin-bottom: var(--line-height);
+        }
+
+        /* Character Name */
+        .character {
+            margin-left: 2.0in; /* Visual indentation */
+            width: 4in;
+            text-transform: uppercase;
+        }
+
+        /* Parenthetical */
+        .parenthetical {
+            margin-left: 1.5in;
+            width: 3.5in;
+        }
+
+        /* Dialogue Text */
+        .lines {
+            margin-left: 1.0in;
+            width: 3.5in; 
+            white-space: pre-wrap;
+        }
+
+        /* Transitions */
+        .transition {
+            text-align: right;
+            text-transform: uppercase;
+            margin-bottom: var(--line-height);
+        }
+
+        /* Page Breaks */
+        .page-break {
+            page-break-after: always;
+            border-bottom: 1px dashed #ccc;
+            margin: 20px 0;
+            color: #ccc;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        /* --- PRINT MEDIA QUERY (For PDF Export) --- */
+        @media print {
+            @page {
+                size: letter;
+                margin: 0;
+            }
+
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                display: block;
+            }
+
+            #script-container {
+                width: 100%;
+                box-shadow: none;
+                margin: 0;
+                padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
+            }
+
+            .page-break { border: none; margin: 0; height: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="script-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fountain-js/dest/fountain.min.js"></script>
+
+    <script>
+        // YOUR SCRIPT CONTENT [cite: 1]
+        const scriptText = `Title: something-fishy
+Credit: written by
+Author: Julian Correa
+Source: treatment
+Version: 1.0
+Notes:	
+	FINAL PRODUCTION DRAFT
+	includes post-production dialogue 
+	and omitted scenes
+Copyright: (c) Julian Correa 2026
+Date: 21/01/2026
+Watermark: something-fishy.fountain
+
+INT. APARTMENT - NIGHT
+
+SOLOMON (30s) is sitting on his couch, scrolling through his phone. The room is dimly lit, with a single lamp casting a warm glow.
+
+Suddenly, he remembers, he had to purchase some items for his mommy. From the bazaar.
+
+He stands up, grabs his wallet, and heads out the door.
+
+EXT. BAZAAR - NIGHT
+
+The bazaar is bustling with activity. Vendors shout out their wares, and colorful lights illuminate the stalls.
+
+Solomon walks through the crowd, looking for the items on his list. Suddenly, he spots the vegetable vendor with potatoes.
+
+SOLOMON 
+Hello, how much for a kilo of potatoes?
+
+VEGETABLE VENDOR
+For you, my friend, only five dollars.
+
+SOLOMON
+Come on, my friend, I need the money. Give me some. But it was for some cheaper $3.
+
+VEGETABLE VENDOR
+Alright, alright. Three dollars it is.
+
+SOLOMON
+See you soon. Thank you. 	
+
+VEGETABLE VENDOR
+See you. Thank you my friend. 
+
+INT. APARTMENT - NIGHT
+
+Solomon returns to his apartment, carrying a bag of groceries. He places the bag on the kitchen counter and begins to unpack it.
+
+As he takes out the potatoes, he notices something strange.
+
+MOMMY
+Hey Solomon, did you get the potatoes? 
+
+SOLOMON
+Yes, Mommy. Here they are.
+
+MOMMY
+Thank you, Solomon. You're such a good son.
+
+SOLOMON
+Anything for you, Mommy.
+
+MOMMY
+By the way, did you remember to get the fish?
+
+SOLOMON
+Fish? Oh no, I completely forgot. I'll go back to the bazaar and get it right away.
+
+MOMMY
+Please hurry, Solomon. I can't wait to have my favorite fish dish.
+
+SOLOMON
+OK mom, I'll get the fish right away. 
+
+MOMMY
+Thanks. So, Lou.
+
+SOLOMON
+Close the door, Mom. 
+
+MOMMY
+See you. 
+
+EXT. BAZAAR - NIGHT
+
+Solomon rushes back to the bazaar, determined to get the fish for his mommy. He weaves through the crowd, searching for the fish vendor. Finally, he spots him.
+
+SOLOMON
+Hello, how much for a kilo of gobro?
+
+FISH VENDOR
+For you, my friend, only ten dollars.
+
+SOLOMON
+Ten dollars? That's a bit steep. Can you give me a better price?`;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fountain.parse(scriptText, true, function (result) {
+                if (result && result.html) {
+                    // Separate title page if it exists
+                    let output = "";
+                    if (result.title_page_html) {
+                        output += `<div id="script-title-page" class="title-page">${result.title_page_html.join('')}</div>`;
+                    }
+                    output += result.html.script;
+                    document.getElementById('script-container').innerHTML = output;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
