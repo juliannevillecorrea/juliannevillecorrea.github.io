@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive 3D solar dehydrator model built with FreeCAD and X3DOM">
+    <title>Solar Dehydrator - 3D Model Viewer</title>
+    
+    <!-- X3DOM Library (HTTPS, minified) -->
+    <script defer src="https://www.x3dom.org/download/x3dom.js"></script>
+    <link rel="stylesheet" href="https://www.x3dom.org/download/x3dom.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        main {
+            padding: 40px 20px;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        button {
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+        }
+        
+        .viewer-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 700px;
+        }
+        
+        x3d {
+            width: 100%;
+            max-width: 1000px;
+            height: 700px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .info-card {
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-left: 5px solid #667eea;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .info-card p, .info-card li {
+            color: #555;
+            line-height: 1.7;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+        
+        .info-card ul {
+            margin-left: 20px;
+        }
+        
+        .info-card strong {
+            color: #667eea;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            x3d {
+                height: 500px;
+            }
+            
+            .viewer-container {
+                min-height: 500px;
+            }
+            
+            .controls {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            main {
+                padding: 20px 15px;
+            }
+            
+            header {
+                padding: 30px 15px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            x3d {
+                height: 350px;
+            }
+            
+            .viewer-container {
+                min-height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>☀️ Solar Dehydrator</h1>
+            <p class="subtitle">Interactive 3D Model Viewer</p>
+        </header>
+        
+        <main>
+            <div class="controls">
+                <button onclick="switchView('Iso')">📐 Isometric</button>
+                <button onclick="switchView('Front')">👁️ Front</button>
+                <button onclick="switchView('Back')">🔄 Back</button>
+                <button onclick="switchView('Right')">➡️ Right</button>
+                <button onclick="switchView('Left')">⬅️ Left</button>
+                <button onclick="switchView('Top')">⬆️ Top</button>
+                <button onclick="switchView('Bottom')">⬇️ Bottom</button>
+            </div>
+            
+            <div class="viewer-container">
+                <x3d>
+                    <scene>
+                        <viewpoint id="Iso" centerofrotation="0 167.309 308.544" position="950.147 -782.838 1258.69" orientation="0.742906 0.307722 0.594473 1.21712" fieldofview="0.9" description="Isometric View"></viewpoint>
+                        <viewpoint id="Front" centerofrotation="0 167.309 308.544" position="0 -1478.4 308.544" orientation="1 0 0 1.5708" fieldofview="0.9" description="Front View"></viewpoint>
+                        <viewpoint id="Back" centerofrotation="0 167.309 308.544" position="0 1813.01 308.544" orientation="0 0.707107 0.707107 3.14159" fieldofview="0.9" description="Back View"></viewpoint>
+                        <viewpoint id="Right" centerofrotation="0 167.309 308.544" position="1645.7 167.309 308.544" orientation="0.57735 0.57735 0.57735 2.0944" fieldofview="0.9" description="Right View"></viewpoint>
+                        <viewpoint id="Left" centerofrotation="0 167.309 308.544" position="-1645.7 167.309 308.544" orientation="-0.57735 0.57735 0.57735 4.18879" fieldofview="0.9" description="Left View"></viewpoint>
+                        <viewpoint id="Top" centerofrotation="0 167.309 308.544" position="0 167.309 1954.25" orientation="0 0 1 0" fieldofview="0.9" description="Top View"></viewpoint>
+                        <viewpoint id="Bottom" centerofrotation="0 167.309 308.544" position="0 167.309 -1337.16" orientation="1 0 0 3.14159" fieldofview="0.9" description="Bottom View"></viewpoint>
+                        
+                        <background skycolor="0.9 0.9 1"></background>
+                        
+                        <group>
+                            <group def="o0">
+                                <group def="o1">
+                                    <transform translation="0 0 0" rotation="0 0 1 0" scale="1 1 1" centerofrotation="0 0 0">
+                                        <group def="o3">
+                                            <group def="o4">
+                                                <transform translation="0 0 0" rotation="0 0 1 0" scale="1 1 1" centerofrotation="0 0 0"></transform>
+                                            </group>
+                                            <group def="o6">
+                                                <transform translation="0 0 0" rotation="0 0 1 0" scale="1 1 1" centerofrotation="0 0 0">
+                                                    <group def="o8">
+                                                        <group def="o9">
+                                                            <shape def="o10">
+                                                                <appearance def="o11">
+                                                                    <material def="o12" emissivecolor="0.098 0.098 0.098"></material>
+                                                                </appearance>
+                                                                <pointset def="o13">
+                                                                    <coordinate def="o14" point=\"193 -163 -180, 193 -163 -12, 193 -133 -180, 193 -133 -12, 223 -163 -180, 223 -163 0, 193 -163 -180, 193 -163 -12, -193 -163 -12, -193 -163 -180, -223 -163 -180, -223 -163 0\"></coordinate>\n                                                                </pointset>\n                                                            </shape>\n                                                        </group>\n                                                        <group def=\"o15\">\n                                                            <shape def=\"o16\">\n                                                                <appearance def=\"o17\">\n                                                                    <material def=\"o18\" diffusecolor=\"0.098 0.098 0.098\" shininess=\"1\"></material>\n                                                                </appearance>\n                                                                <indexedlineset def=\"o19\" coordindex=\"0, 1, -1, 0, 2, -1, 2, 3, -1, 1, 3, -1, 4, 5, -1, 6, 4, -1, 8, 7, -1, 9, 8, -1, 10, 9, -1, 10, 11, -1, 5, 11\">\n                                                                    <coordinate use=\"o14\"></coordinate>\n                                                                </indexedlineset>\n                                                            </shape>\n                                                        </group>\n                                                        <group def=\"o20\">\n                                                            <shape def=\"o21\">\n                                                                <appearance def=\"o22\">\n                                                                    <material def=\"o23\" diffusecolor=\"0.8 0.8 0.902\" ambientintensity=\"0.333\" specularcolor=\"0.533 0.533 0.533\" shininess=\"0.9\"></material>\n                                                                </appearance>\n                                                                <indexedfaceset def=\"o24\" coordindex=\"0, 1, 2, -1, 2, 1, 3, -1, 9, 8, 10, -1, 10, 8, 11, -1, 4, 7, 6, -1, 4, 5, 7, -1, 5, 11, 7, -1, 7, 11, 8, -1\" ccw=\"true\" solid=\"false\" convex=\"true\" creaseangle=\"0.5\">\n                                                                    <coordinate use=\"o14\"></coordinate>\n                                                                </indexedfaceset>\n                                                            </shape>\n                                                        </group>\n                                                    </group>\n                                                </transform>\n                                            </group>\n                                            <group def=\"o25\">\n                                                <transform translation=\"0 0 0\" rotation=\"0 0 1 0\" scale=\"1 1 1\" centerofrotation=\"0 0 0\">\n                                                    <group def=\"o27\">\n                                                        <group def=\"o28\">\n                                                            <shape def=\"o29\">\n                                                                <appearance def=\"o30\">\n                                                                    <material def=\"o31\" emissivecolor=\"0.098 0.098 0.098\"></material>\n                                                                </appearance>\n                                                                <pointset def=\"o32\">\n                                                                    <coordinate def=\"o33\" point=\"-250 -190 0, -250 -190 480, -250 190 0, -250 190 480, -250 -190 0, 250 -190 0, -250 -190 480, 250 -190 480, -226 -190 456, 226 -190 456, -226 -190 24, -125 -190 24\"></coordinate>\n                                                                </pointset>\n                                                            </shape>\n                                                        </group>\n                                                        <group def=\"o34\">\n                                                            <shape def=\"o35\">\n                                                                <appearance def=\"o36\">\n                                                                    <material def=\"o37\" diffusecolor=\"0.098 0.098 0.098\" shininess=\"1\"></material>\n                                                                </appearance>\n                                                                <indexedlineset def=\"o38\" coordindex=\"0, 1, -1, 0, 2, -1, 2, 3, -1, 1, 3, -1, 4, 5, -1, 6, 7, -1, 5, 7, -1, 8, 9, -1, 8, 10, -1, 10, 11\">\n                                                                    <coordinate use=\"o33\"></coordinate>\n                                                                </indexedlineset>\n                                                            </shape>\n                                                        </group>\n                                                        <group def=\"o39\">\n                                                            <shape def=\"o40\">\n                                                                <appearance def=\"o41\">\n                                                                    <material def=\"o42\" diffusecolor=\"0.8 0.8 0.902\" ambientintensity=\"0.333\" specularcolor=\"0.533 0.533 0.533\" shininess=\"0.9\"></material>\n                                                                </appearance>\n                                                                <indexedfaceset def=\"o43\" coordindex=\"0, 1, 2, -1, 2, 1, 3, -1, 4, 12, 10, -1, 12, 11, 10, -1, 10, 8, 4, -1, 8, 6, 4, -1\" ccw=\"true\" solid=\"false\" convex=\"true\" creaseangle=\"0.5\">\n                                                                    <coordinate use=\"o33\"></coordinate>\n                                                                </indexedfaceset>\n                                                            </shape>\n                                                        </group>\n                                                    </group>\n                                                </transform>\n                                            </group>\n                                        </group>\n                                    </transform>\n                                </group>\n                            </group>\n                        </group>\n                    </scene>\n                </x3d>\n            </div>\n            
+            <div class=\"info-grid\">\n                <div class=\"info-card\">\n                    <h3>🎮 Controls</h3>\n                    <ul>\n                        <li><strong>Click & Drag:</strong> Rotate the model</li>\n                        <li><strong>Scroll:</strong> Zoom in/out</li>\n                        <li><strong>Right-Click & Drag:</strong> Pan the view</li>\n                        <li><strong>View Buttons:</strong> Preset camera angles</li>\n                    </ul>\n                </div>\n                \n                <div class=\"info-card\">\n                    <h3>📊 Model Information</h3>\n                    <ul>\n                        <li><strong>Format:</strong> X3D 3.2</li>\n                        <li><strong>Rendering:</strong> WebGL</li>\n                        <li><strong>Source:</strong> FreeCAD</li>\n                        <li><strong>Performance:</strong> Optimized</li>\n                    </ul>\n                </div>\n                \n                <div class=\"info-card\">\n                    <h3>⚡ Features</h3>\n                    <ul>\n                        <li>7 preset camera viewpoints</li>\n                        <li>Real-time 3D rendering</li>\n                        <li>Hardware-accelerated WebGL</li>\n                        <li>Fully responsive design</li>\n                    </ul>\n                </div>\n            </div>\n        </main>\n        \n        <footer>\n            <p>Solar Dehydrator 3D Model • Built with FreeCAD & X3DOM • <a href=\"https://github.com/chickengoat/juliannevillecorrea.github.io\" style=\"color: #667eea; text-decoration: none;\">View Source</a></p>\n        </footer>\n    </div>\n    
+    <script>\n        // Switch to specified viewpoint\n        function switchView(viewpointId) {\n            const viewpoint = document.getElementById(viewpointId);\n            if (viewpoint) {\n                viewpoint.setAttribute('set_bind', 'true');\n            }\n        }\n        \n        // Initialize on page load\n        window.addEventListener('load', function() {\n            // Set default view to Isometric\n            switchView('Iso');\n            \n            // Reload X3DOM if available\n            if (window.x3dom) {\n                x3dom.reload();\n            }\n        });\n    </script>\n</body>\n</html>
