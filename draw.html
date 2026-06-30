@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Technical Drawing Viewer</title>
+    <style>
+        body { margin: 0; background-color: #f0f0f0; font-family: sans-serif; overflow: hidden; }
+        #info { position: absolute; top: 10px; width: 100%; text-align: center; color: #333; pointer-events: none; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <div id="info">3D Model of Fig 1(a)<br>Click and drag to rotate | Scroll to zoom</div>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- Scene Setup ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xfafafa);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.set(80, 80, 100);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // --- Lighting ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(50, 100, 50);
+        scene.add(dirLight);
+
+        // --- Object Construction ---
+        // We create the object using the dimensions from Fig 1(a)
+        // W=50, H=40, D=30
+        const material = new THREE.MeshPhongMaterial({ color: 0xeeeeee, flatShading: true });
+        const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 });
+
+        function createBlock(w, h, d, x, y, z) {
+            const geometry = new THREE.BoxGeometry(w, h, d);
+            const mesh = new THREE.Mesh(geometry, material);
+            
+            // Add wireframe edges for the technical drawing look
+            const edges = new THREE.EdgesGeometry(geometry);
+            const line = new THREE.LineSegments(edges, edgeMaterial);
+            mesh.add(line);
+
+            // Position (Three.js uses center points)
+            mesh.position.set(x + w/2, y + h/2, z + d/2);
+            return mesh;
+        }
+
+        const modelGroup = new THREE.Group();
+
+        // 1. Right Tall Section (Width 15, Height 40, Depth 30)
+        modelGroup.add(createBlock(15, 40, 30, 35, 0, 0));
+
+        // 2. Left Back Corner (Width 15, Height 40, Depth 10)
+        modelGroup.add(createBlock(15, 40, 10, 0, 0, 0));
+
+        // 3. Middle Back Connector (Width 20, Height 25, Depth 10)
+        modelGroup.add(createBlock(20, 25, 10, 15, 0, 0));
+
+        // 4. Front Lower Section (Width 35, Height 25, Depth 20)
+        modelGroup.add(createBlock(35, 25, 20, 0, 0, 10));
+
+        // Center the model group
+        const box = new THREE.Box3().setFromObject(modelGroup);
+        const center = box.getCenter(new THREE.Vector3());
+        modelGroup.position.sub(center);
+        
+        scene.add(modelGroup);
+
+        // --- Helpers ---
+        const grid = new THREE.GridHelper(200, 20, 0xcccccc, 0xeeeeee);
+        grid.position.y = -20;
+        scene.add(grid);
+
+        // --- Animation ---
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
