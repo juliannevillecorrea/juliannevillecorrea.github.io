@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Karigar's Fraction Ledger — Grade 10 Practice</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Hind:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --indigo: #2E3B6E;
+    --indigo-dark: #1B2148;
+    --marigold: #E3A93B;
+    --marigold-dark: #B9812A;
+    --madder: #A6392F;
+    --khadi: #F1E7D0;
+    --khadi-deep: #E6D8B4;
+    --ink: #241F18;
+    --slate: #5B5140;
+    --thread-green: #3E6B4E;
+    --paper-line: rgba(36,31,24,0.12);
+    --radius: 10px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--khadi);
+    background-image:
+      repeating-linear-gradient(180deg, transparent 0 38px, var(--paper-line) 38px 39px);
+    color: var(--ink);
+    font-family: 'Hind', sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    padding-bottom: 60px;
+  }
+
+  h1,h2,h3,h4{ font-family:'Baloo 2', sans-serif; margin: 0 0 .4em 0; color: var(--indigo-dark); }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-size: .72rem;
+    color: var(--madder);
+    font-weight: 700;
+  }
+
+  a{ color: var(--indigo); }
+
+  /* ---------- STITCH DIVIDER (signature motif) ---------- */
+  .stitch{
+    height: 14px;
+    margin: 34px auto;
+    max-width: 900px;
+    background-image: radial-gradient(circle, var(--madder) 2.2px, transparent 2.3px);
+    background-size: 22px 14px;
+    background-repeat: repeat-x;
+    opacity: .55;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background: var(--indigo);
+    background-image:
+      linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 22px),
+      linear-gradient(var(--indigo), var(--indigo-dark));
+    color: var(--khadi);
+    padding: 56px 24px 64px;
+    text-align:center;
+    position: relative;
+    border-bottom: 8px solid var(--marigold);
+  }
+  .hero h1{
+    color: #fff;
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: .3em;
+  }
+  .hero .subtitle{
+    max-width: 680px;
+    margin: 0 auto 18px;
+    color: var(--khadi-deep);
+    font-size: 1.05rem;
+  }
+  .hero .badge-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:22px;}
+  .hero .badge{
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: .82rem;
+    font-family:'JetBrains Mono', monospace;
+  }
+  .hero .stamp{
+    display:inline-block; margin-top: 24px;
+    border: 2px solid var(--marigold);
+    color: var(--marigold);
+    font-family:'JetBrains Mono', monospace;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transform: rotate(-3deg);
+    font-size: .78rem;
+    letter-spacing: .08em;
+  }
+
+  main{ max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+  .anecdote{
+    background: #fff8ea;
+    border-left: 5px solid var(--marigold);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 18px 22px;
+    margin: 28px 0;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+    font-size: .97rem;
+  }
+  .anecdote .tag{ font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--madder); font-weight:700; letter-spacing:.06em;}
+
+  section{ margin-top: 46px; }
+  .section-head{ display:flex; align-items:baseline; gap:12px; margin-bottom: 6px;}
+  .section-head .num{ font-family:'JetBrains Mono',monospace; color: var(--marigold-dark); font-weight:700; }
+
+  /* ---------- ACCORDION (theory) ---------- */
+  .accordion{ border: 1px solid var(--paper-line); border-radius: var(--radius); overflow:hidden; background:#fffdf7; }
+  .acc-item + .acc-item{ border-top: 1px solid var(--paper-line); }
+  .acc-head{
+    width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    padding: 14px 18px; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:1.02rem;
+    display:flex; justify-content:space-between; align-items:center; color: var(--indigo-dark);
+  }
+  .acc-head:hover{ background: rgba(46,59,110,0.05); }
+  .acc-head .chev{ transition: transform .2s ease; font-size:.85rem; color:var(--madder);}
+  .acc-item.open .acc-head .chev{ transform: rotate(90deg); }
+  .acc-body{ max-height:0; overflow:hidden; transition: max-height .25s ease; padding: 0 18px; }
+  .acc-item.open .acc-body{ padding: 4px 18px 18px; }
+  .rule-box{ background: var(--khadi); border-radius: 8px; padding: 10px 14px; margin: 8px 0; font-size:.95rem;}
+
+  /* ---------- TABS (trade stalls) ---------- */
+  .tab-row{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom: 0; }
+  .tab-btn{
+    font-family:'Baloo 2',sans-serif; font-weight:700; font-size: .92rem;
+    background: var(--khadi-deep); border: 1px solid var(--paper-line);
+    border-bottom: none;
+    padding: 10px 16px 8px;
+    border-radius: 10px 10px 0 0;
+    cursor:pointer; color: var(--slate);
+    position:relative; top:1px;
+  }
+  .tab-btn.active{
+    background:#fffdf7; color: var(--indigo-dark);
+    border-color: var(--paper-line);
+    box-shadow: 0 -2px 0 var(--marigold) inset;
+  }
+  .tab-panel{
+    display:none;
+    background:#fffdf7;
+    border:1px solid var(--paper-line);
+    border-radius: 0 var(--radius) var(--radius) var(--radius);
+    padding: 22px;
+  }
+  .tab-panel.active{ display:block; }
+  .ledger-entry{
+    font-family:'JetBrains Mono', monospace; font-size:.75rem; color: var(--madder);
+    letter-spacing:.05em; margin-bottom: 6px;
+  }
+  .problem-card .prompt{ font-size: 1.05rem; margin: 6px 0 14px; }
+  .btn-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+  button.action{
+    font-family:'Baloo 2',sans-serif; font-weight:700; font-size:.92rem;
+    background: var(--indigo); color:#fff; border:none; border-radius: 8px;
+    padding: 9px 18px; cursor:pointer; transition: transform .08s ease, background .15s;
+  }
+  button.action:hover{ background: var(--indigo-dark); }
+  button.action:active{ transform: scale(0.97); }
+  button.action.secondary{ background: transparent; color: var(--indigo); border: 1.5px solid var(--indigo); }
+  button.action.secondary:hover{ background: rgba(46,59,110,0.08); }
+  .solution-box{
+    margin-top: 14px; background: var(--khadi); border-radius: 8px;
+    padding: 14px 16px; display:none; font-size:.96rem;
+  }
+  .solution-box.visible{ display:block; }
+  .solution-box ol{ margin: 6px 0 0 18px; padding:0; }
+  .solution-box li{ margin-bottom: 6px; }
+
+  /* ---------- DRILL ENGINE ---------- */
+  .drill-card{
+    background:#fffdf7; border:1px solid var(--paper-line); border-radius: var(--radius);
+    padding: 22px;
+  }
+  .difficulty-row, .op-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px;}
+  .chip{
+    font-family:'JetBrains Mono',monospace; font-size:.78rem;
+    border: 1.5px solid var(--indigo); color: var(--indigo);
+    background: transparent; border-radius: 999px; padding: 6px 14px; cursor:pointer;
+  }
+  .chip.selected{ background: var(--indigo); color:#fff; }
+  .question-display{ font-size: 1.35rem; margin: 18px 0; min-height: 40px; }
+  .answer-form{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top: 10px;}
+  .frac-input{ display:flex; flex-direction:column; align-items:center; }
+  .frac-input input{
+    width: 64px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:1.05rem;
+    border: 1.5px solid var(--paper-line); border-radius: 6px; padding: 6px 4px;
+  }
+  .frac-input .bar{ width:64px; height:2px; background: var(--ink); margin: 3px 0; }
+  .feedback{ font-weight: 700; margin-top: 10px; min-height: 1.4em; }
+  .feedback.correct{ color: var(--thread-green); }
+  .feedback.wrong{ color: var(--madder); }
+
+  /* ---------- TAPE MEASURE SCORE TRACKER ---------- */
+  .tape-wrap{
+    max-width: 980px; margin: 20px auto 0; background:#fffdf7;
+    border: 1px solid var(--paper-line); border-radius: var(--radius);
+    padding: 16px 20px;
+  }
+  .tape-label{ display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:.8rem; color: var(--slate); margin-bottom:8px;}
+  .tape{
+    position:relative; height: 34px; border-radius: 6px; overflow:hidden;
+    background: repeating-linear-gradient(90deg, var(--khadi-deep) 0 18px, #fffdf7 18px 20px);
+    border: 1px solid var(--paper-line);
+  }
+  .tape-fill{
+    position:absolute; top:0; left:0; height:100%; background: var(--marigold);
+    width: 0%; transition: width .4s ease; opacity:.55;
+  }
+  .tape-ticks{ position:absolute; inset:0; display:flex; }
+  .tape-ticks span{ flex:1; border-right:1px solid rgba(36,31,24,0.15); }
+  .streak-msg{ font-size:.85rem; margin-top:8px; color: var(--madder); font-weight:600; min-height:1.3em;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    text-align:center; margin-top: 60px; padding: 30px 20px;
+    color: var(--slate); font-size:.85rem;
+  }
+  footer .stamp2{
+    font-family:'JetBrains Mono',monospace; color: var(--madder); font-weight:700;
+  }
+
+  .grid-2{ display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px){ .grid-2{ grid-template-columns: 1fr; } }
+
+  .fact-card{
+    background:#fff8ea; border:1px dashed var(--marigold-dark); border-radius: var(--radius);
+    padding: 14px 16px; font-size:.92rem;
+  }
+  .fact-card .tag{ font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--madder); font-weight:700;}
+
+  .visually-hidden-focusable:focus{ outline: 3px solid var(--marigold); outline-offset:2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow" style="color:var(--marigold);">Skill India · CBSE Grade 10 · Number Systems &amp; Arithmetic</div>
+  <h1>The Karigar's Fraction Ledger</h1>
+  <p class="subtitle">
+    Every tailor's tape, every carpenter's plank, every farmer's field is measured in fractions.
+    This ledger turns Grade 10 fraction practice into the everyday arithmetic of India's <em>karigars</em> —
+    skilled craftspeople — so you can practise as much as you like, in as many contexts as you like.
+  </p>
+  <div class="badge-row">
+    <span class="badge">40+ trade word problems</span>
+    <span class="badge">Unlimited auto-generated drills</span>
+    <span class="badge">Step-by-step solutions</span>
+    <span class="badge">MathJax-rendered notation</span>
+  </div>
+  <div class="stamp">ENTRY OPEN &nbsp;·&nbsp; NO LOGIN &nbsp;·&nbsp; PRACTISE AT LENGTH</div>
+</div>
+
+<main>
+
+<div class="anecdote">
+  <div class="tag">LEDGER NOTE, PAGE 1</div>
+  <p style="margin:6px 0 0;">
+    Meera runs a small tailoring stall near the market. One morning a customer wants a kurta that needs
+    2⅓ metres of cloth, but Meera has only a 5¾ metre roll left after the last order. Before she can quote
+    a price or promise a delivery date, she has to know: <em>how much cloth will be left over, and is it enough
+    for the matching dupatta?</em> That question — asked in a hundred different forms by tailors, carpenters,
+    electricians and farmers across the country's Skill India training centres every single day — is exactly
+    what this page will get you fluent in.
+  </p>
+</div>
+
+<div class="stitch"></div>
+
+<!-- ============ SECTION 1: THEORY RECAP ============ -->
+<section id="theory">
+  <div class="section-head"><span class="num">01</span><h2>The Rule Book</h2></div>
+  <p>Five entries every karigar — and every Grade 10 student — keeps at the front of the ledger. Tap each one open.</p>
+
+  <div class="accordion" id="accordion"></div>
+</section>
+
+<div class="stitch"></div>
+
+<!-- ============ SECTION 2: TRADE STALLS ============ -->
+<section id="stalls">
+  <div class="section-head"><span class="num">02</span><h2>The Trade Stalls</h2></div>
+  <p>
+    Five stalls, five trades, all supported under India's Skill Development Mission. Pick a stall, work the
+    problem in your notebook first, then reveal the ledger's own working to check yourself.
+  </p>
+
+  <div class="tab-row" id="tabRow"></div>
+  <div id="tabPanels"></div>
+</section>
+
+<div class="stitch"></div>
+
+<!-- ============ SECTION 3: DRILL ENGINE ============ -->
+<section id="drill">
+  <div class="section-head"><span class="num">03</span><h2>The Practice Bench</h2></div>
+  <p>No word problems here — just pure fraction arithmetic, generated fresh every time you click. Choose a skill and a difficulty, then drill for as long as you need.</p>
+
+  <div class="drill-card">
+    <div class="op-row" id="opRow"></div>
+    <div class="difficulty-row" id="diffRow"></div>
+
+    <div class="question-display" id="questionDisplay">Press "New Question" to begin.</div>
+
+    <div class="answer-form" id="answerForm"></div>
+
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="action" id="newQBtn">New Question</button>
+      <button class="action secondary" id="checkBtn">Check Answer</button>
+      <button class="action secondary" id="revealBtn">Show Working</button>
+    </div>
+
+    <div class="feedback" id="drillFeedback"></div>
+    <div class="solution-box" id="drillSolution"></div>
+  </div>
+</section>
+
+<div class="tape-wrap">
+  <div class="tape-label"><span>PROGRESS TAPE</span><span id="scoreText">0 / 0 correct</span></div>
+  <div class="tape">
+    <div class="tape-fill" id="tapeFill"></div>
+    <div class="tape-ticks">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+  <div class="streak-msg" id="streakMsg"></div>
+</div>
+
+<div class="stitch"></div>
+
+<!-- ============ SECTION 4: DID YOU KNOW ============ -->
+<section id="facts">
+  <div class="section-head"><span class="num">04</span><h2>Notes From the Margins</h2></div>
+  <div class="grid-2" id="factsGrid"></div>
+</section>
+
+<div class="stitch"></div>
+
+<!-- ============ SECTION 5: TIMED CHALLENGE ============ -->
+<section id="challenge">
+  <div class="section-head"><span class="num">05</span><h2>The Ten-Entry Challenge</h2></div>
+  <p>Ten mixed questions — trade word problems and pure drills, shuffled together. See how many you can get right. There is no timer pressure here; take the time you need to think it through properly.</p>
+  <div class="drill-card">
+    <div id="challengeArea"><button class="action" id="startChallengeBtn">Start the Challenge</button></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>Practice recorded only in this browser tab — refresh to reset your tape, no account needed.</p>
+  <p class="stamp2">— THE KARIGAR'S LEDGER · MADE FOR GRADE 10 PRACTICE —</p>
+</footer>
+
+<script>
+/* =========================================================
+   FRACTION MATH HELPERS
+   ========================================================= */
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; }
+function lcm(a,b){ return Math.abs(a*b)/gcd(a,b); }
+function simplify(n,d){
+  if(d<0){ n=-n; d=-d; }
+  const g=gcd(n,d);
+  return {n: n/g, d: d/g};
+}
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function fracTeX(n,d){
+  if(d===1) return `${n}`;
+  if(n<0) return `-\\frac{${Math.abs(n)}}{${d}}`;
+  return `\\frac{${n}}{${d}}`;
+}
+function toMixedTeX(n,d){
+  const s = simplify(n,d);
+  const neg = s.n<0; const nAbs=Math.abs(s.n);
+  const whole = Math.floor(nAbs/s.d);
+  const rem = nAbs % s.d;
+  const sign = neg? '-':'';
+  if(rem===0) return `${sign}${whole}`;
+  if(whole===0) return `${sign}\\frac{${rem}}{${s.d}}`;
+  return `${sign}${whole}\\frac{${rem}}{${s.d}}`;
+}
+function equalFractions(n1,d1,n2,d2){
+  return n1*d2 === n2*d1;
+}
+function typeset(){
+  if(window.MathJax && window.MathJax.typesetPromise){
+    MathJax.typesetPromise();
+  }
+}
+
+/* =========================================================
+   SECTION 1 — THEORY ACCORDION
+   ========================================================= */
+const RULES = [
+  {
+    title: "Adding &amp; Subtracting Fractions",
+    body: `
+      <div class="rule-box">Same denominator: $\\dfrac{a}{c} + \\dfrac{b}{c} = \\dfrac{a+b}{c}$</div>
+      <div class="rule-box">Different denominators — find the LCD first, then combine:
+        $\\dfrac{a}{b} + \\dfrac{c}{d} = \\dfrac{ad+bc}{bd}$</div>
+      <p>Worked check: $\\dfrac{2}{3} + \\dfrac{5}{6}$. LCD of 3 and 6 is 6, so $\\dfrac{4}{6}+\\dfrac{5}{6}=\\dfrac{9}{6}=\\dfrac{3}{2}=1\\dfrac{1}{2}$.</p>`
+  },
+  {
+    title: "Multiplying Fractions",
+    body: `
+      <div class="rule-box">$\\dfrac{a}{b} \\times \\dfrac{c}{d} = \\dfrac{a \\times c}{b \\times d}$</div>
+      <p>No common denominator needed — multiply straight across, then simplify. Example:
+      $\\dfrac{2}{3} \\times \\dfrac{9}{10} = \\dfrac{18}{30} = \\dfrac{3}{5}$.</p>`
+  },
+  {
+    title: "Dividing Fractions",
+    body: `
+      <div class="rule-box">$\\dfrac{a}{b} \\div \\dfrac{c}{d} = \\dfrac{a}{b} \\times \\dfrac{d}{c}$</div>
+      <p>Flip the second fraction (its reciprocal) and multiply. Example:
+      $\\dfrac{5}{6} \\div \\dfrac{2}{3} = \\dfrac{5}{6} \\times \\dfrac{3}{2} = \\dfrac{15}{12} = \\dfrac{5}{4}$.</p>`
+  },
+  {
+    title: "Mixed Numbers ⇄ Improper Fractions",
+    body: `
+      <div class="rule-box">$a\\dfrac{b}{c} = \\dfrac{(a \\times c) + b}{c}$</div>
+      <p>Always convert mixed numbers to improper fractions before adding, subtracting, multiplying or dividing.
+      Example: $2\\dfrac{3}{4} = \\dfrac{(2\\times4)+3}{4} = \\dfrac{11}{4}$.</p>`
+  },
+  {
+    title: "Comparing Fractions",
+    body: `
+      <div class="rule-box">For positive denominators: $\\dfrac{a}{b} > \\dfrac{c}{d} \\iff a \\times d > c \\times b$</div>
+      <p>This is cross-multiplication — no need to find a common denominator just to compare two fractions.
+      Example: is $\\dfrac{5}{8}$ bigger than $\\dfrac{3}{5}$? Check $5\\times5=25$ vs $3\\times8=24$. Since $25>24$,
+      $\\dfrac{5}{8} > \\dfrac{3}{5}$.</p>`
+  }
+];
+
+function buildAccordion(){
+  const wrap = document.getElementById('accordion');
+  RULES.forEach((r,i)=>{
+    const item = document.createElement('div');
+    item.className = 'acc-item' + (i===0 ? ' open':'');
+    item.innerHTML = `
+      <button class="acc-head" aria-expanded="${i===0}">
+        <span>${r.title}</span><span class="chev">▶</span>
+      </button>
+      <div class="acc-body">${r.body}</div>`;
+    wrap.appendChild(item);
+    const head = item.querySelector('.acc-head');
+    const body = item.querySelector('.acc-body');
+    function sync(){
+      body.style.maxHeight = item.classList.contains('open') ? body.scrollHeight + 'px' : '0px';
+    }
+    head.addEventListener('click', ()=>{
+      item.classList.toggle('open');
+      head.setAttribute('aria-expanded', item.classList.contains('open'));
+      sync();
+    });
+    if(i===0) requestAnimationFrame(sync);
+  });
+}
+
+/* =========================================================
+   SECTION 2 — TRADE WORD PROBLEM BANKS
+   ========================================================= */
+const TRADES = [
+  {
+    id:'tailor', name:"Tailoring — Meera's Silai Stall",
+    problems:[
+      {p:"Meera has a 5¾ m roll of cloth. She uses 2⅓ m to stitch a kurta. How much cloth is left?",
+       steps:["Convert to improper fractions: $5\\frac{3}{4}=\\frac{23}{4}$, $2\\frac{1}{3}=\\frac{7}{3}$.",
+              "LCD of 4 and 3 is 12: $\\frac{23}{4}=\\frac{69}{12}$, $\\frac{7}{3}=\\frac{28}{12}$.",
+              "Subtract: $\\frac{69}{12}-\\frac{28}{12}=\\frac{41}{12}$.",
+              "As a mixed number: $\\frac{41}{12}=3\\frac{5}{12}$ m."],
+       ans:"$3\\frac{5}{12}$ m of cloth remain."},
+      {p:"Each shirt needs 1½ m of cloth. How much cloth does Meera need to stitch 8 shirts?",
+       steps:["$1\\frac{1}{2}=\\frac{3}{2}$.","Multiply by 8: $\\frac{3}{2}\\times8=\\frac{24}{2}=12$."],
+       ans:"12 metres of cloth."},
+      {p:"From a 9 m roll, Meera cuts pocket squares of ¾ m each. How many complete pocket squares can she cut?",
+       steps:["Divide: $9\\div\\frac{3}{4}=9\\times\\frac{4}{3}=\\frac{36}{3}=12$."],
+       ans:"12 pocket squares."},
+      {p:"Three fabric scraps measure ⅔ m, ⅚ m and ½ m. What is their total length?",
+       steps:["LCD of 3, 6, 2 is 6: $\\frac{4}{6}+\\frac{5}{6}+\\frac{3}{6}$.","Sum: $\\frac{12}{6}=2$."],
+       ans:"2 metres in total."},
+      {p:"A blouse pattern uses ⅜ m of cloth per sleeve. How much cloth do both sleeves use together?",
+       steps:["Multiply by 2: $\\frac{3}{8}\\times2=\\frac{6}{8}$.","Simplify: $\\frac{6}{8}=\\frac{3}{4}$."],
+       ans:"$\\frac{3}{4}$ m for both sleeves."},
+      {p:"Out of a 10 m bolt, ⅗ has been used for school uniforms. How many metres remain unused?",
+       steps:["Used: $\\frac{3}{5}\\times10=6$ m.","Remaining: $10-6=4$ m."],
+       ans:"4 metres remain."},
+      {p:"A suit needs 2¼ m for the jacket and 1⅝ m for the trousers. What total length of cloth is required?",
+       steps:["Convert: $2\\frac{1}{4}=\\frac{9}{4}=\\frac{18}{8}$, $1\\frac{5}{8}=\\frac{13}{8}$.",
+              "Add: $\\frac{18}{8}+\\frac{13}{8}=\\frac{31}{8}$.","As a mixed number: $3\\frac{7}{8}$ m."],
+       ans:"$3\\frac{7}{8}$ metres."},
+      {p:"Meera is paid ₹450 for finishing ¾ of a wedding lehenga, with the rest paid on completion. What is the full stitching charge?",
+       steps:["Let the full charge be $x$: $\\frac{3}{4}x=450$.","Solve: $x=450\\times\\frac{4}{3}=600$."],
+       ans:"₹600 is the full stitching charge."}
+    ]
+  },
+  {
+    id:'carpenter', name:"Carpentry — Suresh's Workshop",
+    problems:[
+      {p:"A plank is 7½ ft long. Suresh cuts off 2⅚ ft for a shelf. What length of plank remains?",
+       steps:["Convert: $7\\frac{1}{2}=\\frac{15}{2}$, $2\\frac{5}{6}=\\frac{17}{6}$.",
+              "LCD of 2 and 6 is 6: $\\frac{15}{2}=\\frac{45}{6}$.",
+              "Subtract: $\\frac{45}{6}-\\frac{17}{6}=\\frac{28}{6}=\\frac{14}{3}$.",
+              "As a mixed number: $4\\frac{2}{3}$ ft."],
+       ans:"$4\\frac{2}{3}$ ft remain."},
+      {p:"Each table leg uses ¾ ft of wood. How much wood is needed for one 4-legged table?",
+       steps:["Multiply by 4: $\\frac{3}{4}\\times4=3$."],
+       ans:"3 feet of wood."},
+      {p:"A door frame uses ⅔ of a plank and a window frame uses ¼ of the same-sized plank. What fraction of a plank do the two frames use together?",
+       steps:["LCD of 3 and 4 is 12: $\\frac{8}{12}+\\frac{3}{12}$.","Sum: $\\frac{11}{12}$."],
+       ans:"$\\frac{11}{12}$ of a plank."},
+      {p:"Suresh has 15 ft of board and wants pieces of 2½ ft each. How many complete pieces can he cut?",
+       steps:["Divide: $15\\div\\frac{5}{2}=15\\times\\frac{2}{5}=\\frac{30}{5}=6$."],
+       ans:"6 pieces exactly."},
+      {p:"Suresh varnishes ⅝ of a cupboard on day one and ¼ more on day two. What fraction is varnished in total, and what fraction is left?",
+       steps:["LCD of 8 and 4 is 8: $\\frac{5}{8}+\\frac{2}{8}=\\frac{7}{8}$ varnished.","Remaining: $1-\\frac{7}{8}=\\frac{1}{8}$."],
+       ans:"$\\frac{7}{8}$ varnished, $\\frac{1}{8}$ left."},
+      {p:"Of 24 chairs ordered, ⅜ have been polished. How many chairs are polished, and how many remain?",
+       steps:["Polished: $\\frac{3}{8}\\times24=9$.","Remaining: $24-9=15$."],
+       ans:"9 polished, 15 remaining."},
+      {p:"A beam of length 11/3 m is divided into 2 equal pieces. What is the length of each piece?",
+       steps:["Divide: $\\frac{11}{3}\\div2=\\frac{11}{3}\\times\\frac{1}{2}=\\frac{11}{6}$.","As a mixed number: $1\\frac{5}{6}$ m."],
+       ans:"$1\\frac{5}{6}$ metres each."},
+      {p:"A wardrobe costs ₹3600 in materials, and wood makes up 5/9 of that cost. What is the cost of the wood, and what is spent on everything else?",
+       steps:["Wood cost: $\\frac{5}{9}\\times3600=2000$.","Rest: $3600-2000=1600$."],
+       ans:"Wood: ₹2000. Everything else: ₹1600."}
+    ]
+  },
+  {
+    id:'farmer', name:"Farming — Rukmini's Field",
+    problems:[
+      {p:"Rukmini owns 8½ acres and plants rice on ⅗ of the land. How many acres are under rice?",
+       steps:["Convert: $8\\frac{1}{2}=\\frac{17}{2}$.","Multiply: $\\frac{17}{2}\\times\\frac{3}{5}=\\frac{51}{10}$.","As a mixed number: $5\\frac{1}{10}$ acres."],
+       ans:"$5\\frac{1}{10}$ acres of rice."},
+      {p:"¼ of the field grows wheat and ⅖ grows pulses. What fraction of the field is used, and what fraction is left fallow?",
+       steps:["LCD of 4 and 5 is 20: $\\frac{5}{20}+\\frac{8}{20}=\\frac{13}{20}$ used.","Fallow: $1-\\frac{13}{20}=\\frac{7}{20}$."],
+       ans:"$\\frac{13}{20}$ used, $\\frac{7}{20}$ fallow."},
+      {p:"A canal irrigates one field for ¾ hour, then moves to another field for ⅚ hour. What is the total irrigation time?",
+       steps:["LCD of 4 and 6 is 12: $\\frac{9}{12}+\\frac{10}{12}=\\frac{19}{12}$.","As a mixed number: $1\\frac{7}{12}$ hours."],
+       ans:"$1\\frac{7}{12}$ hours."},
+      {p:"Rukmini harvests 250 kg of tomatoes and sells ⅗ of it at the market. How much did she sell, and how much did she keep?",
+       steps:["Sold: $\\frac{3}{5}\\times250=150$ kg.","Kept: $250-150=100$ kg."],
+       ans:"Sold 150 kg, kept 100 kg."},
+      {p:"A 5-acre plot is divided equally among 3 sons. What fraction of the plot, and how many acres, does each son get?",
+       steps:["Divide: $5\\div3=\\frac{5}{3}$.","As a mixed number: $1\\frac{2}{3}$ acres."],
+       ans:"Each gets $\\frac{5}{3}=1\\frac{2}{3}$ acres."},
+      {p:"Seed costs 2/5 kg per plant-bed, and Rukmini has 8 beds. How many kilograms of seed does she need in total?",
+       steps:["Multiply: $\\frac{2}{5}\\times8=\\frac{16}{5}$.","As a mixed number: $3\\frac{1}{5}$ kg."],
+       ans:"$3\\frac{1}{5}$ kg of seed."},
+      {p:"Out of 60 bags of fertilizer, 5/12 were used in the first week. How many bags were used, and how many remain?",
+       steps:["Used: $\\frac{5}{12}\\times60=25$.","Remaining: $60-25=35$."],
+       ans:"25 bags used, 35 remain."},
+      {p:"Field A yields ¾ tonne of wheat per acre; Field B yields ⅝ tonne per acre. Which field yields more, and by how much?",
+       steps:["Common denominator 8: $\\frac{3}{4}=\\frac{6}{8}$.","Compare: $\\frac{6}{8}>\\frac{5}{8}$, difference $=\\frac{1}{8}$ tonne."],
+       ans:"Field A yields more, by $\\frac{1}{8}$ tonne per acre."}
+    ]
+  },
+  {
+    id:'cook', name:"Catering — Chef Aslam's Kitchen",
+    problems:[
+      {p:"A recipe needs 2¼ cups of rice for 6 people. How much rice is needed for half the recipe (3 people)?",
+       steps:["Convert: $2\\frac{1}{4}=\\frac{9}{4}$.","Halve: $\\frac{9}{4}\\div2=\\frac{9}{8}$.","As a mixed number: $1\\frac{1}{8}$ cups."],
+       ans:"$1\\frac{1}{8}$ cups of rice."},
+      {p:"A syrup mixes ¾ cup sugar with ⅓ cup honey. What is the total volume of sweetener?",
+       steps:["LCD of 4 and 3 is 12: $\\frac{9}{12}+\\frac{4}{12}=\\frac{13}{12}$.","As a mixed number: $1\\frac{1}{12}$ cups."],
+       ans:"$1\\frac{1}{12}$ cups."},
+      {p:"A cake recipe needs ⅔ cup butter. How much butter is needed for 5 cakes for a catering order?",
+       steps:["Multiply: $\\frac{2}{3}\\times5=\\frac{10}{3}$.","As a mixed number: $3\\frac{1}{3}$ cups."],
+       ans:"$3\\frac{1}{3}$ cups of butter."},
+      {p:"Of a 20-litre pot of dal, 3/10 was served at lunch. How many litres were served, and how many are left?",
+       steps:["Served: $\\frac{3}{10}\\times20=6$ litres.","Left: $20-6=14$ litres."],
+       ans:"6 L served, 14 L left."},
+      {p:"A biryani recipe needs ⅞ kg rice, but Aslam only has ⅝ kg. How much more rice does he need?",
+       steps:["Subtract: $\\frac{7}{8}-\\frac{5}{8}=\\frac{2}{8}=\\frac{1}{4}$ kg."],
+       ans:"$\\frac{1}{4}$ kg more rice needed."},
+      {p:"Aslam charges ⅗ of the total catering bill as advance. If the bill is ₹15,000, what is the advance, and what remains due?",
+       steps:["Advance: $\\frac{3}{5}\\times15000=9000$.","Due: $15000-9000=6000$."],
+       ans:"Advance ₹9000, due ₹6000."},
+      {p:"A jug holds 3½ litres of buttermilk, poured equally into 7 glasses. How much does each glass hold?",
+       steps:["Convert: $3\\frac{1}{2}=\\frac{7}{2}$.","Divide by 7: $\\frac{7}{2}\\div7=\\frac{1}{2}$."],
+       ans:"$\\frac{1}{2}$ litre per glass."},
+      {p:"A spice mix is ⅙ turmeric, ¼ chili, and ⅓ coriander by weight, with the rest being other spices. What fraction is 'other spices'?",
+       steps:["LCD of 6, 4, 3 is 12: $\\frac{2}{12}+\\frac{3}{12}+\\frac{4}{12}=\\frac{9}{12}=\\frac{3}{4}$ used.","Other spices: $1-\\frac{3}{4}=\\frac{1}{4}$."],
+       ans:"$\\frac{1}{4}$ is other spices."}
+    ]
+  },
+  {
+    id:'electrician', name:"Electrical &amp; Mobile Repair — Zoya's Stall",
+    problems:[
+      {p:"A wire of length 12⅗ m is cut into pieces of ⅗ m each. How many complete pieces can be cut?",
+       steps:["Convert: $12\\frac{3}{5}=\\frac{63}{5}$.","Divide: $\\frac{63}{5}\\div\\frac{3}{5}=\\frac{63}{5}\\times\\frac{5}{3}=21$."],
+       ans:"21 pieces."},
+      {p:"Zoya repairs ⅜ of the day's phones before lunch, and ¼ more after lunch. What fraction of the day's phones is repaired in total, and what fraction remains?",
+       steps:["LCD of 8 and 4 is 8: $\\frac{3}{8}+\\frac{2}{8}=\\frac{5}{8}$ repaired.","Remaining: $1-\\frac{5}{8}=\\frac{3}{8}$."],
+       ans:"$\\frac{5}{8}$ repaired, $\\frac{3}{8}$ remain."},
+      {p:"A battery is ⅚ charged. After use it drops by ¼ of a full charge. What fraction of charge remains?",
+       steps:["LCD of 6 and 4 is 12: $\\frac{10}{12}-\\frac{3}{12}=\\frac{7}{12}$."],
+       ans:"$\\frac{7}{12}$ of the charge remains."},
+      {p:"Of ₹24,000 collected in repair fees this month, ⅓ was spent on spare parts. How much was spent, and how much profit remained?",
+       steps:["Spent: $\\frac{1}{3}\\times24000=8000$.","Profit: $24000-8000=16000$."],
+       ans:"Spent ₹8000, profit ₹16,000."},
+      {p:"Zoya has ⅚ m of LAN cable, and a router setup needs ⅔ m. How much cable is left over?",
+       steps:["LCD of 6 and 3 is 6: $\\frac{5}{6}-\\frac{4}{6}=\\frac{1}{6}$ m."],
+       ans:"$\\frac{1}{6}$ m left over."},
+      {p:"Of 18 phones brought in, 2/9 had screen issues and ⅓ had battery issues; the rest had other issues. How many phones fall into each category?",
+       steps:["Screen: $\\frac{2}{9}\\times18=4$.","Battery: $\\frac{1}{3}\\times18=6$.","Other: $18-4-6=8$."],
+       ans:"Screen: 4, Battery: 6, Other: 8."},
+      {p:"A resistor is rated at 100 Ω with a tolerance of 1/20 of its rated value. What is the actual resistance range?",
+       steps:["Tolerance amount: $\\frac{1}{20}\\times100=5$ Ω.","Range: $100-5=95$ to $100+5=105$."],
+       ans:"Between 95 Ω and 105 Ω."},
+      {p:"Zoya's shop is open ¾ of each day. How many hours is that, out of a 24-hour day?",
+       steps:["Multiply: $\\frac{3}{4}\\times24=18$."],
+       ans:"18 hours a day."}
+    ]
+  }
+];
+
+let tradeIndex = {}; // current problem pointer per trade
+
+function buildTabs(){
+  const tabRow = document.getElementById('tabRow');
+  const panels = document.getElementById('tabPanels');
+  TRADES.forEach((trade,i)=>{
+    tradeIndex[trade.id] = 0;
+
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i===0 ? ' active':'');
+    btn.innerHTML = trade.name;
+    btn.dataset.trade = trade.id;
+    btn.addEventListener('click', ()=>switchTab(trade.id));
+    tabRow.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'tab-panel' + (i===0 ? ' active':'');
+    panel.id = 'panel-' + trade.id;
+    panel.innerHTML = `
+      <div class="problem-card">
+        <div class="ledger-entry">ENTRY <span class="entry-no">1</span> OF ${trade.problems.length}</div>
+        <div class="prompt"></div>
+        <div class="btn-row">
+          <button class="action reveal-btn">Reveal Working</button>
+          <button class="action secondary next-btn">Next Problem →</button>
+          <button class="action secondary shuffle-btn">🔀 Shuffle</button>
+        </div>
+        <div class="solution-box"></div>
+      </div>`;
+    panels.appendChild(panel);
+
+    renderTradeProblem(trade.id);
+
+    panel.querySelector('.reveal-btn').addEventListener('click', ()=>{
+      panel.querySelector('.solution-box').classList.toggle('visible');
+    });
+    panel.querySelector('.next-btn').addEventListener('click', ()=>{
+      tradeIndex[trade.id] = (tradeIndex[trade.id]+1) % trade.problems.length;
+      renderTradeProblem(trade.id);
+    });
+    panel.querySelector('.shuffle-btn').addEventListener('click', ()=>{
+      tradeIndex[trade.id] = randInt(0, trade.problems.length-1);
+      renderTradeProblem(trade.id);
+    });
+  });
+}
+
+function renderTradeProblem(tradeId){
+  const trade = TRADES.find(t=>t.id===tradeId);
+  const idx = tradeIndex[tradeId];
+  const problem = trade.problems[idx];
+  const panel = document.getElementById('panel-'+tradeId);
+  panel.querySelector('.entry-no').textContent = idx+1;
+  panel.querySelector('.prompt').textContent = problem.p;
+  const solBox = panel.querySelector('.solution-box');
+  solBox.classList.remove('visible');
+  solBox.innerHTML = `<strong>Working:</strong><ol>${problem.steps.map(s=>`<li>${s}</li>`).join('')}</ol><p><strong>Answer:</strong> ${problem.ans}</p>`;
+  typeset();
+}
+
+function switchTab(tradeId){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.trade===tradeId));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.id === 'panel-'+tradeId));
+}
+
+/* =========================================================
+   SECTION 3 — DRILL ENGINE
+   ========================================================= */
+const OPS = [
+  {id:'add', label:'Add'}, {id:'sub', label:'Subtract'},
+  {id:'mul', label:'Multiply'}, {id:'div', label:'Divide'},
+  {id:'mixed', label:'Mixed ⇄ Improper'}, {id:'compare', label:'Compare'}
+];
+const DIFFS = [
+  {id:'easy', label:'Easy (denominators 2–6)', max:6},
+  {id:'medium', label:'Medium (denominators 2–12)', max:12},
+  {id:'hard', label:'Hard (mixed numbers, denom. 2–12)', max:12}
+];
+let currentOp = 'add';
+let currentDiff = 'easy';
+let currentQuestion = null; // {stem, checkFn, stepsHTML, answerType}
+let score = {correct:0, total:0, streak:0};
+
+function buildChips(){
+  const opRow = document.getElementById('opRow');
+  OPS.forEach(o=>{
+    const c = document.createElement('button');
+    c.className = 'chip' + (o.id===currentOp?' selected':'');
+    c.textContent = o.label;
+    c.addEventListener('click', ()=>{ currentOp=o.id; refreshChips(); newQuestion(); });
+    c.dataset.op = o.id;
+    opRow.appendChild(c);
+  });
+  const diffRow = document.getElementById('diffRow');
+  DIFFS.forEach(d=>{
+    const c = document.createElement('button');
+    c.className = 'chip' + (d.id===currentDiff?' selected':'');
+    c.textContent = d.label;
+    c.addEventListener('click', ()=>{ currentDiff=d.id; refreshChips(); newQuestion(); });
+    c.dataset.diff = d.id;
+    diffRow.appendChild(c);
+  });
+}
+function refreshChips(){
+  document.querySelectorAll('#opRow .chip').forEach(c=>c.classList.toggle('selected', c.dataset.op===currentOp));
+  document.querySelectorAll('#diffRow .chip').forEach(c=>c.classList.toggle('selected', c.dataset.diff===currentDiff));
+}
+
+function makeFraction(maxDen, allowImproperFriendly){
+  const d = randInt(2,maxDen);
+  const n = randInt(1, d-1);
+  return {n,d};
+}
+
+function buildAnswerForm(kind){
+  const form = document.getElementById('answerForm');
+  form.innerHTML = '';
+  if(kind === 'compare'){
+    form.innerHTML = `
+      <button class="action secondary cmp-btn" data-choice="lt">A &lt; B</button>
+      <button class="action secondary cmp-btn" data-choice="eq">A = B</button>
+      <button class="action secondary cmp-btn" data-choice="gt">A &gt; B</button>`;
+    form.querySelectorAll('.cmp-btn').forEach(b=>{
+      b.addEventListener('click', ()=>checkCompareAnswer(b.dataset.choice));
+    });
+  } else {
+    form.innerHTML = `
+      <div class="frac-input">
+        <input type="text" id="ansNum" inputmode="numeric" aria-label="Answer numerator" placeholder="n">
+        <div class="bar"></div>
+        <input type="text" id="ansDen" inputmode="numeric" aria-label="Answer denominator" placeholder="d">
+      </div>
+      <span style="color:var(--slate); font-size:.85rem;">(whole numbers: leave d blank or use 1)</span>`;
+  }
+}
+
+function newQuestion(){
+  document.getElementById('drillFeedback').textContent = '';
+  document.getElementById('drillFeedback').className = 'feedback';
+  const solBox = document.getElementById('drillSolution');
+  solBox.classList.remove('visible');
+  const maxDen = DIFFS.find(d=>d.id===currentDiff).max;
+  const useMixedForm = currentDiff==='hard';
+
+  if(currentOp==='mixed'){
+    buildAnswerForm('frac');
+    // randomly ask to convert improper->mixed or mixed->improper
+    const direction = Math.random()<0.5 ? 'toMixed' : 'toImproper';
+    if(direction === 'toMixed'){
+      const d = randInt(2,maxDen);
+      const whole = randInt(1,5);
+      const rem = randInt(1,d-1);
+      const n = whole*d+rem;
+      document.getElementById('questionDisplay').innerHTML = `Convert to a mixed number: $\\dfrac{${n}}{${d}}$`;
+      currentQuestion = {
+        check: (an,ad)=>{
+          // user enters mixed as whole part in num field? We standardize: ask for improper equivalent check via mixed representation isn't simple w/ two inputs.
+          return false;
+        },
+        customCheck: (rawN,rawD)=>{
+          // interpret ansNum as combined "whole.rem" not supported; instead compare using rawN as improper fraction fallback
+          return equalFractions(rawN, rawD, n, d);
+        },
+        stepsHTML: `<ol>
+          <li>Divide $${n} \\div ${d}$: whole part is $${whole}$, remainder is $${rem}$.</li>
+          <li>Mixed number: $${whole}\\frac{${rem}}{${d}}$ — equivalently the improper fraction is $\\frac{${n}}{${d}}$.</li>
+        </ol><p>Enter your answer above as the equivalent improper fraction $\\frac{${n}}{${d}}$ to check.</p>`
+      };
+    } else {
+      const d = randInt(2,maxDen);
+      const whole = randInt(1,5);
+      const rem = randInt(1,d-1);
+      const n = whole*d+rem;
+      document.getElementById('questionDisplay').innerHTML = `Convert to an improper fraction: $${whole}\\dfrac{${rem}}{${d}}$`;
+      currentQuestion = {
+        customCheck: (rawN,rawD)=> equalFractions(rawN, rawD, n, d),
+        stepsHTML: `<ol>
+          <li>$(${whole} \\times ${d}) + ${rem} = ${n}$</li>
+          <li>So $${whole}\\frac{${rem}}{${d}} = \\frac{${n}}{${d}}$.</li>
+        </ol>`
+      };
+    }
+    typeset();
+    return;
+  }
+
+  if(currentOp==='compare'){
+    buildAnswerForm('compare');
+    const f1 = makeFraction(maxDen); const f2 = makeFraction(maxDen);
+    document.getElementById('questionDisplay').innerHTML = `Compare: $A=\\dfrac{${f1.n}}{${f1.d}}$ &nbsp; and &nbsp; $B=\\dfrac{${f2.n}}{${f2.d}}$`;
+    const left = f1.n*f2.d, right = f2.n*f1.d;
+    let correctChoice = left===right ? 'eq' : (left>right ? 'gt':'lt');
+    currentQuestion = {
+      correctChoice,
+      stepsHTML: `<ol>
+        <li>Cross-multiply: $${f1.n}\\times${f2.d} = ${left}$ and $${f2.n}\\times${f1.d} = ${right}$.</li>
+        <li>Since $${left} ${left===right?'=':(left>right?'>':'<')} ${right}$, $A ${correctChoice==='eq'?'=':(correctChoice==='gt'?'>':'<')} B$.</li>
+      </ol>`
+    };
+    typeset();
+    return;
+  }
+
+  // add / sub / mul / div
+  buildAnswerForm('frac');
+  let f1, f2, w1=0, w2=0;
+  f1 = makeFraction(maxDen); f2 = makeFraction(maxDen);
+  if(useMixedForm){ w1 = randInt(1,4); w2 = randInt(1,4); }
+  const n1 = w1*f1.d + f1.n, d1 = f1.d;
+  const n2 = w2*f2.d + f2.n, d2 = f2.d;
+
+  const symbol = {add:'+', sub:'-', mul:'\\times', div:'\\div'}[currentOp];
+  const q1TeX = useMixedForm ? `${w1}\\frac{${f1.n}}{${f1.d}}` : `\\frac{${f1.n}}{${f1.d}}`;
+  const q2TeX = useMixedForm ? `${w2}\\frac{${f2.n}}{${f2.d}}` : `\\frac{${f2.n}}{${f2.d}}`;
+  document.getElementById('questionDisplay').innerHTML = `Simplify: $${q1TeX} \\; ${symbol} \\; ${q2TeX}$`;
+
+  let ansN, ansD, steps=[];
+  if(currentOp==='add' || currentOp==='sub'){
+    const L = lcm(d1,d2);
+    const N1 = n1*(L/d1), N2 = n2*(L/d2);
+    ansN = currentOp==='add' ? N1+N2 : N1-N2;
+    ansD = L;
+    steps.push(`Convert to improper fractions if needed: $\\frac{${n1}}{${d1}}$ and $\\frac{${n2}}{${d2}}$.`);
+    steps.push(`LCD of ${d1} and ${d2} is ${L}: $\\frac{${N1}}{${L}}$ and $\\frac{${N2}}{${L}}$.`);
+    steps.push(`${currentOp==='add'?'Add':'Subtract'} numerators: $\\frac{${N1}}{${L}} ${currentOp==='add'?'+':'-'} \\frac{${N2}}{${L}} = \\frac{${ansN}}{${L}}$.`);
+  } else if(currentOp==='mul'){
+    ansN = n1*n2; ansD = d1*d2;
+    steps.push(`Multiply straight across: $\\frac{${n1}}{${d1}} \\times \\frac{${n2}}{${d2}} = \\frac{${n1}\\times${n2}}{${d1}\\times${d2}} = \\frac{${ansN}}{${ansD}}$.`);
+  } else { // div
+    ansN = n1*d2; ansD = d1*n2;
+    steps.push(`Flip the second fraction and multiply: $\\frac{${n1}}{${d1}} \\times \\frac{${d2}}{${n2}} = \\frac{${ansN}}{${ansD}}$.`);
+  }
+  const simplified = simplify(ansN, ansD);
+  steps.push(`Simplify: $\\frac{${ansN}}{${ansD}} = ${fracTeX(simplified.n, simplified.d)}$` + (Math.abs(simplified.n) >= simplified.d && simplified.d>1 ? ` $= ${toMixedTeX(simplified.n, simplified.d)}$` : '') + '.');
+
+  currentQuestion = {
+    customCheck: (rawN,rawD)=> equalFractions(rawN, rawD, simplified.n, simplified.d),
+    stepsHTML: `<ol>${steps.map(s=>`<li>${s}</li>`).join('')}</ol>`
+  };
+  typeset();
+}
+
+function checkCompareAnswer(choice){
+  score.total++;
+  const correct = choice === currentQuestion.correctChoice;
+  if(correct){ score.correct++; score.streak++; } else { score.streak=0; }
+  updateScoreUI();
+  const fb = document.getElementById('drillFeedback');
+  fb.textContent = correct ? '✔ Correct! Well measured.' : '✘ Not quite — check the working below.';
+  fb.className = 'feedback ' + (correct?'correct':'wrong');
+  document.getElementById('drillSolution').classList.add('visible');
+  document.getElementById('drillSolution').innerHTML = currentQuestion.stepsHTML;
+  typeset();
+}
+
+function checkFracAnswer(){
+  if(!currentQuestion || !currentQuestion.customCheck){
+    document.getElementById('drillFeedback').textContent = 'Generate a question first.';
+    return;
+  }
+  const rawNInput = document.getElementById('ansNum');
+  const rawDInput = document.getElementById('ansDen');
+  const rawN = parseInt(rawNInput.value, 10);
+  const rawD = rawDInput.value.trim()==='' ? 1 : parseInt(rawDInput.value, 10);
+  const fb = document.getElementById('drillFeedback');
+  if(isNaN(rawN) || isNaN(rawD) || rawD===0){
+    fb.textContent = 'Enter a valid numerator (and denominator, if not a whole number).';
+    fb.className = 'feedback wrong';
+    return;
+  }
+  score.total++;
+  const correct = currentQuestion.customCheck(rawN, rawD);
+  if(correct){ score.correct++; score.streak++; } else { score.streak=0; }
+  updateScoreUI();
+  fb.textContent = correct ? '✔ Correct! Well measured.' : '✘ Not quite — check the working below and try the next one.';
+  fb.className = 'feedback ' + (correct?'correct':'wrong');
+}
+
+function revealSolution(){
+  if(!currentQuestion) return;
+  const box = document.getElementById('drillSolution');
+  box.classList.add('visible');
+  box.innerHTML = currentQuestion.stepsHTML;
+  typeset();
+}
+
+const STREAK_MESSAGES = [
+  {min:3, msg:"Teen ekaathe! Three in a row — the ledger is impressed."},
+  {min:5, msg:"Paanch! Five straight. You're measuring like a pro karigar now."},
+  {min:8, msg:"Zabardast! Eight in a row — this stall would hire you."},
+  {min:12, msg:"Bahut badiya! A dozen straight correct — master karigar status."}
+];
+function updateScoreUI(){
+  document.getElementById('scoreText').textContent = `${score.correct} / ${score.total} correct`;
+  const pct = score.total===0 ? 0 : Math.round((score.correct/score.total)*100);
+  document.getElementById('tapeFill').style.width = pct + '%';
+  const streakEl = document.getElementById('streakMsg');
+  const applicable = STREAK_MESSAGES.filter(m=>score.streak>=m.min).pop();
+  streakEl.textContent = applicable ? applicable.msg : (score.streak>0 ? `Streak: ${score.streak}` : '');
+}
+
+/* =========================================================
+   SECTION 4 — FACTS
+   ========================================================= */
+const FACTS = [
+  {tag:"DID YOU KNOW", text:"India's ancient mathematicians helped develop the place-value decimal system that the whole world now uses — the same system that makes writing fractions like 3/4 or 2¼ possible in the first place."},
+  {tag:"MEASURE TWICE", text:"Tailor's and carpenter's tape measures are marked in fractions of an inch — often down to 1/16 or even 1/32. Misreading a fraction on the tape is one of the most common causes of wasted material on a job."},
+  {tag:"SKILL INDIA", text:"The Skill India Mission (including schemes like PMKVY, launched in 2015) trains lakhs of young people every year in trades such as tailoring, carpentry, electrical work and food production — every one of which runs on fraction arithmetic daily."},
+  {tag:"KITCHEN MATH", text:"Professional kitchens routinely scale recipes up or down using fractions — halving, doubling, or adjusting a recipe meant for 6 people to serve 50 for a wedding catering order."},
+  {tag:"WORD OF CAUTION", text:"A resistor's 'tolerance' — often written as a fraction or percentage like 1/20 — tells an electrician exactly how far the real component's value might drift from its rated value. Get the fraction wrong, and a whole circuit can misbehave."},
+  {tag:"HISTORY NOTE", text:"The horizontal fraction bar you write between numerator and denominator has roots in the mathematical exchange between India, the Arab world, and medieval Europe — a small piece of notation with a long journey."}
+];
+function buildFacts(){
+  const grid = document.getElementById('factsGrid');
+  FACTS.forEach(f=>{
+    const card = document.createElement('div');
+    card.className = 'fact-card';
+    card.innerHTML = `<div class="tag">${f.tag}</div><p style="margin:6px 0 0;">${f.text}</p>`;
+    grid.appendChild(card);
+  });
+}
+
+/* =========================================================
+   SECTION 5 — TEN-ENTRY CHALLENGE
+   ========================================================= */
+function buildChallengePool(){
+  const pool = [];
+  TRADES.forEach(trade=>{
+    trade.problems.forEach(p=>{
+      pool.push({type:'word', prompt:p.p, stepsHTML:`<ol>${p.steps.map(s=>`<li>${s}</li>`).join('')}</ol><p><strong>Answer:</strong> ${p.ans}</p>`});
+    });
+  });
+  return pool;
+}
+let challengeState = null;
+
+function startChallenge(){
+  const pool = buildChallengePool();
+  // shuffle and take 10
+  for(let i=pool.length-1;i>0;i--){ const j=randInt(0,i); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  challengeState = { items: pool.slice(0,10), idx:0, correct:0, revealed:false };
+  renderChallenge();
+}
+
+function renderChallenge(){
+  const area = document.getElementById('challengeArea');
+  if(challengeState.idx >= challengeState.items.length){
+    area.innerHTML = `
+      <h3>Challenge Complete!</h3>
+      <p>You reviewed all 10 entries. Score how many you solved correctly in your own notebook before revealing each answer:
+      that self-honesty is exactly the habit a good karigar (and a good student) relies on.</p>
+      <button class="action" id="restartChallengeBtn">Run It Again</button>`;
+    document.getElementById('restartChallengeBtn').addEventListener('click', startChallenge);
+    return;
+  }
+  const item = challengeState.items[challengeState.idx];
+  area.innerHTML = `
+    <div class="ledger-entry">CHALLENGE ENTRY ${challengeState.idx+1} OF ${challengeState.items.length}</div>
+    <div class="prompt" style="font-size:1.05rem; margin:8px 0 14px;">${item.prompt}</div>
+    <div class="btn-row">
+      <button class="action" id="chRevealBtn">Reveal Answer</button>
+      <button class="action secondary" id="chNextBtn">Next Entry →</button>
+    </div>
+    <div class="solution-box" id="chSolutionBox">${item.stepsHTML}</div>`;
+  document.getElementById('chRevealBtn').addEventListener('click', ()=>{
+    document.getElementById('chSolutionBox').classList.add('visible');
+    typeset();
+  });
+  document.getElementById('chNextBtn').addEventListener('click', ()=>{
+    challengeState.idx++;
+    renderChallenge();
+  });
+  typeset();
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', ()=>{
+  buildAccordion();
+  buildTabs();
+  buildChips();
+  buildFacts();
+  updateScoreUI();
+
+  document.getElementById('newQBtn').addEventListener('click', newQuestion);
+  document.getElementById('checkBtn').addEventListener('click', ()=>{
+    if(currentOp==='compare'){
+      document.getElementById('drillFeedback').textContent = 'Pick A < B, A = B, or A > B above.';
+    } else {
+      checkFracAnswer();
+    }
+  });
+  document.getElementById('revealBtn').addEventListener('click', revealSolution);
+  document.getElementById('startChallengeBtn').addEventListener('click', startChallenge);
+});
+</script>
+</body>
+</html>
