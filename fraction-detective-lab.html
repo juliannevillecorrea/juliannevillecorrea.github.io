@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Fraction Detective Agency — Unlimited Case Files</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Work+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --noir: #141B22;
+    --noir-2: #1D2731;
+    --noir-3: #232F3A;
+    --paper: #E7DEC4;
+    --paper-dark: #D8CBA3;
+    --amber: #E3A63D;
+    --amber-dark: #B9812A;
+    --teal: #3FA79C;
+    --red-stamp: #C1443B;
+    --ink: #1B1B1B;
+    --fog: #9FAAB6;
+    --radius: 10px;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; background: var(--noir); color: var(--paper);
+    font-family:'Work Sans', sans-serif; font-size:16.5px; line-height:1.6;
+    padding-bottom:70px;
+    background-image: radial-gradient(circle at 50% -10%, rgba(227,166,61,0.10), transparent 55%);
+  }
+  h1,h2,h3{ font-family:'Special Elite', monospace; letter-spacing:.01em; margin:0 0 .4em; }
+  h1{ color:#fff; } h2{ color: var(--amber); } h3{ color: var(--ink); }
+  a{ color: var(--amber); }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    text-align:center; padding: 60px 24px 46px; position:relative;
+    border-bottom: 1px solid rgba(227,166,61,0.25);
+  }
+  .hero .eyebrow{ font-family:'IBM Plex Mono',monospace; letter-spacing:.18em; text-transform:uppercase;
+    font-size:.75rem; color: var(--teal); font-weight:600; }
+  .hero h1{ font-size: clamp(2rem,4.4vw,3.1rem); margin: 10px 0 14px; }
+  .hero .amber-rule{ width:120px; height:3px; background:var(--amber); margin:0 auto 18px; }
+  .hero p.lede{ max-width:680px; margin:0 auto; color: var(--fog); font-size:1.03rem; }
+  .badge-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:24px;}
+  .badge{
+    font-family:'IBM Plex Mono',monospace; font-size:.78rem; color: var(--amber);
+    border:1px solid rgba(227,166,61,0.4); border-radius:4px; padding:5px 12px;
+  }
+
+  main{ max-width:1000px; margin:0 auto; padding: 0 20px; }
+
+  .briefing{
+    background: var(--noir-2); border-left:4px solid var(--teal); border-radius: 0 8px 8px 0;
+    padding: 18px 22px; margin: 30px 0; font-size:.97rem; color: var(--paper);
+  }
+  .briefing .tag{ font-family:'IBM Plex Mono',monospace; font-size:.72rem; color: var(--teal); font-weight:700; letter-spacing:.06em;}
+
+  /* ---------- RANK BAR ---------- */
+  .rank-wrap{
+    background: var(--noir-2); border:1px solid rgba(227,166,61,0.2); border-radius: var(--radius);
+    padding: 14px 20px; margin: 24px 0; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .rank-badge{
+    font-family:'Special Elite',monospace; background: var(--amber); color: var(--noir);
+    padding: 6px 14px; border-radius: 4px; font-size:.85rem; transform: rotate(-2deg);
+  }
+  .rank-track{ flex:1; min-width:180px; height:10px; background: var(--noir-3); border-radius:6px; overflow:hidden; }
+  .rank-fill{ height:100%; width:0%; background: linear-gradient(90deg, var(--teal), var(--amber)); transition: width .4s ease; }
+  .rank-stat{ font-family:'IBM Plex Mono',monospace; font-size:.82rem; color: var(--fog); }
+
+  /* ---------- CASE FOLDER (signature element) ---------- */
+  .case{ margin-top: 46px; }
+  .case-tab{
+    display:inline-block; background: var(--amber); color: var(--noir);
+    font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:.78rem;
+    padding: 5px 14px 5px; border-radius: 6px 6px 0 0; letter-spacing:.04em;
+  }
+  .case-folder{
+    background: var(--paper); color: var(--ink);
+    border-radius: 0 10px 10px 10px; padding: 24px;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+  }
+  .case-folder h3{ font-size:1.28rem; margin-bottom:6px; }
+  .case-sub{ color:#5c5442; font-size:.92rem; margin-bottom:16px; }
+
+  .evidence-box{
+    background: #fbf6e8; border: 1.5px dashed var(--amber-dark); border-radius:8px;
+    padding: 16px 18px; margin: 12px 0; font-size:1.05rem;
+  }
+
+  button.btn{
+    font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:.85rem;
+    background: var(--noir); color: var(--paper); border:1.5px solid var(--noir);
+    padding: 9px 16px; border-radius:6px; cursor:pointer; transition: transform .08s ease, background .15s;
+  }
+  button.btn:hover{ background: var(--noir-3); }
+  button.btn:active{ transform: scale(0.97); }
+  button.btn.ghost{ background: transparent; color: var(--noir); border-color: var(--noir); }
+  button.btn.ghost:hover{ background: rgba(27,27,27,0.06); }
+  button.btn.amber{ background: var(--amber-dark); border-color:var(--amber-dark); color:#1a1200; }
+  .btn-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+
+  .verdict{ font-weight:700; margin-top:12px; min-height:1.4em; }
+  .verdict.solved{ color: var(--teal); }
+  .verdict.open{ color: var(--red-stamp); }
+
+  .reveal-box{
+    display:none; margin-top:14px; background:#f2ead3; border-radius:8px; padding:14px 16px;
+    border-top: 3px solid var(--amber-dark); font-size:.96rem;
+  }
+  .reveal-box.visible{ display:block; }
+  .reveal-box ol{ margin:6px 0 0 18px; padding:0; }
+  .reveal-box li{ margin-bottom:6px; }
+  .stamp{
+    display:inline-block; font-family:'Special Elite',monospace; border:2px solid; border-radius:6px;
+    padding:2px 10px; font-size:.8rem; transform: rotate(-3deg); margin-top:8px;
+  }
+  .stamp.solved{ color: var(--teal); border-color: var(--teal); }
+  .stamp.open{ color: var(--red-stamp); border-color: var(--red-stamp); }
+
+  .frac-input{ display:flex; align-items:center; gap:8px; }
+  .frac-input input{
+    width:60px; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:1.05rem;
+    border:1.5px solid #c9bd97; border-radius:6px; padding:6px 4px; background:#fffef9;
+  }
+  .fbar{ width:60px; height:2px; background:var(--ink); }
+
+  /* svg shading grid */
+  .shape-row{ display:flex; gap:8px; flex-wrap:wrap; margin:14px 0; }
+  .seg{ cursor:pointer; transition: fill .12s ease; }
+  .seg:hover{ opacity:.85; }
+
+  .mc-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .mc-btn{
+    font-family:'IBM Plex Mono',monospace; font-size:.9rem; background:#fffef9;
+    border:1.5px solid #c9bd97; border-radius:8px; padding:10px 16px; cursor:pointer;
+  }
+  .mc-btn:hover{ border-color: var(--amber-dark); }
+  .mc-btn.chosen{ background: var(--amber); border-color: var(--amber-dark); }
+
+  input[type=range]{ width:100%; accent-color: var(--amber-dark); }
+  .numberline{ position:relative; height:46px; margin: 16px 0 8px; }
+  .numberline .line{ position:absolute; top:22px; left:0; right:0; height:2px; background:#3d3520; }
+  .numberline .tick{ position:absolute; top:16px; width:1px; height:14px; background:#3d3520; }
+  .numberline .marker{
+    position:absolute; top:6px; width:14px; height:14px; border-radius:50%;
+    background: var(--red-stamp); transform: translateX(-50%);
+  }
+  .numberline .ticklabel{ position:absolute; top:32px; font-size:.68rem; font-family:'IBM Plex Mono',monospace; transform: translateX(-50%); color:#3d3520;}
+
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  @media (max-width:760px){ .grid-2{ grid-template-columns:1fr; } }
+
+  footer{ text-align:center; margin-top:60px; padding:30px 20px; color: var(--fog); font-size:.85rem;}
+  footer .mono{ color: var(--amber); }
+
+  .radio-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+  .radio-row label{
+    font-family:'IBM Plex Mono',monospace; font-size:.85rem; background:#fffef9;
+    border:1.5px solid #c9bd97; border-radius:8px; padding:8px 14px; cursor:pointer; display:flex; align-items:center; gap:6px;
+  }
+  .radio-row input{ accent-color: var(--amber-dark); }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto !important; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">The Fraction Detective Agency</div>
+  <h1>Unlimited Case Files on Fractions</h1>
+  <div class="amber-rule"></div>
+  <p class="lede">
+    Every case here is generated fresh, on the spot, and no two files are ever quite the same.
+    Your job is not just to find an answer — it is to reason like a detective: notice what looks
+    suspicious, test your hunch, and explain <em>why</em> it holds up. New cases never run out.
+  </p>
+  <div class="badge-row">
+    <span class="badge">8 case types</span>
+    <span class="badge">Infinite random generation</span>
+    <span class="badge">Built-in reasoning, not just answers</span>
+  </div>
+</div>
+
+<main>
+
+<div class="rank-wrap">
+  <div class="rank-badge" id="rankBadge">ROOKIE</div>
+  <div class="rank-track"><div class="rank-fill" id="rankFill"></div></div>
+  <div class="rank-stat" id="rankStat">0 cases closed</div>
+</div>
+
+<div class="briefing">
+  <div class="tag">AGENCY BRIEFING</div>
+  <p style="margin:6px 0 0;">
+    Fractions are not just numbers with a line in the middle — they are a way of describing
+    <em>relationships</em>: a part compared to a whole. Every case below attacks that idea from a
+    different angle. Work through a few types today; come back tomorrow for entirely new cases.
+  </p>
+</div>
+
+<!-- ============ CASE 1: SHADE THE EVIDENCE ============ -->
+<div class="case" id="case1">
+  <span class="case-tab">CASE FILE No. 01</span>
+  <div class="case-folder">
+    <h3>Shade the Evidence</h3>
+    <p class="case-sub">Build a fraction by hand — click pieces of the shape until the shaded amount matches the target.</p>
+    <div class="evidence-box" id="shadePrompt">Press "New Case" to receive your assignment.</div>
+    <div class="shape-row" id="shadeShape"></div>
+    <div class="btn-row">
+      <button class="btn amber" id="shadeNewBtn">New Case</button>
+      <button class="btn ghost" id="shadeCheckBtn">Check My Shading</button>
+    </div>
+    <div class="verdict" id="shadeVerdict"></div>
+    <div class="reveal-box" id="shadeReveal"></div>
+  </div>
+</div>
+
+<!-- ============ CASE 2: READ THE EVIDENCE ============ -->
+<div class="case" id="case2">
+  <span class="case-tab">CASE FILE No. 02</span>
+  <div class="case-folder">
+    <h3>Read the Evidence</h3>
+    <p class="case-sub">The shape has already been marked by a previous detective. What fraction does it show?</p>
+    <div class="evidence-box">A witness shaded part of this shape. Name the fraction it represents.</div>
+    <div class="shape-row" id="readShape"></div>
+    <div class="frac-input">
+      <input type="text" id="readNum" placeholder="n" aria-label="numerator">
+      <div class="fbar"></div>
+      <input type="text" id="readDen" placeholder="d" aria-label="denominator">
+    </div>
+    <div class="btn-row">
+      <button class="btn amber" id="readNewBtn">New Case</button>
+      <button class="btn ghost" id="readCheckBtn">Submit Reading</button>
+    </div>
+    <div class="verdict" id="readVerdict"></div>
+    <div class="reveal-box" id="readReveal"></div>
+  </div>
+</div>
+
+<!-- ============ CASE 3: THE IMPOSTOR ============ -->
+<div class="case" id="case3">
+  <span class="case-tab">CASE FILE No. 03</span>
+  <div class="case-folder">
+    <h3>The Impostor</h3>
+    <p class="case-sub">Three of these four fractions are secretly equal in value. One is an impostor. Find it — and prove it.</p>
+    <div class="mc-row" id="impostorRow"></div>
+    <div class="btn-row">
+      <button class="btn amber" id="impostorNewBtn">New Case</button>
+      <button class="btn ghost" id="impostorRevealBtn">Reveal Proof</button>
+    </div>
+    <div class="verdict" id="impostorVerdict"></div>
+    <div class="reveal-box" id="impostorReveal"></div>
+  </div>
+</div>
+
+<!-- ============ CASE 4: NUMBER LINE STAKEOUT ============ -->
+<div class="case" id="case4">
+  <span class="case-tab">CASE FILE No. 04</span>
+  <div class="case-folder">
+    <h3>Number Line Stakeout</h3>
+    <p class="case-sub">Drag the marker to the exact position of the target fraction on the number line.</p>
+    <div class="evidence-box" id="linePrompt">Press "New Case" to receive your assignment.</div>
+    <input type="range" id="lineSlider" min="0" max="10" value="0">
+    <div class="numberline" id="numberLine"></div>
+    <div class="btn-row">
+      <button class="btn amber" id="lineNewBtn">New Case</button>
+      <button class="btn ghost" id="lineCheckBtn">Lock In Position</button>
+    </div>
+    <div class="verdict" id="lineVerdict"></div>
+    <div class="reveal-box" id="lineReveal"></div>
+  </div>
+</div>
+
+<!-- ============ CASE 5: THE GAP BETWEEN ============ -->
+<div class="case" id="case5">
+  <span class="case-tab">CASE FILE No. 05</span>
+  <div class="case-folder">
+    <h3>The Gap Between</h3>
+    <p class="case-sub">Two fractions are given. Find <em>any</em> fraction that fits strictly between them — there is always at least one.</p>
+    <div class="evidence-box" id="gapPrompt">Press "New Case" to receive your assignment.</div>
+    <div class="frac-input">
+      <input type="text" id="gapNum" placeholder="n" aria-label="numerator">
+      <div class="fbar"></div>
+      <input type="text" id="gapDen" placeholder="d" aria-label="denominator">
+    </div>
+    <div class="btn-row">
+      <button class="btn amber" id="gapNewBtn">New Case</button>
+      <button class="btn ghost" id="gapCheckBtn">Submit Fraction</button>
+      <button class="btn ghost" id="gapHintBtn">Show a Detective's Trick</button>
+    </div>
+    <div class="verdict" id="gapVerdict"></div>
+    <div class="reveal-box" id="gapReveal"></div>
+  </div>
+</div>
+
+<!-- ============ CASE 6: THE FAULTY LEDGER ============ -->
+<div class="case" id="case6">
+  <span class="case-tab">CASE FILE No. 06</span>
+  <div class="case-folder">
+    <h3>The Faulty Ledger</h3>
+    <p class="case-sub">A suspect's working is shown below. Exactly one line is wrong. Which one — and why?</p>
+    <div class="evidence-box" id="faultyPrompt">Press "New Case" to receive your assignment.</div>
+    <div class="radio-row" id="faultyChoices"></div>
+    <div class="btn-row">
+      <button class="btn amber" id="faultyNewBtn">New Case</button>
+      <button class="btn ghost" id="faultyCheckBtn">Accuse This Step</button>
+    </div>
+    <div class="verdict" id="faultyVerdict"></div>
+    <div class="reveal-box" id="faultyReveal"></div>
+  </div>
+</div>
+
+<!-- ============ CASE 7: GUT INSTINCT ============ -->
+<div class="case" id="case7">
+  <span class="case-tab">CASE FILE No. 07</span>
+  <div class="case-folder">
+    <h3>Gut Instinct</h3>
+    <p class="case-sub">No calculating on paper allowed — just estimate. Is this fraction closest to 0, ½, or 1?</p>
+    <div class="evidence-box" id="gutPrompt">Press "New Case" to receive your assignment.</div>
+    <div class="mc-row">
+      <button class="mc-btn" data-choice="0">Closest to 0</button>
+      <button class="mc-btn" data-choice="0.5">Closest to ½</button>
+      <button class="mc-btn" data-choice="1">Closest to 1</button>
+    </div>
+    <div class="btn-row"><button class="btn amber" id="gutNewBtn">New Case</button></div>
+    <div class="verdict" id="gutVerdict"></div>
+    <div class="reveal-box" id="gutReveal"></div>
+  </div>
+</div>
+
+<!-- ============ CASE 8: ALWAYS, SOMETIMES, NEVER ============ -->
+<div class="case" id="case8">
+  <span class="case-tab">CASE FILE No. 08</span>
+  <div class="case-folder">
+    <h3>Always, Sometimes, or Never?</h3>
+    <p class="case-sub">Classify the claim, then check your reasoning against the file.</p>
+    <div class="evidence-box" id="claimPrompt">Press "New Case" to receive your assignment.</div>
+    <div class="mc-row">
+      <button class="mc-btn" data-choice="always">Always True</button>
+      <button class="mc-btn" data-choice="sometimes">Sometimes True</button>
+      <button class="mc-btn" data-choice="never">Never True</button>
+    </div>
+    <div class="btn-row"><button class="btn amber" id="claimNewBtn">New Case</button></div>
+    <div class="verdict" id="claimVerdict"></div>
+    <div class="reveal-box" id="claimReveal"></div>
+  </div>
+</div>
+
+<!-- ============ CASE 9: THE FRACTION RIDDLE ============ -->
+<div class="case" id="case9">
+  <span class="case-tab">CASE FILE No. 09</span>
+  <div class="case-folder">
+    <h3>The Fraction Riddle</h3>
+    <p class="case-sub">The trickiest file in the cabinet. Read carefully, reason it out, then check your answer.</p>
+    <div class="evidence-box" id="riddlePrompt">Press "New Case" to receive your assignment.</div>
+    <div class="frac-input">
+      <input type="text" id="riddleNum" placeholder="n" aria-label="numerator">
+      <div class="fbar"></div>
+      <input type="text" id="riddleDen" placeholder="d" aria-label="denominator">
+    </div>
+    <div class="btn-row">
+      <button class="btn amber" id="riddleNewBtn">New Case</button>
+      <button class="btn ghost" id="riddleCheckBtn">Submit Solution</button>
+      <button class="btn ghost" id="riddleRevealBtn">Reveal Reasoning</button>
+    </div>
+    <div class="verdict" id="riddleVerdict"></div>
+    <div class="reveal-box" id="riddleReveal"></div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p>All cases are generated live in your browser. Close the tab, reopen it, and the whole cabinet resets — endless fresh files, every time.</p>
+  <p class="mono">— AGENCY CASE LOG · GRADE 10 FRACTIONS UNIT —</p>
+</footer>
+
+<script>
+/* =========================================================
+   MATH HELPERS
+   ========================================================= */
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; }
+function lcm(a,b){ return Math.abs(a*b)/gcd(a,b); }
+function simplify(n,d){ if(d<0){n=-n; d=-d;} const g=gcd(n,d); return {n:n/g, d:d/g}; }
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function equalFractions(n1,d1,n2,d2){ return n1*d2 === n2*d1; }
+function fracLT(n1,d1,n2,d2){ return n1*d2 < n2*d1; } // assumes positive denominators
+function pickDistinct(arr,count){
+  const copy=[...arr];
+  const out=[];
+  for(let i=0;i<count && copy.length>0;i++){
+    const idx = randInt(0,copy.length-1);
+    out.push(copy[idx]);
+    copy.splice(idx,1);
+  }
+  return out;
+}
+function typeset(){ if(window.MathJax && window.MathJax.typesetPromise){ MathJax.typesetPromise(); } }
+
+/* =========================================================
+   RANK SYSTEM
+   ========================================================= */
+const RANKS = [
+  {min:0, label:"ROOKIE"},
+  {min:5, label:"DETECTIVE"},
+  {min:10, label:"INSPECTOR"},
+  {min:20, label:"CHIEF INSPECTOR"},
+  {min:35, label:"MASTER SLEUTH"}
+];
+let casesSolved = 0;
+let casesAttempted = 0;
+function registerVerdict(correct){
+  casesAttempted++;
+  if(correct) casesSolved++;
+  updateRankUI();
+}
+function updateRankUI(){
+  const rank = RANKS.filter(r=>casesSolved>=r.min).pop();
+  document.getElementById('rankBadge').textContent = rank.label;
+  const nextRank = RANKS.find(r=>r.min>casesSolved);
+  const pct = nextRank ? Math.min(100, Math.round((casesSolved-rank.min)/(nextRank.min-rank.min)*100)) : 100;
+  document.getElementById('rankFill').style.width = pct + '%';
+  document.getElementById('rankStat').textContent = `${casesSolved} case${casesSolved===1?'':'s'} closed · ${casesAttempted} attempted`;
+}
+updateRankUI();
+
+/* =========================================================
+   SVG SHAPE RENDERING (bars & circles)
+   ========================================================= */
+const SVGNS = "http://www.w3.org/2000/svg";
+function renderBar(container, d, filledSet, interactive, onToggle){
+  container.innerHTML = '';
+  const w=320, h=64;
+  const svg = document.createElementNS(SVGNS,'svg');
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('style','max-width:340px; height:auto;');
+  const segW = w/d;
+  for(let i=0;i<d;i++){
+    const rect = document.createElementNS(SVGNS,'rect');
+    rect.setAttribute('x', i*segW+1);
+    rect.setAttribute('y', 6);
+    rect.setAttribute('width', segW-2);
+    rect.setAttribute('height', h-12);
+    rect.setAttribute('rx', 3);
+    rect.setAttribute('fill', filledSet.has(i) ? '#E3A63D' : '#fbf6e8');
+    rect.setAttribute('stroke', '#3d3520');
+    rect.setAttribute('stroke-width', '1.5');
+    if(interactive){
+      rect.classList.add('seg');
+      rect.addEventListener('click', ()=>{ onToggle(i); });
+    }
+    svg.appendChild(rect);
+  }
+  container.appendChild(svg);
+}
+function renderCircle(container, d, filledSet, interactive, onToggle){
+  container.innerHTML = '';
+  const size=180, cx=90, cy=90, r=78;
+  const svg = document.createElementNS(SVGNS,'svg');
+  svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('style','max-width:200px; height:auto;');
+  const step = (2*Math.PI)/d;
+  for(let i=0;i<d;i++){
+    const a1 = -Math.PI/2 + i*step;
+    const a2 = -Math.PI/2 + (i+1)*step;
+    const x1 = cx + r*Math.cos(a1), y1 = cy + r*Math.sin(a1);
+    const x2 = cx + r*Math.cos(a2), y2 = cy + r*Math.sin(a2);
+    const path = document.createElementNS(SVGNS,'path');
+    path.setAttribute('d', `M${cx},${cy} L${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 0,1 ${x2.toFixed(2)},${y2.toFixed(2)} Z`);
+    path.setAttribute('fill', filledSet.has(i) ? '#E3A63D' : '#fbf6e8');
+    path.setAttribute('stroke', '#3d3520');
+    path.setAttribute('stroke-width', '1.5');
+    if(interactive){
+      path.classList.add('seg');
+      path.addEventListener('click', ()=>{ onToggle(i); });
+    }
+    svg.appendChild(path);
+  }
+  container.appendChild(svg);
+}
+
+/* =========================================================
+   CASE 1 — SHADE THE EVIDENCE
+   ========================================================= */
+let shade1 = { d:0, n:0, shape:'bar', filled:new Set() };
+function newShadeCase(){
+  shade1.d = randInt(3,10);
+  shade1.n = randInt(1, shade1.d-1);
+  shade1.shape = Math.random()<0.5 ? 'bar' : 'circle';
+  shade1.filled = new Set();
+  document.getElementById('shadePrompt').innerHTML =
+    `Shade exactly $\\dfrac{${shade1.n}}{${shade1.d}}$ of the ${shade1.shape==='bar'?'bar':'circle'} below by clicking pieces. It does not matter <em>which</em> pieces you pick — only how many.`;
+  document.getElementById('shadeVerdict').textContent = '';
+  document.getElementById('shadeReveal').classList.remove('visible');
+  drawShade1();
+  typeset();
+}
+function drawShade1(){
+  const container = document.getElementById('shadeShape');
+  const draw = shade1.shape==='bar' ? renderBar : renderCircle;
+  draw(container, shade1.d, shade1.filled, true, (i)=>{
+    if(shade1.filled.has(i)) shade1.filled.delete(i); else shade1.filled.add(i);
+    drawShade1();
+  });
+}
+function checkShadeCase(){
+  const verdict = document.getElementById('shadeVerdict');
+  const reveal = document.getElementById('shadeReveal');
+  const correct = shade1.filled.size === shade1.n;
+  registerVerdict(correct);
+  verdict.textContent = correct
+    ? `Case closed — you shaded ${shade1.filled.size} of ${shade1.d} pieces. That is exactly $\\frac{${shade1.n}}{${shade1.d}}$.`
+    : `Not yet — you shaded ${shade1.filled.size} of ${shade1.d} pieces, but the target was $\\frac{${shade1.n}}{${shade1.d}}$.`;
+  verdict.className = 'verdict ' + (correct?'solved':'open');
+  reveal.innerHTML = `<p>The key insight: a fraction only cares about <strong>how many parts</strong> are shaded out of the total, never <em>which specific parts</em>. Any ${shade1.n} of the ${shade1.d} pieces — corners, middle, edges — all represent $\\frac{${shade1.n}}{${shade1.d}}$ equally well.</p>
+  <span class="stamp ${correct?'solved':'open'}">${correct?'VERIFIED':'RE-EXAMINE'}</span>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+
+/* =========================================================
+   CASE 2 — READ THE EVIDENCE
+   ========================================================= */
+let read2 = { d:0, n:0, shape:'bar', filled:new Set() };
+function newReadCase(){
+  read2.d = randInt(3,10);
+  read2.n = randInt(1, read2.d-1);
+  read2.shape = Math.random()<0.5 ? 'bar' : 'circle';
+  const idxPool = [...Array(read2.d).keys()];
+  read2.filled = new Set(pickDistinct(idxPool, read2.n));
+  document.getElementById('readVerdict').textContent = '';
+  document.getElementById('readReveal').classList.remove('visible');
+  document.getElementById('readNum').value = '';
+  document.getElementById('readDen').value = '';
+  const draw = read2.shape==='bar' ? renderBar : renderCircle;
+  draw(document.getElementById('readShape'), read2.d, read2.filled, false, ()=>{});
+}
+function checkReadCase(){
+  const rawN = parseInt(document.getElementById('readNum').value,10);
+  const rawD = parseInt(document.getElementById('readDen').value,10);
+  const verdict = document.getElementById('readVerdict');
+  const reveal = document.getElementById('readReveal');
+  if(isNaN(rawN) || isNaN(rawD) || rawD===0){
+    verdict.textContent = 'Enter both a numerator and a denominator first.';
+    verdict.className = 'verdict open';
+    return;
+  }
+  const correct = equalFractions(rawN, rawD, read2.n, read2.d);
+  registerVerdict(correct);
+  verdict.textContent = correct ? 'Confirmed — your reading matches the evidence.' : 'That reading does not match the shape shown.';
+  verdict.className = 'verdict ' + (correct?'solved':'open');
+  reveal.innerHTML = `<p>${read2.filled.size} of the ${read2.d} equal pieces are shaded, so the fraction shown is $\\frac{${read2.n}}{${read2.d}}$` +
+    (simplify(read2.n,read2.d).d !== read2.d ? ` which simplifies to $${fracDisplay(simplify(read2.n,read2.d))}$.` : '.') + `</p>
+    <span class="stamp ${correct?'solved':'open'}">${correct?'VERIFIED':'RE-EXAMINE'}</span>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+function fracDisplay(s){ return s.d===1 ? `${s.n}` : `\\frac{${s.n}}{${s.d}}`; }
+
+/* =========================================================
+   CASE 3 — THE IMPOSTOR
+   ========================================================= */
+let impostor3 = { cards:[], impostorIndex:-1, chosen:-1 };
+function newImpostorCase(){
+  const q = randInt(2,7);
+  const p = randInt(1,q-1);
+  const base = simplify(p,q);
+  const scales = pickDistinct([2,3,4,5,6], 3);
+  const trueCards = scales.map(k=>({n: base.n*k, d: base.d*k}));
+  let impN, impD;
+  do{
+    const k = randInt(2,6);
+    const wobble = Math.random()<0.5 ? 1 : -1;
+    impN = base.n*k + wobble;
+    impD = base.d*k;
+  } while(impN<=0 || equalFractions(impN, impD, base.n, base.d));
+  const impostorCard = {n: impN, d: impD};
+  const all = [...trueCards, impostorCard];
+  // shuffle
+  for(let i=all.length-1;i>0;i--){ const j=randInt(0,i); [all[i],all[j]]=[all[j],all[i]]; }
+  impostor3.cards = all;
+  impostor3.impostorIndex = all.indexOf(impostorCard);
+  impostor3.baseValue = base;
+  impostor3.chosen = -1;
+  document.getElementById('impostorVerdict').textContent = '';
+  document.getElementById('impostorReveal').classList.remove('visible');
+  const row = document.getElementById('impostorRow');
+  row.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  all.forEach((c,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'mc-btn';
+    btn.innerHTML = `${letters[i]}: $\\frac{${c.n}}{${c.d}}$`;
+    btn.addEventListener('click', ()=>{
+      impostor3.chosen = i;
+      row.querySelectorAll('.mc-btn').forEach(b=>b.classList.remove('chosen'));
+      btn.classList.add('chosen');
+    });
+    row.appendChild(btn);
+  });
+  typeset();
+}
+function revealImpostorCase(){
+  const verdict = document.getElementById('impostorVerdict');
+  const reveal = document.getElementById('impostorReveal');
+  if(impostor3.chosen === -1){
+    verdict.textContent = 'Pick a suspect first.';
+    verdict.className = 'verdict open';
+    return;
+  }
+  const correct = impostor3.chosen === impostor3.impostorIndex;
+  registerVerdict(correct);
+  const letters = ['A','B','C','D'];
+  verdict.textContent = correct ? `Correct — ${letters[impostor3.impostorIndex]} is the impostor.` : `Not quite — the real impostor was ${letters[impostor3.impostorIndex]}.`;
+  verdict.className = 'verdict ' + (correct?'solved':'open');
+  const lines = impostor3.cards.map((c,i)=>{
+    const cross = c.n * impostor3.baseValue.d;
+    const baseCross = impostor3.baseValue.n * c.d;
+    const same = cross === baseCross;
+    return `<li>${letters[i]}: $\\frac{${c.n}}{${c.d}}$ — cross-check against $\\frac{${impostor3.baseValue.n}}{${impostor3.baseValue.d}}$: $${c.n}\\times${impostor3.baseValue.d}=${cross}$ vs $${impostor3.baseValue.n}\\times${c.d}=${baseCross}$ &rarr; ${same? 'equal in value':'<strong>different in value — the impostor</strong>'}.</li>`;
+  }).join('');
+  reveal.innerHTML = `<ol>${lines}</ol><span class="stamp ${correct?'solved':'open'}">${correct?'VERIFIED':'RE-EXAMINE'}</span>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+
+/* =========================================================
+   CASE 4 — NUMBER LINE STAKEOUT
+   ========================================================= */
+let line4 = { q:1, range:1, targetN:0 };
+function newLineCase(){
+  line4.q = randInt(2,10);
+  line4.range = Math.random()<0.65 ? 1 : 2;
+  line4.targetN = randInt(0, line4.range*line4.q);
+  const simp = simplify(line4.targetN, line4.q);
+  document.getElementById('linePrompt').innerHTML =
+    `Move the marker to $${fracDisplay(simp)}$ on a number line from 0 to ${line4.range}.`;
+  document.getElementById('lineVerdict').textContent = '';
+  document.getElementById('lineReveal').classList.remove('visible');
+  const slider = document.getElementById('lineSlider');
+  slider.min = 0; slider.max = line4.range*line4.q; slider.value = 0;
+  drawNumberLine();
+  typeset();
+}
+function drawNumberLine(){
+  const wrap = document.getElementById('numberLine');
+  wrap.innerHTML = '<div class="line"></div>';
+  const totalTicks = line4.range*line4.q;
+  for(let i=0;i<=totalTicks;i++){
+    const pct = (i/totalTicks)*100;
+    const tick = document.createElement('div');
+    tick.className = 'tick';
+    tick.style.left = pct+'%';
+    wrap.appendChild(tick);
+    if(i % line4.q === 0){
+      const lbl = document.createElement('div');
+      lbl.className = 'ticklabel';
+      lbl.style.left = pct+'%';
+      lbl.textContent = (i/line4.q);
+      wrap.appendChild(lbl);
+    }
+  }
+  const marker = document.createElement('div');
+  marker.className = 'marker';
+  marker.id = 'lineMarker';
+  const slider = document.getElementById('lineSlider');
+  marker.style.left = ((slider.value/totalTicks)*100)+'%';
+  wrap.appendChild(marker);
+}
+document.addEventListener('input', (e)=>{
+  if(e.target && e.target.id === 'lineSlider'){
+    const totalTicks = line4.range*line4.q;
+    const marker = document.getElementById('lineMarker');
+    if(marker) marker.style.left = ((e.target.value/totalTicks)*100)+'%';
+  }
+});
+function checkLineCase(){
+  const slider = document.getElementById('lineSlider');
+  const verdict = document.getElementById('lineVerdict');
+  const reveal = document.getElementById('lineReveal');
+  const correct = parseInt(slider.value,10) === line4.targetN;
+  registerVerdict(correct);
+  const simp = simplify(line4.targetN, line4.q);
+  verdict.textContent = correct ? 'Marker locked on the exact spot. Case closed.' : `Off the mark — the correct tick was at $${fracDisplay(simp)}$.`;
+  verdict.className = 'verdict ' + (correct?'solved':'open');
+  reveal.innerHTML = `<p>$${fracDisplay(simp)}$ sits at tick ${line4.targetN} out of ${line4.range*line4.q} equal steps between 0 and ${line4.range}.</p><span class="stamp ${correct?'solved':'open'}">${correct?'VERIFIED':'RE-EXAMINE'}</span>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+
+/* =========================================================
+   CASE 5 — THE GAP BETWEEN
+   ========================================================= */
+let gap5 = { a:{n:0,d:0}, b:{n:0,d:0} };
+function newGapCase(){
+  let n1,d1,n2,d2;
+  do{
+    d1 = randInt(2,9); n1 = randInt(1,d1-1);
+    d2 = randInt(2,9); n2 = randInt(1,d2-1);
+  } while(equalFractions(n1,d1,n2,d2));
+  if(fracLT(n2,d2,n1,d1)){ [n1,d1,n2,d2] = [n2,d2,n1,d1]; }
+  gap5.a = {n:n1,d:d1}; gap5.b = {n:n2,d:d2};
+  document.getElementById('gapPrompt').innerHTML = `Find a fraction strictly between $\\dfrac{${n1}}{${d1}}$ and $\\dfrac{${n2}}{${d2}}$.`;
+  document.getElementById('gapVerdict').textContent = '';
+  document.getElementById('gapReveal').classList.remove('visible');
+  document.getElementById('gapNum').value=''; document.getElementById('gapDen').value='';
+  typeset();
+}
+function checkGapCase(){
+  const rawN = parseInt(document.getElementById('gapNum').value,10);
+  const rawD = parseInt(document.getElementById('gapDen').value,10);
+  const verdict = document.getElementById('gapVerdict');
+  const reveal = document.getElementById('gapReveal');
+  if(isNaN(rawN) || isNaN(rawD) || rawD===0){
+    verdict.textContent = 'Enter a numerator and a positive denominator.';
+    verdict.className = 'verdict open';
+    return;
+  }
+  const d = Math.abs(rawD);
+  const n = rawD<0 ? -rawN : rawN;
+  const between = fracLT(gap5.a.n, gap5.a.d, n, d) && fracLT(n, d, gap5.b.n, gap5.b.d);
+  registerVerdict(between);
+  verdict.textContent = between
+    ? `Confirmed — $\\frac{${rawN}}{${rawD}}$ sits strictly between the two.`
+    : `That one does not fall strictly between $\\frac{${gap5.a.n}}{${gap5.a.d}}$ and $\\frac{${gap5.b.n}}{${gap5.b.d}}$.`;
+  verdict.className = 'verdict ' + (between?'solved':'open');
+  const medN = gap5.a.n + gap5.b.n, medD = gap5.a.d + gap5.b.d;
+  reveal.innerHTML = `<p>One reliable trick: the <strong>mediant</strong> $\\frac{a+c}{b+d}$ of two fractions $\\frac{a}{b}$ and $\\frac{c}{d}$ always lands strictly between them. Here that gives $\\frac{${medN}}{${medD}}$.</p>
+  <p>Deeper question to sit with: could you always find <em>another</em> fraction between your answer and one of the originals? What does that tell you about how many fractions exist between any two different fractions?</p>
+  <span class="stamp ${between?'solved':'open'}">${between?'VERIFIED':'RE-EXAMINE'}</span>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+function hintGapCase(){
+  const reveal = document.getElementById('gapReveal');
+  const medN = gap5.a.n + gap5.b.n, medD = gap5.a.d + gap5.b.d;
+  reveal.innerHTML = `<p><strong>Detective's trick:</strong> add the numerators together and add the denominators together — $\\frac{${gap5.a.n}+${gap5.b.n}}{${gap5.a.d}+${gap5.b.d}} = \\frac{${medN}}{${medD}}$. This "mediant" always lies between the two originals. Try it, then submit your own fraction above.</p>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+
+/* =========================================================
+   CASE 6 — THE FAULTY LEDGER
+   ========================================================= */
+let faulty6 = { correctStepIndex:-1, chosen:-1 };
+function newFaultyCase(){
+  const bugTypes = ['add-denom','sub-denom','mul-cross','div-noflip','simplify-half'];
+  const bug = bugTypes[randInt(0,bugTypes.length-1)];
+  const a = randInt(1,6), b = randInt(a+1,10);
+  const c = randInt(1,6), d = randInt(c+1,10);
+  let steps = [], wrongIndex = -1, correctSteps = [];
+  if(bug==='add-denom' || bug==='sub-denom'){
+    const op = bug==='add-denom' ? '+' : '-';
+    const opWord = bug==='add-denom' ? 'Add' : 'Subtract';
+    steps = [
+      `Step 1: Start with $\\frac{${a}}{${b}} ${op} \\frac{${c}}{${d}}$.`,
+      `Step 2: ${opWord} numerators and ${opWord.toLowerCase()} denominators: $\\frac{${a}${op}${c}}{${b}${op}${d}} = \\frac{${bug==='add-denom'?a+c:a-c}}{${bug==='add-denom'?b+d:b-d}}$.`,
+      `Step 3: That is the final answer.`
+    ];
+    wrongIndex = 1;
+    const L = lcm(b,d);
+    const N1=a*(L/b), N2=c*(L/d);
+    const res = bug==='add-denom' ? N1+N2 : N1-N2;
+    const simp = simplify(res,L);
+    correctSteps = [
+      `Find the LCD of ${b} and ${d}, which is ${L}.`,
+      `Rewrite: $\\frac{${a}}{${b}}=\\frac{${N1}}{${L}}$ and $\\frac{${c}}{${d}}=\\frac{${N2}}{${L}}$.`,
+      `${opWord} numerators only, keep the denominator: $\\frac{${res}}{${L}}$` + (simp.d!==L? ` $= ${fracDisplay(simp)}$`:'') + `.`
+    ];
+  } else if(bug==='mul-cross'){
+    steps = [
+      `Step 1: Start with $\\frac{${a}}{${b}} \\times \\frac{${c}}{${d}}$.`,
+      `Step 2: Multiply crosswise: $\\frac{${a}\\times${d}}{${b}\\times${c}} = \\frac{${a*d}}{${b*c}}$.`,
+      `Step 3: That is the final answer.`
+    ];
+    wrongIndex = 1;
+    const res = simplify(a*c, b*d);
+    correctSteps = [
+      `Multiplying fractions never needs a common denominator — multiply straight across.`,
+      `Numerators together: $${a}\\times${c}=${a*c}$. Denominators together: $${b}\\times${d}=${b*d}$.`,
+      `Result: $\\frac{${a*c}}{${b*d}}$` + (res.d!==b*d ? ` $= ${fracDisplay(res)}$`:'') + `.`
+    ];
+  } else if(bug==='div-noflip'){
+    steps = [
+      `Step 1: Start with $\\frac{${a}}{${b}} \\div \\frac{${c}}{${d}}$.`,
+      `Step 2: Multiply straight across without flipping: $\\frac{${a}\\times${c}}{${b}\\times${d}} = \\frac{${a*c}}{${b*d}}$.`,
+      `Step 3: That is the final answer.`
+    ];
+    wrongIndex = 1;
+    const res = simplify(a*d, b*c);
+    correctSteps = [
+      `Dividing by a fraction means multiplying by its reciprocal — flip the second fraction first.`,
+      `$\\frac{${a}}{${b}} \\div \\frac{${c}}{${d}} = \\frac{${a}}{${b}} \\times \\frac{${d}}{${c}}$.`,
+      `Result: $\\frac{${a*d}}{${b*c}}$` + (res.d!==b*c ? ` $= ${fracDisplay(res)}$`:'') + `.`
+    ];
+  } else { // simplify-half
+    const k = randInt(2,4);
+    const bigN = a*k, bigD = b*k;
+    steps = [
+      `Step 1: Simplify $\\frac{${bigN}}{${bigD}}$.`,
+      `Step 2: Divide only the numerator by ${k}: $\\frac{${bigN/k}}{${bigD}}$.`,
+      `Step 3: That is the simplified answer.`
+    ];
+    wrongIndex = 1;
+    correctSteps = [
+      `To simplify, divide BOTH the numerator and denominator by the same common factor.`,
+      `Both ${bigN} and ${bigD} share a factor of ${k}: $\\frac{${bigN}\\div${k}}{${bigD}\\div${k}} = \\frac{${a}}{${b}}$.`,
+      `Result: $\\frac{${a}}{${b}}$ — dividing only one part of the fraction changes its value, since you are no longer scaling top and bottom equally.`
+    ];
+  }
+  faulty6.wrongIndex = wrongIndex;
+  faulty6.chosen = -1;
+  faulty6.correctSteps = correctSteps;
+  document.getElementById('faultyPrompt').innerHTML = steps.join('<br>');
+  const choicesDiv = document.getElementById('faultyChoices');
+  choicesDiv.innerHTML = '';
+  for(let i=0;i<steps.length;i++){
+    const label = document.createElement('label');
+    label.innerHTML = `<input type="radio" name="faultyStep" value="${i}"> Step ${i+1}`;
+    choicesDiv.appendChild(label);
+  }
+  document.getElementById('faultyVerdict').textContent = '';
+  document.getElementById('faultyReveal').classList.remove('visible');
+  typeset();
+}
+function checkFaultyCase(){
+  const chosenEl = document.querySelector('input[name="faultyStep"]:checked');
+  const verdict = document.getElementById('faultyVerdict');
+  const reveal = document.getElementById('faultyReveal');
+  if(!chosenEl){
+    verdict.textContent = 'Choose which step you are accusing first.';
+    verdict.className = 'verdict open';
+    return;
+  }
+  const chosen = parseInt(chosenEl.value,10);
+  const correct = chosen === faulty6.wrongIndex;
+  registerVerdict(correct);
+  verdict.textContent = correct ? `Correct accusation — Step ${chosen+1} is where it goes wrong.` : `Not quite — the real error was in Step ${faulty6.wrongIndex+1}.`;
+  verdict.className = 'verdict ' + (correct?'solved':'open');
+  reveal.innerHTML = `<strong>Correct method:</strong><ol>${faulty6.correctSteps.map(s=>`<li>${s}</li>`).join('')}</ol><span class="stamp ${correct?'solved':'open'}">${correct?'VERIFIED':'RE-EXAMINE'}</span>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+
+/* =========================================================
+   CASE 7 — GUT INSTINCT
+   ========================================================= */
+let gut7 = { n:0, d:0 };
+function newGutCase(){
+  gut7.d = randInt(3,20);
+  gut7.n = randInt(1, gut7.d-1);
+  document.getElementById('gutPrompt').innerHTML = `Estimate — no exact arithmetic: $\\dfrac{${gut7.n}}{${gut7.d}}$`;
+  document.getElementById('gutVerdict').textContent = '';
+  document.getElementById('gutReveal').classList.remove('visible');
+  typeset();
+}
+function checkGutChoice(choiceStr){
+  const val = gut7.n/gut7.d;
+  const dists = { '0': Math.abs(val-0), '0.5': Math.abs(val-0.5), '1': Math.abs(val-1) };
+  const bestKey = Object.keys(dists).reduce((a,b)=> dists[a]<=dists[b] ? a : b);
+  const correct = choiceStr === bestKey;
+  registerVerdict(correct);
+  const verdict = document.getElementById('gutVerdict');
+  const label = {'0':'0','0.5':'½','1':'1'};
+  verdict.textContent = correct ? `Good instinct — ${label[bestKey]} is the closest benchmark.` : `Your gut said ${label[choiceStr]}, but ${label[bestKey]} is actually closer.`;
+  verdict.className = 'verdict ' + (correct?'solved':'open');
+  const reveal = document.getElementById('gutReveal');
+  reveal.innerHTML = `<p>$\\frac{${gut7.n}}{${gut7.d}} \\approx ${val.toFixed(3)}$. Distances — from 0: ${dists['0'].toFixed(3)}, from ½: ${dists['0.5'].toFixed(3)}, from 1: ${dists['1'].toFixed(3)}. Smallest wins.</p>
+  <span class="stamp ${correct?'solved':'open'}">${correct?'VERIFIED':'RE-EXAMINE'}</span>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+
+/* =========================================================
+   CASE 8 — ALWAYS / SOMETIMES / NEVER
+   ========================================================= */
+const CLAIMS = [
+  {gen: ()=>{
+    const d1=randInt(3,9), d2=randInt(3,9);
+    return {text:`If Fraction A has a bigger denominator than Fraction B, then Fraction A is always the smaller fraction.`, ans:'sometimes',
+      why:`Only true when numerators match, or when comparing unit fractions. For example $\\frac{1}{9}<\\frac{1}{3}$ (bigger denominator, smaller value) but $\\frac{8}{9}>\\frac{1}{3}$ (bigger denominator, bigger value).`};
+  }},
+  {gen: ()=>({text:`Multiplying two proper fractions (each between 0 and 1) always gives a result smaller than both of them.`, ans:'always',
+    why:`Multiplying by a number less than 1 always shrinks a value. Example: $\\frac{2}{3}\\times\\frac{3}{4}=\\frac{1}{2}$, which is smaller than both $\\frac{2}{3}$ and $\\frac{3}{4}$.`})},
+  {gen: ()=>({text:`Two fractions that look completely different can represent the exact same value.`, ans:'always',
+    why:`This is the idea of equivalent fractions: $\\frac{2}{4}$, $\\frac{3}{6}$ and $\\frac{50}{100}$ all equal $\\frac{1}{2}$.`})},
+  {gen: ()=>({text:`Adding the numerators of two fractions and adding their denominators gives the sum of the two fractions.`, ans:'never',
+    why:`That shortcut (the "mediant") never gives the true sum — it happens to land between the two fractions, but that is a different fact entirely. Example: $\\frac{1}{2}+\\frac{1}{2}=1$, but adding numerators/denominators gives $\\frac{2}{4}=\\frac{1}{2}$, not 1.`})},
+  {gen: ()=>({text:`A fraction in lowest terms has a numerator and denominator that share no common factor other than 1.`, ans:'always',
+    why:`That is the definition of "lowest terms" (or "simplest form") — if they shared another factor, you could simplify further.`})},
+  {gen: ()=>({text:`Dividing a fraction by another proper fraction (less than 1) always makes the result bigger than the original.`, ans:'always',
+    why:`Dividing by something less than 1 is the same as multiplying by its reciprocal, which is greater than 1. Example: $\\frac{1}{2}\\div\\frac{1}{4}=2$, bigger than $\\frac{1}{2}$.`})},
+  {gen: ()=>({text:`If you add 1 to both the numerator and denominator of a fraction, the value of the fraction stays the same.`, ans:'never',
+    why:`Adding 1 to top and bottom is not the same as scaling by a common factor. Example: $\\frac{1}{2} \\to \\frac{2}{3}$, and $\\frac{1}{2}\\ne\\frac{2}{3}$.`})},
+  {gen: ()=>({text:`A fraction can be placed somewhere on the number line between any two other fractions, no matter how close together they are.`, ans:'always',
+    why:`Fractions are "dense" — between any two different fractions there are infinitely many more, however close together the two start out.`})},
+  {gen: ()=>({text:`Two fractions with the same denominator can be compared just by comparing their numerators.`, ans:'always',
+    why:`With equal denominators, the pieces are the same size, so whichever fraction has more of those equal pieces is bigger.`})},
+  {gen: ()=>({text:`Squaring a proper fraction (between 0 and 1) gives a result bigger than the original fraction.`, ans:'never',
+    why:`Squaring a number between 0 and 1 always makes it smaller, since you are multiplying by another number less than 1. Example: $\\left(\\frac{2}{3}\\right)^2=\\frac{4}{9}$, and $\\frac{4}{9}<\\frac{2}{3}$.`})}
+];
+let claim8Order = [];
+let claim8Idx = 0;
+let currentClaim = null;
+function newClaimCase(){
+  if(claim8Idx >= claim8Order.length){
+    claim8Order = [...Array(CLAIMS.length).keys()];
+    for(let i=claim8Order.length-1;i>0;i--){ const j=randInt(0,i); [claim8Order[i],claim8Order[j]]=[claim8Order[j],claim8Order[i]]; }
+    claim8Idx = 0;
+  }
+  currentClaim = CLAIMS[claim8Order[claim8Idx]].gen();
+  claim8Idx++;
+  document.getElementById('claimPrompt').textContent = currentClaim.text;
+  document.getElementById('claimVerdict').textContent = '';
+  document.getElementById('claimReveal').classList.remove('visible');
+  typeset();
+}
+function checkClaimChoice(choice){
+  const correct = choice === currentClaim.ans;
+  registerVerdict(correct);
+  const verdict = document.getElementById('claimVerdict');
+  verdict.textContent = correct ? 'Correct classification.' : `Not quite — the correct classification is "${currentClaim.ans}".`;
+  verdict.className = 'verdict ' + (correct?'solved':'open');
+  const reveal = document.getElementById('claimReveal');
+  reveal.innerHTML = `<p>${currentClaim.why}</p><span class="stamp ${correct?'solved':'open'}">${correct?'VERIFIED':'RE-EXAMINE'}</span>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+
+/* =========================================================
+   CASE 9 — THE FRACTION RIDDLE
+   ========================================================= */
+let riddle9 = { n:0, d:0, explain:'' };
+function newRiddleCase(){
+  const type = randInt(1,3);
+  let p,q,k;
+  do{ q = randInt(2,7); p = randInt(1,q-1); } while(gcd(p,q)!==1);
+  if(type===1){
+    k = randInt(2,5);
+    const S = k*(p+q);
+    riddle9.n = p*k; riddle9.d = q*k;
+    document.getElementById('riddlePrompt').innerHTML =
+      `I am a fraction, and I am NOT in lowest terms. My numerator and denominator add up to ${S}. When I am simplified fully, I become $\\dfrac{${p}}{${q}}$. What fraction am I, before simplifying?`;
+    riddle9.explain = `<li>If the fraction is $k$ times $\\frac{${p}}{${q}}$, its numerator+denominator is $k(${p}+${q})=${S}$.</li>
+      <li>Solve for $k$: $k = ${S}\\div${p+q} = ${k}$.</li>
+      <li>So the fraction is $\\frac{${p}\\times${k}}{${q}\\times${k}} = \\frac{${riddle9.n}}{${riddle9.d}}$.</li>`;
+  } else if(type===2){
+    const c = randInt(2,7);
+    k = randInt(2,5);
+    riddle9.n = p*k; riddle9.d = riddle9.n + c*k;
+    // ensure d>n and matches simplified form: recompute q properly
+    q = p + c; // adjust q to reflect denominator relationship p and q differ by c
+    if(gcd(p,q)!==1){ // regenerate with a clean pair if needed
+      // fallback simple deterministic fix: pick p=1
+      p = 1; q = 1+c;
+      k = randInt(2,5);
+      riddle9.n = p*k; riddle9.d = q*k;
+    }
+    document.getElementById('riddlePrompt').innerHTML =
+      `I am a proper fraction. My denominator is exactly ${c} more than my numerator. Fully simplified, I equal $\\dfrac{${p}}{${q}}$. What fraction am I, before simplifying?`;
+    riddle9.explain = `<li>If numerator $=p\\times k$ and denominator $=q\\times k$, the gap between them is $k(q-p)=${c}$.</li>
+      <li>Since $q-p=${q-p}$, solve $k=${c}\\div${q-p}=${k}$.</li>
+      <li>So the fraction is $\\frac{${p}\\times${k}}{${q}\\times${k}} = \\frac{${riddle9.n}}{${riddle9.d}}$.</li>`;
+  } else {
+    k = randInt(2,3);
+    riddle9.n = p*k; riddle9.d = q*k;
+    const P = p*q*k*k;
+    document.getElementById('riddlePrompt').innerHTML =
+      `I am a fraction. The numerator multiplied by the denominator equals ${P}. Fully simplified, I equal $\\dfrac{${p}}{${q}}$. What fraction am I, before simplifying?`;
+    riddle9.explain = `<li>If numerator $=p\\times k$ and denominator $=q\\times k$, their product is $p\\times q\\times k^2 = ${p}\\times${q}\\times k^2$.</li>
+      <li>Set that equal to ${P}: $k^2 = ${P}\\div${p*q} = ${k*k}$, so $k=${k}$.</li>
+      <li>So the fraction is $\\frac{${p}\\times${k}}{${q}\\times${k}} = \\frac{${riddle9.n}}{${riddle9.d}}$.</li>`;
+  }
+  document.getElementById('riddleVerdict').textContent = '';
+  document.getElementById('riddleReveal').classList.remove('visible');
+  document.getElementById('riddleNum').value=''; document.getElementById('riddleDen').value='';
+  typeset();
+}
+function checkRiddleCase(){
+  const rawN = parseInt(document.getElementById('riddleNum').value,10);
+  const rawD = parseInt(document.getElementById('riddleDen').value,10);
+  const verdict = document.getElementById('riddleVerdict');
+  if(isNaN(rawN) || isNaN(rawD) || rawD===0){
+    verdict.textContent = 'Enter a numerator and denominator first.';
+    verdict.className = 'verdict open';
+    return;
+  }
+  const correct = equalFractions(rawN, rawD, riddle9.n, riddle9.d);
+  registerVerdict(correct);
+  verdict.textContent = correct ? 'Case closed — that matches the riddle exactly.' : `Not a match — try reasoning through the setup again, or reveal the working.`;
+  verdict.className = 'verdict ' + (correct?'solved':'open');
+}
+function revealRiddleCase(){
+  const reveal = document.getElementById('riddleReveal');
+  reveal.innerHTML = `<ol>${riddle9.explain}</ol><p><strong>Answer:</strong> $\\frac{${riddle9.n}}{${riddle9.d}}$</p>`;
+  reveal.classList.add('visible');
+  typeset();
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('shadeNewBtn').addEventListener('click', newShadeCase);
+  document.getElementById('shadeCheckBtn').addEventListener('click', checkShadeCase);
+  newShadeCase();
+
+  document.getElementById('readNewBtn').addEventListener('click', newReadCase);
+  document.getElementById('readCheckBtn').addEventListener('click', checkReadCase);
+  newReadCase();
+
+  document.getElementById('impostorNewBtn').addEventListener('click', newImpostorCase);
+  document.getElementById('impostorRevealBtn').addEventListener('click', revealImpostorCase);
+  newImpostorCase();
+
+  document.getElementById('lineNewBtn').addEventListener('click', newLineCase);
+  document.getElementById('lineCheckBtn').addEventListener('click', checkLineCase);
+  newLineCase();
+
+  document.getElementById('gapNewBtn').addEventListener('click', newGapCase);
+  document.getElementById('gapCheckBtn').addEventListener('click', checkGapCase);
+  document.getElementById('gapHintBtn').addEventListener('click', hintGapCase);
+  newGapCase();
+
+  document.getElementById('faultyNewBtn').addEventListener('click', newFaultyCase);
+  document.getElementById('faultyCheckBtn').addEventListener('click', checkFaultyCase);
+  newFaultyCase();
+
+  document.getElementById('gutNewBtn').addEventListener('click', newGutCase);
+  document.querySelectorAll('#case7 .mc-btn').forEach(b=>{
+    b.addEventListener('click', ()=>checkGutChoice(b.dataset.choice));
+  });
+  newGutCase();
+
+  document.getElementById('claimNewBtn').addEventListener('click', newClaimCase);
+  document.querySelectorAll('#case8 .mc-btn').forEach(b=>{
+    b.addEventListener('click', ()=>checkClaimChoice(b.dataset.choice));
+  });
+  newClaimCase();
+
+  document.getElementById('riddleNewBtn').addEventListener('click', newRiddleCase);
+  document.getElementById('riddleCheckBtn').addEventListener('click', checkRiddleCase);
+  document.getElementById('riddleRevealBtn').addEventListener('click', revealRiddleCase);
+  newRiddleCase();
+});
+</script>
+</body>
+</html>
