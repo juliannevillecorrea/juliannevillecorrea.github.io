@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>आवर्त सारणी | correa.school</title>
+<meta name="description" content="हिंदी में संपूर्ण, इंटरैक्टिव आवर्त सारणी — कक्षा 10 के विद्यार्थियों के लिए">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Hind:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0a0a08;
+    --black-2:#141410;
+    --black-3:#1c1c16;
+    --yellow:#FFD400;
+    --yellow-soft:#FFE873;
+    --yellow-dim:#8a7a1f;
+    --paper:#F5F1E3;
+    --line:#3a3626;
+
+    --c-alkali:#FFD400;
+    --c-alkaline:#FFC107;
+    --c-transition:#E0A800;
+    --c-posttrans:#F4D160;
+    --c-metalloid:#D9A441;
+    --c-nonmetal:#FFF3B0;
+    --c-halogen:#FFB627;
+    --c-noble:#FFF9C4;
+    --c-lanth:#C99A2E;
+    --c-actin:#8B6914;
+    --c-unknown:#6b6b5a;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--black);
+    color:var(--paper);
+    font-family:'Hind',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{background:var(--yellow);color:#000;}
+
+  /* ---------- Hazard stripe motif ---------- */
+  .stripe-bar{
+    height:14px;
+    width:100%;
+    background:repeating-linear-gradient(135deg,var(--yellow) 0 22px,#000 22px 44px);
+    background-size:62px 62px;
+  }
+  .stripe-bar.anim{
+    animation:stripe-move 3s linear infinite;
+  }
+  @keyframes stripe-move{
+    from{background-position:0 0;}
+    to{background-position:62px 0;}
+  }
+
+  /* ---------- Hero ---------- */
+  header.hero{
+    position:relative;
+    padding:64px 24px 46px;
+    text-align:center;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(255,212,0,0.14), transparent 60%),
+      var(--black);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:var(--yellow);
+    opacity:.85;
+    margin-bottom:18px;
+  }
+  h1.title{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:800;
+    font-size:clamp(2.6rem,7vw,5.2rem);
+    margin:0;
+    line-height:1.05;
+    color:var(--yellow);
+    text-shadow:0 0 40px rgba(255,212,0,.25);
+    letter-spacing:.01em;
+  }
+  p.tagline{
+    max-width:640px;
+    margin:20px auto 0;
+    font-size:clamp(1rem,2vw,1.2rem);
+    color:#e8e2c9;
+    line-height:1.7;
+  }
+  p.tagline b{color:var(--yellow-soft);}
+
+  .orbit-wrap{
+    position:absolute;
+    top:20px; right:4%;
+    width:150px;height:150px;
+    opacity:.9;
+    display:none;
+  }
+  @media(min-width:900px){ .orbit-wrap{display:block;} }
+  .orbit-wrap svg{width:100%;height:100%;}
+  .orbit-ring{fill:none;stroke:var(--yellow-dim);stroke-width:1.4;}
+  .orbit-electron{fill:var(--yellow);filter:drop-shadow(0 0 6px var(--yellow));}
+  .spin1{animation:spin 6s linear infinite;transform-origin:75px 75px;}
+  .spin2{animation:spin 9s linear infinite reverse;transform-origin:75px 75px;}
+  .spin3{animation:spin 13s linear infinite;transform-origin:75px 75px;}
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+  /* ---------- Controls ---------- */
+  .controls{
+    max-width:1400px;
+    margin:0 auto;
+    padding:26px 20px 10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:center;
+    justify-content:center;
+  }
+  .search-box{
+    position:relative;
+    flex:0 1 340px;
+  }
+  .search-box input{
+    width:100%;
+    padding:12px 16px 12px 40px;
+    border-radius:8px;
+    border:2px solid var(--line);
+    background:var(--black-2);
+    color:var(--paper);
+    font-family:'Hind',sans-serif;
+    font-size:15px;
+    outline:none;
+    transition:border-color .2s;
+  }
+  .search-box input:focus{border-color:var(--yellow);}
+  .search-box::before{
+    content:"🔍";
+    position:absolute;left:13px;top:50%;transform:translateY(-50%);
+    font-size:14px;opacity:.6;
+  }
+  .chips{
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  }
+  .chip{
+    font-family:'Hind',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    padding:7px 13px;
+    border-radius:20px;
+    border:1.5px solid var(--line);
+    background:var(--black-2);
+    color:var(--paper);
+    cursor:pointer;
+    display:flex;align-items:center;gap:6px;
+    transition:all .15s;
+    user-select:none;
+  }
+  .chip:hover{border-color:var(--yellow-dim);}
+  .chip.active{
+    background:var(--yellow);
+    color:#000;
+    border-color:var(--yellow);
+  }
+  .chip .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  .view-toggle{
+    display:flex;gap:6px;background:var(--black-2);
+    border:1.5px solid var(--line);border-radius:8px;padding:3px;
+  }
+  .view-toggle button{
+    font-family:'Hind',sans-serif;font-weight:600;font-size:13px;
+    padding:7px 12px;border:none;border-radius:6px;background:transparent;
+    color:var(--paper);cursor:pointer;
+  }
+  .view-toggle button.active{background:var(--yellow);color:#000;}
+
+  .result-count{
+    text-align:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--yellow-dim);
+    margin:6px 0 0;
+  }
+
+  /* ---------- Table grid ---------- */
+  .table-wrap{
+    max-width:1400px;
+    margin:20px auto 10px;
+    padding:10px 14px 30px;
+    overflow-x:auto;
+  }
+  .ptable{
+    display:grid;
+    grid-template-columns:repeat(18,minmax(46px,1fr));
+    gap:4px;
+    min-width:1000px;
+  }
+  .ptable.f-block{
+    margin-top:10px;
+    grid-template-columns:repeat(18,minmax(46px,1fr));
+  }
+  .spacer-row{height:10px;grid-column:1/-1;}
+
+  .cell{
+    position:relative;
+    background:var(--black-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:5px 4px 4px;
+    aspect-ratio:1/1.05;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .cell::before{
+    content:"";
+    position:absolute;top:0;left:0;right:0;height:4px;
+    background:var(--cat-color,var(--yellow));
+  }
+  .cell:hover{
+    transform:translateY(-3px) scale(1.06);
+    z-index:5;
+    border-color:var(--cat-color,var(--yellow));
+    box-shadow:0 6px 18px rgba(0,0,0,.5),0 0 0 1px var(--cat-color,var(--yellow)),0 0 22px -4px var(--cat-color,var(--yellow));
+  }
+  .cell .z{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9px;
+    color:#a9a288;
+  }
+  .cell .sym{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    font-size:clamp(13px,1.6vw,19px);
+    color:var(--yellow-soft);
+    line-height:1;
+  }
+  .cell .hiname{
+    font-size:9.5px;
+    color:#c9c2a3;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    line-height:1.15;
+  }
+  .cell .mass{
+    font-family:'JetBrains Mono',monospace;
+    font-size:8px;
+    color:#847c5f;
+  }
+  .cell.placeholder{
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;color:#6b664f;
+  }
+  .cell.dim{opacity:.14;pointer-events:none;filter:grayscale(1);}
+  .cell.hidden-search{display:none;}
+
+  /* legend */
+  .legend{
+    max-width:1400px;margin:6px auto 40px;padding:0 20px;
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  }
+  .legend .item{
+    font-size:12px;color:#c9c2a3;
+    display:flex;align-items:center;gap:6px;
+  }
+  .legend .sw{width:11px;height:11px;border-radius:3px;display:inline-block;}
+
+  /* ---------- Modal ---------- */
+  .overlay{
+    position:fixed;inset:0;
+    background:rgba(6,6,4,.78);
+    backdrop-filter:blur(3px);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:100;
+    padding:20px;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:var(--black-3);
+    border:2px solid var(--yellow);
+    border-radius:16px;
+    max-width:640px;width:100%;
+    max-height:88vh;
+    overflow-y:auto;
+    padding:0;
+    position:relative;
+    box-shadow:0 0 60px rgba(255,212,0,.15);
+  }
+  .modal-stripe{height:8px;background:repeating-linear-gradient(135deg,var(--modal-color,var(--yellow)) 0 16px,#000 16px 32px);}
+  .modal-body{padding:28px 30px 32px;}
+  .modal-close{
+    position:absolute;top:16px;right:18px;
+    background:none;border:none;color:var(--paper);
+    font-size:22px;cursor:pointer;line-height:1;
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s;
+  }
+  .modal-close:hover{background:rgba(255,255,255,.1);}
+  .modal-head{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+  .modal-symbol{
+    font-family:'Baloo 2',sans-serif;font-weight:800;
+    font-size:64px;color:var(--yellow);
+    line-height:1;
+    text-shadow:0 0 30px rgba(255,212,0,.3);
+  }
+  .modal-z{font-family:'JetBrains Mono',monospace;color:#a9a288;font-size:13px;}
+  .modal-names{}
+  .modal-hiname{font-size:26px;font-weight:700;color:var(--paper);}
+  .modal-enname{font-size:14px;color:#a9a288;font-family:'JetBrains Mono',monospace;}
+  .modal-cat-tag{
+    display:inline-flex;align-items:center;gap:6px;
+    margin-top:10px;
+    font-size:12px;font-weight:600;
+    padding:5px 11px;border-radius:20px;
+    background:var(--modal-color,var(--yellow));
+    color:#000;
+  }
+  .modal-stats{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:10px;margin:22px 0 4px;
+  }
+  .stat{
+    background:var(--black-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 12px;
+    text-align:center;
+  }
+  .stat .label{font-size:10.5px;color:#8a8367;text-transform:uppercase;letter-spacing:.05em;}
+  .stat .value{font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--yellow-soft);margin-top:3px;}
+
+  .shells{
+    display:flex;justify-content:center;margin:22px 0;
+  }
+  .shells svg{filter:drop-shadow(0 0 10px rgba(255,212,0,.12));}
+
+  .fact-box{
+    margin-top:18px;
+    padding:16px 18px;
+    background:linear-gradient(135deg,rgba(255,212,0,.08),rgba(255,212,0,.02));
+    border-left:3px solid var(--yellow);
+    border-radius:8px;
+    font-size:15px;
+    line-height:1.7;
+    color:#efe9d3;
+  }
+  .fact-box .fact-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--yellow);display:block;margin-bottom:6px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    text-align:center;
+    padding:40px 20px 50px;
+    color:#8a8367;
+    font-size:13px;
+  }
+  footer .brand{color:var(--yellow);font-weight:700;font-family:'Baloo 2',sans-serif;font-size:16px;}
+  footer a{color:var(--yellow-soft);text-decoration:none;}
+
+  /* scrollbar */
+  ::-webkit-scrollbar{height:10px;width:10px;}
+  ::-webkit-scrollbar-track{background:var(--black-2);}
+  ::-webkit-scrollbar-thumb{background:var(--yellow-dim);border-radius:6px;}
+
+  @media (max-width:640px){
+    .modal-symbol{font-size:48px;}
+    .modal-hiname{font-size:20px;}
+    header.hero{padding:44px 16px 32px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .stripe-bar.anim{animation:none;}
+    .spin1,.spin2,.spin3{animation:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stripe-bar anim"></div>
+
+<header class="hero">
+  <div class="orbit-wrap">
+    <svg viewBox="0 0 150 150">
+      <circle class="orbit-ring" cx="75" cy="75" r="62"/>
+      <circle class="orbit-ring" cx="75" cy="75" r="42"/>
+      <circle class="orbit-ring" cx="75" cy="75" r="22"/>
+      <circle class="orbit-electron" cx="75" cy="13" r="4" class="spin1"/>
+      <g class="spin1"><circle class="orbit-electron" cx="75" cy="13" r="4"/></g>
+      <g class="spin2"><circle class="orbit-electron" cx="117" cy="75" r="3.4"/></g>
+      <g class="spin3"><circle class="orbit-electron" cx="75" cy="53" r="2.8"/></g>
+      <circle cx="75" cy="75" r="6" fill="var(--yellow)"/>
+    </svg>
+  </div>
+  <div class="eyebrow">CORREA.SCHOOL · कक्षा 10 · रसायन विज्ञान</div>
+  <h1 class="title">आवर्त सारणी</h1>
+  <p class="tagline">118 तत्व, 118 कहानियाँ। हर खाने में छिपी है <b>ब्रह्मांड की संरचना</b> — तारों की भट्टी से लेकर आपके फोन की स्क्रीन तक। किसी भी तत्व पर क्लिक करके उसकी पूरी कहानी जानें।</p>
+</header>
+
+<div class="controls">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="तत्व खोजें — नाम, संकेत या परमाणु क्रमांक..." autocomplete="off">
+  </div>
+  <div class="view-toggle">
+    <button class="active" data-mode="category">श्रेणी अनुसार</button>
+    <button data-mode="phase">भौतिक अवस्था अनुसार</button>
+  </div>
+</div>
+<div class="chips" id="chipRow"></div>
+<p class="result-count" id="resultCount"></p>
+
+<div class="table-wrap">
+  <div class="ptable" id="mainGrid"></div>
+  <div class="spacer-row"></div>
+  <div class="ptable f-block" id="fGrid"></div>
+</div>
+
+<div class="legend" id="legendRow"></div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-stripe" id="modalStripe"></div>
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-body">
+      <div class="modal-head">
+        <div class="modal-symbol" id="mSym">H</div>
+        <div class="modal-names">
+          <div class="modal-z" id="mZ">परमाणु क्रमांक 1</div>
+          <div class="modal-hiname" id="mHiName">हाइड्रोजन</div>
+          <div class="modal-enname" id="mEnName">Hydrogen</div>
+          <div class="modal-cat-tag" id="mCatTag"></div>
+        </div>
+      </div>
+      <div class="modal-stats">
+        <div class="stat"><div class="label">परमाणु द्रव्यमान</div><div class="value" id="mMass">1.008</div></div>
+        <div class="stat"><div class="label">आवर्त / वर्ग</div><div class="value" id="mPeriodGroup">1 / 1</div></div>
+        <div class="stat"><div class="label">भौतिक अवस्था</div><div class="value" id="mPhase">गैस</div></div>
+      </div>
+      <div class="shells" id="shellsWrap"></div>
+      <div class="fact-box">
+        <span class="fact-label">क्यों दिलचस्प है?</span>
+        <span id="mFact"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="brand">correa.school</div>
+  <p>कक्षा 10 · CBSE पाठ्यक्रम के लिए बनाया गया एक इंटरैक्टिव शिक्षण संसाधन<br>
+  डेटा वैज्ञानिक रूप से सत्यापित IUPAC मानों पर आधारित · अत्यंत भारी तत्वों (112–118) की भौतिक अवस्था अभी भी शोध का विषय है</p>
+</footer>
+
+<script>
+/* ---------------------------------------------------------------
+   DATA: [ Z, symbol, English name, Hindi name, atomic mass, category,
+           period, group (0 = f-block, placed via fcol), phase, fact ]
+   phase: s=ठोस, l=द्रव, g=गैस, u=अज्ञात/अनुमानित
+----------------------------------------------------------------*/
+const ELEMENTS = [
+[1,"H","Hydrogen","हाइड्रोजन",1.008,"nonmetal",1,1,"g","ब्रह्मांड का सबसे हल्का और सबसे प्रचुर तत्व; सूर्य में हाइड्रोजन के परमाणु जुड़कर हीलियम बनाते हैं और असीम ऊर्जा देते हैं।"],
+[2,"He","Helium","हीलियम",4.003,"noble",1,18,"g","सूर्य के प्रकाश स्पेक्ट्रम में सबसे पहले खोजा गया, धरती पर बाद में मिला; गुब्बारों और MRI मशीनों को ठंडा रखने में उपयोगी।"],
+[3,"Li","Lithium","लिथियम",6.94,"alkali",2,1,"s","सबसे हल्की धातु; मोबाइल फोन और इलेक्ट्रिक कारों की बैटरियों में क्रांति लाने वाला तत्व।"],
+[4,"Be","Beryllium","बेरिलियम",9.012,"alkaline",2,2,"s","अंतरिक्ष यानों और X-रे खिड़कियों में उपयोग होने वाली असाधारण रूप से हल्की व मजबूत धातु।"],
+[5,"B","Boron","बोरॉन",10.81,"metalloid",2,13,"s","बोरोसिलिकेट कांच (जैसे प्रयोगशाला के बर्तन) को अचानक गर्मी सहने योग्य बनाता है।"],
+[6,"C","Carbon","कार्बन",12.011,"nonmetal",2,14,"s","जीवन का आधार तत्व; हीरा और ग्रेफाइट दोनों इसी के रूप हैं, फिर भी गुण बिल्कुल विपरीत।"],
+[7,"N","Nitrogen","नाइट्रोजन",14.007,"nonmetal",2,15,"g","वायुमंडल का लगभग 78% भाग बनाता है और पौधों की वृद्धि तथा प्रोटीन निर्माण के लिए आवश्यक है।"],
+[8,"O","Oxygen","ऑक्सीजन",15.999,"nonmetal",2,16,"g","जीवों की सांस के लिए अनिवार्य; पानी (H₂O) और अधिकांश चट्टानों का प्रमुख घटक।"],
+[9,"F","Fluorine","फ्लोरीन",18.998,"halogen",2,17,"g","सबसे अधिक क्रियाशील तत्व; दांतों की सुरक्षा के लिए टूथपेस्ट में मिलाया जाता है।"],
+[10,"Ne","Neon","नियॉन",20.180,"noble",2,18,"g","चमकीली रंगीन 'नियॉन साइनबोर्ड' की रोशनी इसी उत्कृष्ट गैस से बनती है।"],
+[11,"Na","Sodium","सोडियम",22.990,"alkali",3,1,"s","पानी के साथ हिंसक प्रतिक्रिया करता है; नमक (NaCl) के रूप में हर रसोई में मौजूद।"],
+[12,"Mg","Magnesium","मैग्नीशियम",24.305,"alkaline",3,2,"s","पौधों की पत्तियों में क्लोरोफिल का केंद्रीय परमाणु; जलने पर तेज सफेद रोशनी देता है।"],
+[13,"Al","Aluminium","एल्युमिनियम",26.982,"posttrans",3,13,"s","हल्की व जंग-रोधी धातु; हवाई जहाज के ढाँचे से लेकर खाने-पीने के डिब्बों तक उपयोग होती है।"],
+[14,"Si","Silicon","सिलिकॉन",28.085,"metalloid",3,14,"s","कंप्यूटर चिप्स और सौर सेल की रीढ़; साधारण रेत का भी मुख्य घटक यही तत्व है।"],
+[15,"P","Phosphorus","फॉस्फोरस",30.974,"nonmetal",3,15,"s","DNA और हड्डियों का महत्वपूर्ण भाग; इसकी खोज माचिस बनाने की खोज से भी जुड़ी रही है।"],
+[16,"S","Sulfur","सल्फर",32.06,"nonmetal",3,16,"s","ज्वालामुखियों के पास पीले क्रिस्टल के रूप में मिलता है; सल्फ्यूरिक एसिड बनाने में उपयोगी।"],
+[17,"Cl","Chlorine","क्लोरीन",35.45,"halogen",3,17,"g","पानी को कीटाणुरहित करने और नमक बनाने में उपयोग होने वाली तीखी हरी-पीली गैस।"],
+[18,"Ar","Argon","आर्गन",39.948,"noble",3,18,"g","वायुमंडल की तीसरी सबसे बड़ी गैस; पुराने बल्बों के अंदर तार को जलने से बचाती थी।"],
+[19,"K","Potassium","पोटैशियम",39.098,"alkali",4,1,"s","मांसपेशियों व तंत्रिकाओं के कार्य के लिए आवश्यक; केले में प्रचुर मात्रा में पाया जाता है।"],
+[20,"Ca","Calcium","कैल्शियम",40.078,"alkaline",4,2,"s","हड्डियों और दांतों की मजबूती का आधार तत्व; दूध में प्रचुर मात्रा में मिलता है।"],
+[21,"Sc","Scandium","स्कैंडियम",44.956,"transition",4,3,"s","हल्की मिश्र धातुओं में उपयोग; बेसबॉल बैट जैसे उच्च-प्रदर्शन खेल उपकरणों को मजबूत बनाता है।"],
+[22,"Ti","Titanium","टाइटेनियम",47.867,"transition",4,4,"s","स्टील जितना मजबूत पर बहुत हल्का; कृत्रिम जोड़ों और अंतरिक्ष यानों में उपयोगी।"],
+[23,"V","Vanadium","वैनेडियम",50.942,"transition",4,5,"s","स्टील को अत्यधिक कठोर और मजबूत बनाने के लिए इसमें मिलाया जाता है।"],
+[24,"Cr","Chromium","क्रोमियम",51.996,"transition",4,6,"s","स्टेनलेस स्टील को जंगरोधी चमक और मजबूती देने वाला महत्वपूर्ण तत्व।"],
+[25,"Mn","Manganese","मैंगनीज",54.938,"transition",4,7,"s","लगभग सभी स्टील निर्माण में अनिवार्य; पौधों के विकास में भी सहायक सूक्ष्म-पोषक तत्व।"],
+[26,"Fe","Iron","लोहा (आयरन)",55.845,"transition",4,8,"s","पृथ्वी की क्रोड (कोर) का प्रमुख भाग; रक्त में हीमोग्लोबिन का केंद्रीय तत्व जो ऑक्सीजन ढोता है।"],
+[27,"Co","Cobalt","कोबाल्ट",58.933,"transition",4,9,"s","गहरा नीला रंग देने वाला तत्व; आधुनिक बैटरियों और शक्तिशाली चुम्बकों में उपयोगी।"],
+[28,"Ni","Nickel","निकल",58.693,"transition",4,10,"s","सिक्कों और स्टेनलेस स्टील में उपयोग होने वाली चमकदार, जंगरोधी धातु।"],
+[29,"Cu","Copper","तांबा (कॉपर)",63.546,"transition",4,11,"s","बिजली का बेहतरीन सुचालक; तारों, बर्तनों और सिक्कों में सदियों से उपयोग हो रहा है।"],
+[30,"Zn","Zinc","जस्ता (जिंक)",65.38,"transition",4,12,"s","लोहे को जंग से बचाने के लिए परत चढ़ाई जाती है; शरीर की रोग-प्रतिरोधक क्षमता के लिए भी जरूरी।"],
+[31,"Ga","Gallium","गैलियम",69.723,"posttrans",4,13,"s","हाथ पर रखते ही पिघलने लगती है, क्योंकि इसका गलनांक शरीर के तापमान के करीब है!"],
+[32,"Ge","Germanium","जर्मेनियम",72.630,"metalloid",4,14,"s","शुरुआती ट्रांजिस्टर और आधुनिक फाइबर-ऑप्टिक केबल में उपयोग होने वाला सेमीकंडक्टर तत्व।"],
+[33,"As","Arsenic","आर्सेनिक",74.922,"metalloid",4,15,"s","कीटनाशकों में उपयोग होने वाला विषैला तत्व; अर्धचालक उद्योग में भी उपयोगी।"],
+[34,"Se","Selenium","सेलेनियम",78.971,"nonmetal",4,16,"s","सौर सेल और पुराने फोटोकॉपियर में उपयोग होने वाला प्रकाश-संवेदी तत्व।"],
+[35,"Br","Bromine","ब्रोमीन",79.904,"halogen",4,17,"l","कमरे के तापमान पर तरल रहने वाला दुर्लभ अधातु; तीखी गंध वाला गहरे लाल-भूरे रंग का द्रव।"],
+[36,"Kr","Krypton","क्रिप्टॉन",83.798,"noble",4,18,"g","कैमरे के फ्लैश और विशेष प्रकाश बल्बों में उपयोग होने वाली उत्कृष्ट गैस।"],
+[37,"Rb","Rubidium","रुबिडियम",85.468,"alkali",5,1,"s","परमाणु घड़ियों में अत्यंत सटीक समय मापने के लिए उपयोग होता है।"],
+[38,"Sr","Strontium","स्ट्रॉन्शियम",87.62,"alkaline",5,2,"s","आतिशबाजी में चमकीला लाल रंग पैदा करने वाला तत्व।"],
+[39,"Y","Yttrium","इट्रियम",88.906,"transition",5,3,"s","LED और टीवी स्क्रीन की फॉस्फर परत में रंग चमकाने के लिए उपयोगी।"],
+[40,"Zr","Zirconium","ज़िरकोनियम",91.224,"transition",5,4,"s","नाभिकीय रिएक्टरों में उच्च तापमान सहने वाला महत्वपूर्ण संरचनात्मक तत्व।"],
+[41,"Nb","Niobium","नाइओबियम",92.906,"transition",5,5,"s","सुपरकंडक्टिंग चुम्बकों (जैसे MRI मशीनों में) उपयोग होने वाली मजबूत धातु।"],
+[42,"Mo","Molybdenum","मोलिब्डेनम",95.95,"transition",5,6,"s","उच्च ताप सहने वाले स्टील मिश्र धातुओं और औद्योगिक उपकरणों में उपयोगी।"],
+[43,"Tc","Technetium","टेक्नीशियम",98,"transition",5,7,"s","प्रकृति में लगभग न मिलने वाला पहला कृत्रिम रूप से बनाया गया तत्व; चिकित्सा इमेजिंग में जीवनरक्षक उपयोग।"],
+[44,"Ru","Ruthenium","रूथेनियम",101.07,"transition",5,8,"s","विद्युत संपर्कों और गहनों को टिकाऊ, खरोंच-रोधी बनाने में उपयोगी।"],
+[45,"Rh","Rhodium","रोडियम",102.906,"transition",5,9,"s","वाहनों के प्रदूषण नियंत्रण उपकरण (कैटेलिटिक कन्वर्टर) में उपयोग होने वाली अत्यंत मूल्यवान धातु।"],
+[46,"Pd","Palladium","पैलेडियम",106.42,"transition",5,10,"s","कैटेलिटिक कन्वर्टर और गहनों में उपयोग होने वाली चमकदार, प्रतिरोधी धातु।"],
+[47,"Ag","Silver","चांदी (सिल्वर)",107.868,"transition",5,11,"s","सभी धातुओं में सबसे अच्छी विद्युत और ऊष्मा सुचालक।"],
+[48,"Cd","Cadmium","कैडमियम",112.414,"transition",5,12,"s","पुरानी रिचार्जेबल बैटरियों में उपयोग होता था; विषाक्तता के कारण अब सीमित उपयोग।"],
+[49,"In","Indium","इंडियम",114.818,"posttrans",5,13,"s","टचस्क्रीन और LCD स्क्रीन की पारदर्शी संचालक परत में उपयोगी।"],
+[50,"Sn","Tin","टिन (राँगा)",118.710,"posttrans",5,14,"s","लोहे के डिब्बों पर परत चढ़ाकर जंग से बचाने में सदियों से उपयोग होता आ रहा है।"],
+[51,"Sb","Antimony","एंटीमनी",121.760,"metalloid",5,15,"s","प्राचीन काल से आँखों के काजल (कोहल) में सौंदर्य प्रसाधन के रूप में उपयोग होता रहा है।"],
+[52,"Te","Tellurium","टेलुरियम",127.60,"metalloid",5,16,"s","सौर पैनल (सोलर सेल) बनाने में उपयोगी एक दुर्लभ तत्व।"],
+[53,"I","Iodine","आयोडीन",126.904,"halogen",5,17,"s","थायरॉइड ग्रंथि के लिए आवश्यक; नमक में मिलाकर घेंघा रोग रोकने में उपयोगी।"],
+[54,"Xe","Xenon","ज़ेनॉन",131.293,"noble",5,18,"g","अंतरिक्ष यानों के आयन इंजन और तेज कार हेडलाइट में उपयोग होने वाली भारी उत्कृष्ट गैस।"],
+[55,"Cs","Cesium","सीज़ियम",132.905,"alkali",6,1,"s","परमाणु घड़ी की परिभाषा का आधार — एक 'सेकंड' इसी के परमाणु कंपन से मापा जाता है।"],
+[56,"Ba","Barium","बेरियम",137.327,"alkaline",6,2,"s","पेट के X-रे में 'बेरियम मील' के रूप में आंतरिक अंगों को स्पष्ट दिखाने के लिए उपयोग होता है।"],
+[57,"La","Lanthanum","लैंथेनम",138.905,"lanth",6,0,"s","कैमरे के उच्च-गुणवत्ता वाले लेंस और हाइब्रिड कार बैटरियों में उपयोगी।"],
+[58,"Ce","Cerium","सीरियम",140.116,"lanth",6,0,"s","लाइटर के चकमक पत्थर (फ्लिंट) में चिंगारी पैदा करने के लिए उपयोग होता है।"],
+[59,"Pr","Praseodymium","प्रेजोडाइमियम",140.908,"lanth",6,0,"s","शक्तिशाली चुम्बक और वेल्डिंग गॉगल्स के कांच में सुरक्षा के लिए उपयोगी।"],
+[60,"Nd","Neodymium","नियोडाइमियम",144.242,"lanth",6,0,"s","सबसे शक्तिशाली स्थायी चुम्बक इसी से बनते हैं, जो हेडफोन और इलेक्ट्रिक मोटर में उपयोग होते हैं।"],
+[61,"Pm","Promethium","प्रोमेथियम",145,"lanth",6,0,"s","पूरी तरह रेडियोधर्मी तत्व; कभी घड़ियों की चमकदार सुइयों में सीमित उपयोग हुआ है।"],
+[62,"Sm","Samarium","समैरियम",150.36,"lanth",6,0,"s","उच्च तापमान पर भी काम करने वाले शक्तिशाली स्थायी चुम्बकों में उपयोगी।"],
+[63,"Eu","Europium","यूरोपियम",151.964,"lanth",6,0,"s","यूरो नोटों की सुरक्षा स्याही और टीवी स्क्रीन में लाल-नीली चमक देने वाला तत्व।"],
+[64,"Gd","Gadolinium","गैडोलिनियम",157.25,"lanth",6,0,"s","MRI स्कैन को अधिक स्पष्ट बनाने के लिए कंट्रास्ट एजेंट के रूप में उपयोग होता है।"],
+[65,"Tb","Terbium","टर्बियम",158.925,"lanth",6,0,"s","हरी रोशनी देने वाला फॉस्फर; ऊर्जा-बचत बल्बों में उपयोगी।"],
+[66,"Dy","Dysprosium","डिस्प्रोसियम",162.500,"lanth",6,0,"s","उच्च तापमान पर भी अपना चुंबकत्व बनाए रखने की दुर्लभ क्षमता रखता है।"],
+[67,"Ho","Holmium","होल्मियम",164.930,"lanth",6,0,"s","सभी ज्ञात तत्वों में सबसे तेज कृत्रिम चुंबकीय क्षेत्र बनाने की क्षमता रखता है।"],
+[68,"Er","Erbium","अर्बियम",167.259,"lanth",6,0,"s","फाइबर-ऑप्टिक केबल में इंटरनेट सिग्नल को बढ़ाने (एम्प्लीफाई) में उपयोगी।"],
+[69,"Tm","Thulium","थ्यूलियम",168.934,"lanth",6,0,"s","दुर्लभतम प्राकृतिक तत्वों में से एक; पोर्टेबल X-रे उपकरणों में उपयोगी।"],
+[70,"Yb","Ytterbium","इटरबियम",173.045,"lanth",6,0,"s","अत्यंत सटीक परमाणु घड़ियों की सटीकता और भी बढ़ाने में उपयोग होने वाला तत्व।"],
+[71,"Lu","Lutetium","ल्यूटेटियम",174.967,"lanth",6,0,"s","लैंथेनाइड श्रृंखला का अंतिम, सबसे घना और सबसे कठोर सदस्य।"],
+[72,"Hf","Hafnium","हेफ्नियम",178.49,"transition",6,4,"s","कंप्यूटर चिप्स के अत्यंत सूक्ष्म ट्रांजिस्टरों में उपयोग होने वाला आधुनिक तत्व।"],
+[73,"Ta","Tantalum","टैंटलम",180.948,"transition",6,5,"s","मोबाइल फोन के छोटे-छोटे कैपेसिटर बनाने में लगभग अनिवार्य तत्व।"],
+[74,"W","Tungsten","टंगस्टन",183.84,"transition",6,6,"s","सभी धातुओं में सबसे अधिक गलनांक; पुराने बल्बों के फिलामेंट में उपयोग होता था।"],
+[75,"Re","Rhenium","रीनियम",186.207,"transition",6,7,"s","जेट इंजन के पुर्जों को अत्यधिक उच्च तापमान सहने योग्य बनाता है।"],
+[76,"Os","Osmium","ऑस्मियम",190.23,"transition",6,8,"s","प्रकृति में मिलने वाला सबसे घना ज्ञात तत्व।"],
+[77,"Ir","Iridium","इरिडियम",192.217,"transition",6,9,"s","डायनासोर-विलुप्ति काल की मिट्टी की परत में मिलने के कारण उल्कापिंड टकराव के प्रमाण से जुड़ा तत्व।"],
+[78,"Pt","Platinum","प्लैटिनम",195.085,"transition",6,10,"s","गहनों के साथ-साथ वाहनों के प्रदूषण नियंत्रण में महत्वपूर्ण उत्प्रेरक (कैटेलिस्ट) की भूमिका निभाता है।"],
+[79,"Au","Gold","सोना (गोल्ड)",196.967,"transition",6,11,"s","हजारों वर्षों से मूल्यवान; अत्यंत लचीला और इलेक्ट्रॉनिक्स में विश्वसनीय संपर्क बनाने में उपयोगी।"],
+[80,"Hg","Mercury","पारा (मर्करी)",200.592,"transition",6,12,"l","कमरे के तापमान पर तरल रहने वाली एकमात्र धातु; कभी थर्मामीटर में व्यापक उपयोग होता था।"],
+[81,"Tl","Thallium","थैलियम",204.38,"posttrans",6,13,"s","पहले चूहे मारने की दवा में उपयोग होता था; अत्यंत विषैला माना जाने वाला तत्व।"],
+[82,"Pb","Lead","सीसा (लेड)",207.2,"posttrans",6,14,"s","घना व नरम धातु; रेडिएशन से बचाव के एप्रन और पुरानी बैटरियों में उपयोग होता है।"],
+[83,"Bi","Bismuth","बिस्मथ",208.980,"posttrans",6,15,"s","सुंदर इंद्रधनुषी रंगों वाले सीढ़ीनुमा क्रिस्टल बनाने के लिए प्रसिद्ध; भारी होते हुए भी बहुत कम विषैला।"],
+[84,"Po","Polonium","पोलोनियम",209,"posttrans",6,16,"s","मैरी क्यूरी द्वारा खोजा गया, अत्यंत रेडियोधर्मी तत्व — उनके मातृदेश पोलैंड के नाम पर रखा गया।"],
+[85,"At","Astatine","एस्टैटिन",210,"halogen",6,17,"s","प्रकृति में सबसे दुर्लभ तत्वों में से एक; पृथ्वी की पूरी परत में इसकी मात्रा एक ग्राम से भी कम है।"],
+[86,"Rn","Radon","रेडॉन",222,"noble",6,18,"g","मिट्टी और चट्टानों से रिसने वाली रेडियोधर्मी गैस; घरों में इसकी जांच स्वास्थ्य सुरक्षा हेतु जरूरी होती है।"],
+[87,"Fr","Francium","फ्रांसियम",223,"alkali",7,1,"s","अत्यंत अस्थिर व दुर्लभ; किसी भी क्षण पृथ्वी पर इसका कुल भंडार एक औंस से भी कम रहता है।"],
+[88,"Ra","Radium","रेडियम",226,"alkaline",7,2,"s","मैरी और पियरे क्यूरी द्वारा खोजा गया; कभी घड़ियों की सुइयों में अंधेरे में चमक के लिए उपयोग हुआ।"],
+[89,"Ac","Actinium","एक्टिनियम",227,"actin",7,0,"s","एक्टिनाइड श्रृंखला को नाम देने वाला पहला रेडियोधर्मी तत्व।"],
+[90,"Th","Thorium","थोरियम",232.038,"actin",7,0,"s","भविष्य के सुरक्षित नाभिकीय रिएक्टरों के ईंधन के रूप में बड़ी संभावनाओं वाला तत्व।"],
+[91,"Pa","Protactinium","प्रोटैक्टिनियम",231.036,"actin",7,0,"s","अत्यंत दुर्लभ और रेडियोधर्मी; यूरेनियम अयस्क में केवल सूक्ष्म मात्रा में मिलता है।"],
+[92,"U","Uranium","यूरेनियम",238.029,"actin",7,0,"s","नाभिकीय ऊर्जा संयंत्रों में बिजली बनाने के लिए ऊर्जा स्रोत के रूप में उपयोग होता है।"],
+[93,"Np","Neptunium","नेप्च्यूनियम",237,"actin",7,0,"s","यूरेनियम से भारी खोजा गया पहला तत्व, ग्रह नेप्च्यून के नाम पर रखा गया।"],
+[94,"Pu","Plutonium","प्लूटोनियम",244,"actin",7,0,"s","नाभिकीय ऊर्जा और अंतरिक्ष यानों को शक्ति देने वाले जनरेटरों में उपयोग होता है।"],
+[95,"Am","Americium","अमेरिसियम",243,"actin",7,0,"s","आपके घर के धुआं संसूचक (स्मोक डिटेक्टर) में सुरक्षा के लिए उपयोग होने वाला तत्व।"],
+[96,"Cm","Curium","क्यूरियम",247,"actin",7,0,"s","मैरी और पियरे क्यूरी के सम्मान में नामित एक रेडियोधर्मी तत्व।"],
+[97,"Bk","Berkelium","बर्केलियम",247,"actin",7,0,"s","बर्कले, कैलिफोर्निया शहर के नाम पर रखा गया, जहाँ इसे पहली बार बनाया गया था।"],
+[98,"Cf","Californium","कैलिफोर्नियम",251,"actin",7,0,"s","न्यूट्रॉन स्रोत के रूप में कैंसर उपचार और खनिज खोज में उपयोगी दुर्लभ तत्व।"],
+[99,"Es","Einsteinium","आइंस्टीनियम",252,"actin",7,0,"s","पहले हाइड्रोजन बम परीक्षण के मलबे में खोजा गया; अल्बर्ट आइंस्टीन के सम्मान में नामित।"],
+[100,"Fm","Fermium","फर्मियम",257,"actin",7,0,"s","महान भौतिक विज्ञानी एनरिको फर्मी के सम्मान में नामित तत्व।"],
+[101,"Md","Mendelevium","मेंडेलीवियम",258,"actin",7,0,"s","आवर्त सारणी के जनक दिमित्री मेंडेलीव के नाम पर रखा गया — एक सुंदर श्रद्धांजलि।"],
+[102,"No","Nobelium","नोबेलियम",259,"actin",7,0,"s","अल्फ्रेड नोबेल के नाम पर रखा गया, अत्यंत अल्पजीवी कृत्रिम तत्व।"],
+[103,"Lr","Lawrencium","लॉरेंसियम",266,"actin",7,0,"s","कण त्वरक (साइक्लोट्रॉन) के आविष्कारक अर्नेस्ट लॉरेंस के नाम पर रखा गया अंतिम एक्टिनाइड।"],
+[104,"Rf","Rutherfordium","रदरफोर्डियम",267,"transition",7,4,"u","परमाणु के नाभिक की खोज करने वाले वैज्ञानिक अर्नेस्ट रदरफोर्ड के नाम पर रखा गया तत्व।"],
+[105,"Db","Dubnium","डब्नियम",268,"transition",7,5,"u","रूस के डुबना शहर के नाम पर, जहाँ परमाणु अनुसंधान की एक प्रमुख प्रयोगशाला स्थित है।"],
+[106,"Sg","Seaborgium","सीबोर्गियम",269,"transition",7,6,"u","वैज्ञानिक ग्लेन सीबोर्ग के सम्मान में — किसी जीवित वैज्ञानिक के नाम पर रखा गया पहला तत्व।"],
+[107,"Bh","Bohrium","बोहरियम",270,"transition",7,7,"u","परमाणु संरचना के सिद्धांत देने वाले महान भौतिक विज्ञानी नील्स बोहर के नाम पर।"],
+[108,"Hs","Hassium","हैसियम",269,"transition",7,8,"u","जर्मनी के हेस्से (Hesse) प्रांत के नाम पर, जहाँ इसे पहली बार बनाया गया।"],
+[109,"Mt","Meitnerium","मीटनेरियम",278,"transition",7,9,"u","नाभिकीय विखंडन को समझाने वाली वैज्ञानिक लीज़े माइटनर के सम्मान में नामित।"],
+[110,"Ds","Darmstadtium","डार्मस्टेडियम",281,"transition",7,10,"u","जर्मनी के डार्मस्टाट शहर के नाम पर, जहाँ इस तत्व को पहली बार संश्लेषित किया गया।"],
+[111,"Rg","Roentgenium","रॉन्टजेनियम",282,"transition",7,11,"u","X-रे की खोज करने वाले विल्हेम रॉन्टजन के सम्मान में नामित तत्व।"],
+[112,"Cn","Copernicium","कोपरनिसियम",285,"transition",7,12,"u","खगोलशास्त्री निकोलस कोपरनिकस के नाम पर, जिन्होंने बताया कि पृथ्वी सूर्य के चारों ओर घूमती है।"],
+[113,"Nh","Nihonium","निहोनियम",286,"posttrans",7,13,"u","जापान (निहोन) की प्रयोगशाला में बना पहला तत्व — एशिया से नामित पहली ऐसी खोज।"],
+[114,"Fl","Flerovium","फ्लेरोवियम",289,"posttrans",7,14,"u","रूसी वैज्ञानिक जॉर्जी फ्लेरोव की प्रसिद्ध नाभिकीय प्रतिक्रिया प्रयोगशाला के नाम पर रखा गया।"],
+[115,"Mc","Moscovium","मॉस्कोवियम",290,"posttrans",7,15,"u","रूस की राजधानी मॉस्को के निकट बनाए जाने के कारण नामित तत्व।"],
+[116,"Lv","Livermorium","लिवरमोरियम",293,"posttrans",7,16,"u","अमेरिका की लॉरेंस लिवरमोर राष्ट्रीय प्रयोगशाला के नाम पर रखा गया तत्व।"],
+[117,"Ts","Tennessine","टेनेसीन",294,"halogen",7,17,"u","अमेरिका के टेनेसी राज्य के नाम पर — जहाँ की प्रयोगशालाओं ने इसे बनाने में मदद की।"],
+[118,"Og","Oganesson","ओगेनेसॉन",294,"noble",7,18,"u","वैज्ञानिक यूरी ओगेनेसियन के सम्मान में नामित — अब तक ज्ञात सबसे भारी तत्व, आवर्त सारणी की अंतिम पंक्ति पूरी करता है।"]
+];
+
+const CATEGORIES = {
+  alkali:     {label:"क्षारीय धातु",          color:"var(--c-alkali)",     icon:"⚡"},
+  alkaline:   {label:"क्षारीय मृदा धातु",      color:"var(--c-alkaline)",   icon:"🔥"},
+  transition: {label:"संक्रमण धातु",           color:"var(--c-transition)", icon:"⚙"},
+  posttrans:  {label:"उत्तर-संक्रमण धातु",      color:"var(--c-posttrans)",  icon:"◆"},
+  metalloid:  {label:"उपधातु",                 color:"var(--c-metalloid)",  icon:"◈"},
+  nonmetal:   {label:"अधातु",                  color:"var(--c-nonmetal)",   icon:"🌿"},
+  halogen:    {label:"हैलोजन",                 color:"var(--c-halogen)",    icon:"☣"},
+  noble:      {label:"उत्कृष्ट गैस",            color:"var(--c-noble)",      icon:"✦"},
+  lanth:      {label:"लैंथेनाइड",              color:"var(--c-lanth)",      icon:"✺"},
+  actin:      {label:"एक्टिनाइड",              color:"var(--c-actin)",      icon:"☢"}
+};
+
+const PHASES = {
+  s:{label:"ठोस (Solid)",   color:"#FFD400"},
+  l:{label:"द्रव (Liquid)", color:"#7FD8FF"},
+  g:{label:"गैस (Gas)",     color:"#FF8AD8"},
+  u:{label:"अज्ञात / अनुमानित", color:"#8a8367"}
+};
+
+const byZ = {};
+ELEMENTS.forEach(e=>byZ[e[0]]=e);
+
+/* ---------------- Build main grid (periods 1-7, groups 1-18) --------------- */
+const mainGrid = document.getElementById('mainGrid');
+const fGrid = document.getElementById('fGrid');
+
+function makeCellEl(e, isF){
+  const [z,sym,en,hi,mass,cat,period,group,phase,fact] = e;
+  const div = document.createElement('div');
+  div.className='cell';
+  div.dataset.z=z; div.dataset.cat=cat; div.dataset.phase=phase;
+  div.dataset.name=(en+" "+hi+" "+sym+" "+z).toLowerCase();
+  div.style.setProperty('--cat-color', CATEGORIES[cat].color);
+  div.innerHTML = `<span class="z">${z}</span><span class="sym">${sym}</span><span class="hiname">${hi}</span><span class="mass">${mass}</span>`;
+  div.addEventListener('click',()=>openModal(z));
+  return div;
+}
+
+// main table 7x18 positions
+const mainPositions = {}; // "period-group" -> element
+ELEMENTS.forEach(e=>{
+  const [z,sym,en,hi,mass,cat,period,group] = e;
+  if(group>0){ mainPositions[period+"-"+group]=e; }
+});
+
+for(let period=1;period<=7;period++){
+  for(let group=1;group<=18;group++){
+    const key=period+"-"+group;
+    if(mainPositions[key]){
+      mainGrid.appendChild(makeCellEl(mainPositions[key]));
+    } else if((period===6 && group===3) || (period===7 && group===3)){
+      const ph=document.createElement('div');
+      ph.className='cell placeholder';
+      ph.textContent = period===6 ? "57–71" : "89–103";
+      ph.style.setProperty('--cat-color', period===6? CATEGORIES.lanth.color : CATEGORIES.actin.color);
+      mainGrid.appendChild(ph);
+    } else {
+      const blank=document.createElement('div');
+      blank.style.visibility='hidden';
+      mainGrid.appendChild(blank);
+    }
+  }
+}
+
+// f-block rows: columns 3-17 map to fcol 1-15
+const lanth = ELEMENTS.filter(e=>e[5]==='lanth');
+const actinRow = ELEMENTS.filter(e=>e[5]==='actin');
+for(let col=1;col<=18;col++){
+  if(col<3 || col>17){
+    const blank=document.createElement('div'); blank.style.visibility='hidden';
+    fGrid.appendChild(blank);
+  } else {
+    const idx=col-3;
+    fGrid.appendChild(makeCellEl(lanth[idx]));
+  }
+}
+for(let col=1;col<=18;col++){
+  if(col<3 || col>17){
+    const blank=document.createElement('div'); blank.style.visibility='hidden';
+    fGrid.appendChild(blank);
+  } else {
+    const idx=col-3;
+    fGrid.appendChild(makeCellEl(actinRow[idx]));
+  }
+}
+
+/* ---------------- Legend + chips ---------------- */
+const chipRow=document.getElementById('chipRow');
+const legendRow=document.getElementById('legendRow');
+let currentMode='category';
+let activeFilter=null;
+
+function buildChips(){
+  chipRow.innerHTML='';
+  const dict = currentMode==='category'?CATEGORIES:PHASES;
+  Object.keys(dict).forEach(key=>{
+    const d=dict[key];
+    const chip=document.createElement('div');
+    chip.className='chip'+(activeFilter===key?' active':'');
+    chip.innerHTML=`<span class="dot" style="background:${d.color}"></span>${d.label}`;
+    chip.addEventListener('click',()=>{
+      activeFilter = activeFilter===key? null : key;
+      buildChips();
+      applyFilter();
+    });
+    chipRow.appendChild(chip);
+  });
+}
+
+function buildLegend(){
+  legendRow.innerHTML='';
+  Object.values(CATEGORIES).forEach(d=>{
+    const item=document.createElement('div');
+    item.className='item';
+    item.innerHTML=`<span class="sw" style="background:${d.color}"></span>${d.icon} ${d.label}`;
+    legendRow.appendChild(item);
+  });
+}
+
+document.querySelectorAll('.view-toggle button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.view-toggle button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode=btn.dataset.mode;
+    activeFilter=null;
+    buildChips();
+    applyFilter();
+  });
+});
+
+function applyFilter(){
+  const cells=document.querySelectorAll('.cell:not(.placeholder)');
+  cells.forEach(c=>{
+    const key = currentMode==='category'? c.dataset.cat : c.dataset.phase;
+    if(activeFilter && key!==activeFilter){
+      c.classList.add('dim');
+    } else {
+      c.classList.remove('dim');
+    }
+  });
+  updateCount();
+}
+
+/* ---------------- Search ---------------- */
+const searchInput=document.getElementById('searchInput');
+const resultCount=document.getElementById('resultCount');
+searchInput.addEventListener('input',()=>{
+  const q=searchInput.value.trim().toLowerCase();
+  document.querySelectorAll('.cell:not(.placeholder)').forEach(c=>{
+    if(q==='' || c.dataset.name.includes(q)){
+      c.classList.remove('hidden-search');
+    } else {
+      c.classList.add('hidden-search');
+    }
+  });
+  updateCount();
+});
+
+function updateCount(){
+  const all=document.querySelectorAll('.cell:not(.placeholder)');
+  const visible=[...all].filter(c=>!c.classList.contains('hidden-search') && !c.classList.contains('dim'));
+  if(searchInput.value.trim()!=='' || activeFilter){
+    resultCount.textContent = `${visible.length} तत्व दिखाए जा रहे हैं`;
+  } else {
+    resultCount.textContent = '';
+  }
+}
+
+buildChips();
+buildLegend();
+
+/* ---------------- Electron shells (simplified Bohr filling) ---------------- */
+function getShells(z){
+  const capacities=[2,8,18,32,32,18,8];
+  let remaining=z, shells=[];
+  // simplified sequential fill (not exact for transition/lanthanide electron configs,
+  // used here purely as an illustrative Bohr-model visual)
+  for(let i=0;i<capacities.length && remaining>0;i++){
+    const take=Math.min(capacities[i],remaining);
+    shells.push(take);
+    remaining-=take;
+  }
+  return shells;
+}
+
+function renderShells(z){
+  const shells=getShells(z);
+  const size=220, cx=size/2, cy=size/2;
+  const maxR=size/2-14;
+  let svg=`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
+  svg+=`<circle cx="${cx}" cy="${cy}" r="9" fill="var(--yellow)" />`;
+  shells.forEach((count,i)=>{
+    const r = 26 + i*((maxR-26)/Math.max(1,shells.length-1||1));
+    const rad = shells.length===1? maxR*0.6 : r;
+    svg+=`<circle cx="${cx}" cy="${cy}" r="${rad}" fill="none" stroke="#5a5636" stroke-width="1.2" stroke-dasharray="3,4"/>`;
+    for(let e=0;e<count;e++){
+      const angle=(2*Math.PI*e)/count - Math.PI/2;
+      const ex=cx+rad*Math.cos(angle);
+      const ey=cy+rad*Math.sin(angle);
+      svg+=`<circle cx="${ex}" cy="${ey}" r="4" fill="var(--yellow-soft)" opacity="0.92"/>`;
+    }
+  });
+  svg+=`</svg>`;
+  return svg;
+}
+
+/* ---------------- Modal ---------------- */
+const overlay=document.getElementById('overlay');
+function openModal(z){
+  const e=byZ[z];
+  const [zz,sym,en,hi,mass,cat,period,group,phase,fact]=e;
+  document.getElementById('mSym').textContent=sym;
+  document.getElementById('mZ').textContent=`परमाणु क्रमांक ${zz}`;
+  document.getElementById('mHiName').textContent=hi;
+  document.getElementById('mEnName').textContent=en;
+  const tag=document.getElementById('mCatTag');
+  tag.innerHTML=`${CATEGORIES[cat].icon} ${CATEGORIES[cat].label}`;
+  document.getElementById('mMass').textContent=mass;
+  document.getElementById('mPeriodGroup').textContent=`${period} / ${group>0?group:'f-ब्लॉक'}`;
+  document.getElementById('mPhase').textContent=PHASES[phase].label;
+  document.getElementById('mFact').textContent=fact;
+  document.getElementById('shellsWrap').innerHTML=renderShells(zz);
+  document.getElementById('modalStripe').style.setProperty('--modal-color',CATEGORIES[cat].color);
+  document.querySelector('.modal').style.setProperty('--modal-color',CATEGORIES[cat].color);
+  overlay.classList.add('show');
+}
+document.getElementById('modalClose').addEventListener('click',()=>overlay.classList.remove('show'));
+overlay.addEventListener('click',(ev)=>{ if(ev.target===overlay) overlay.classList.remove('show'); });
+document.addEventListener('keydown',(ev)=>{ if(ev.key==='Escape') overlay.classList.remove('show'); });
+</script>
+
+</body>
+</html>
