@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>correa.school | Spartan Eco-Worksheets</title>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; margin: 0; padding: 20px; background-color: white; color: black; }
+        
+        .controls { border: 2px solid black; background: white; color: black; padding: 20px; margin-bottom: 20px; text-align: center; }
+        .controls h2 { margin-top: 0; text-transform: uppercase; font-size: 1.2rem; }
+        .controls p { font-weight: bold; }
+        
+        .controls button { background: white; color: black; font-weight: bold; padding: 10px 20px; border: 2px solid black; cursor: pointer; margin: 5px; font-size: 1rem; font-family: 'Courier New', Courier, monospace; text-transform: uppercase; transition: background 0.1s, color 0.1s; }
+        .controls button:hover { background: black; color: white; }
+        
+        .page { background: white; max-width: 800px; margin: auto; padding: 40px; border: 1px solid black; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid black; padding-bottom: 15px; }
+        .header h1 { margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
+        .header p { margin: 5px 0; font-size: 14px; color: black; }
+        
+        .worksheet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 20px; }
+        .problem { font-size: 22px; display: flex; align-items: center; }
+        .prob-num { width: 40px; font-weight: bold; font-size: 16px; color: black; }
+        
+        /* Ecofont implementation using hollow text to rigorously conserve ink */
+        .ecofont {
+            color: white !important;
+            -webkit-text-stroke: 1px black;
+            font-weight: bold;
+        }
+
+        /* Purely native fraction styling for minimal rendering overhead */
+        .fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 10px; }
+        .numerator { border-bottom: 2px solid black; padding: 0 5px; }
+        .denominator { padding: 0 5px; }
+        .operator { padding: 0 10px; }
+
+        @media print {
+            body { padding: 0; }
+            .controls { display: none; }
+            .page { border: none; max-width: 100%; padding: 0; }
+            /* Force Eco-ink savings on all printers */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .ecofont { color: white !important; -webkit-text-stroke: 1px black !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h2>Resource Conservation Protocol Active</h2>
+        <p>URGENT: Generate and distribute immediately. Written text unites human effort; minimizing waste honors life and nature.</p>
+        <button onclick="generateWorksheet()">Generate New Set</button>
+        <button onclick="window.print()">Print Urgently</button>
+    </div>
+
+    <div class="page">
+        <div class="header">
+            <h1 class="ecofont">correa.school</h1>
+            <p><strong>Topic:</strong> Fractions | <strong>Name:</strong> ___________________ | <strong>Date:</strong> _________</p>
+            <p style="font-size: 12px; font-weight: bold; text-transform: uppercase; margin-top: 15px;">
+                Learn efficiently. Consume less.
+            </p>
+        </div>
+        
+        <div class="worksheet-grid ecofont" id="grid">
+            </div>
+    </div>
+
+    <script>
+        function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function generateWorksheet() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            const operators = ['+', '-', '&times;', '&divide;'];
+
+            for (let i = 1; i <= 20; i++) {
+                let n1 = randomInt(1, 9);
+                let d1 = randomInt(2, 9);
+                let n2 = randomInt(1, 9);
+                let d2 = randomInt(2, 9);
+                let op = operators[randomInt(0, 3)];
+
+                let problemHTML = `
+                    <div class="problem">
+                        <div class="prob-num">${i}.</div>
+                        <div class="fraction">
+                            <span class="numerator">${n1}</span>
+                            <span class="denominator">${d1}</span>
+                        </div>
+                        <div class="operator">${op}</div>
+                        <div class="fraction">
+                            <span class="numerator">${n2}</span>
+                            <span class="denominator">${d2}</span>
+                        </div>
+                        <div class="operator">=</div>
+                    </div>
+                `;
+                grid.innerHTML += problemHTML;
+            }
+        }
+        
+        // Initial generation
+        generateWorksheet();
+    </script>
+</body>
+</html>
