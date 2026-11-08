@@ -1,0 +1,1179 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Tense Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: sticky tab bar over one working column. Time is the organising idea:
+   past = amber, present = teal, future = violet, used for every tense mark. */
+:root{
+  --font-display:'Bricolage Grotesque','Trebuchet MS',system-ui,sans-serif;
+  --font-body:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --bg:#F2F6F6; --surface:#FFFFFF; --surface2:#E6EDED; --fg:#10201F; --muted:#506569; --line:#CBD8D8;
+  --past:#9A5708; --past-bg:#FBEBD2;
+  --pres:#0B7476; --pres-bg:#D3EFEE;
+  --fut:#5146C9; --fut-bg:#E4E1FB;
+  --good:#17703A; --good-bg:#DDF3E3;
+  --bad:#B3261E; --bad-bg:#FBE0DD;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1416; --surface:#142022; --surface2:#1C2D30; --fg:#E6F0EF; --muted:#9BB2B5; --line:#2A3D40;
+    --past:#F0B25A; --past-bg:#3A2A10;
+    --pres:#4FD1D3; --pres-bg:#0F3335;
+    --fut:#A5A0FF; --fut-bg:#26224F;
+    --good:#6FD58C; --good-bg:#12361F;
+    --bad:#FF8F87; --bad-bg:#3E1815;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1416; --surface:#142022; --surface2:#1C2D30; --fg:#E6F0EF; --muted:#9BB2B5; --line:#2A3D40;
+  --past:#F0B25A; --past-bg:#3A2A10;
+  --pres:#4FD1D3; --pres-bg:#0F3335;
+  --fut:#A5A0FF; --fut-bg:#26224F;
+  --good:#6FD58C; --good-bg:#12361F;
+  --bad:#FF8F87; --bad-bg:#3E1815;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.55 var(--font-body);
+  padding-block:0 56px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.wrap{max-width:1040px;margin:0 auto}
+[data-zone="past"]{--z:var(--past);--zbg:var(--past-bg)}
+[data-zone="pres"]{--z:var(--pres);--zbg:var(--pres-bg)}
+[data-zone="fut"]{--z:var(--fut);--zbg:var(--fut-bg)}
+
+header.top{padding-block:22px 10px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px}
+.brand{margin:0;font:800 clamp(30px,6vw,46px)/1 var(--font-display);letter-spacing:-.025em}
+.sub{margin:0;color:var(--muted);font:400 13px var(--font-mono)}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid var(--line);padding-top:6px}
+.tab{appearance:none;border:0;background:none;color:var(--muted);font:700 15px var(--font-body);padding:10px 14px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--fg)}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--fg)}
+:focus-visible{outline:2px solid var(--pres);outline-offset:2px}
+main{padding-top:24px}
+h2{font:700 clamp(23px,3.6vw,31px)/1.15 var(--font-display);letter-spacing:-.015em;margin:0 0 8px;text-wrap:balance}
+h3{font:600 12.5px var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:30px 0 10px}
+p{margin:0 0 12px}
+.lead,.intro p{max-width:65ch;color:var(--muted)}
+.meta{font:400 13px var(--font-mono);color:var(--muted);margin:0 0 10px;font-variant-numeric:tabular-nums}
+
+/* buttons, inputs */
+.btn{appearance:none;border:1px solid var(--fg);background:var(--fg);color:var(--bg);font:700 15px var(--font-body);padding:9px 18px;border-radius:var(--r);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--fg)}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+input[type="text"],select{font:inherit;padding:8px 10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:var(--r);min-width:0;max-width:100%}
+input[type="text"]:disabled,select:disabled{opacity:1;color:var(--fg)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(16px,3vw,26px);min-width:0}
+.fb{margin-top:12px;padding:10px 12px;border-radius:var(--r);font-weight:700}
+.fb.ok{background:var(--good-bg);color:var(--good)}
+.fb.no{background:var(--bad-bg);color:var(--bad)}
+.fb b{font-weight:700}
+
+/* timelines */
+.tlwrap{overflow-x:auto;margin:12px 0 0}
+.tl{display:block;width:100%;height:auto}
+.tlwrap .tl{min-width:460px;max-width:720px}
+.tl .axis{stroke:var(--muted)} .tl .axis-head{fill:var(--muted)}
+.tl .now{stroke:var(--fg)}
+.tl .mark{fill:var(--z)}
+.tl .bar{fill:var(--zbg);stroke:var(--z)}
+.tl .ring{fill:var(--surface);stroke:var(--z)}
+.tl .conn{stroke:var(--z)}
+.tl text{font:16px var(--font-body);fill:var(--muted)}
+.tl .lbl-now{font-weight:700;fill:var(--fg);letter-spacing:.08em}
+.tl .lbl-z{fill:var(--z);font-weight:700}
+
+/* map */
+.aspects{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 22px;margin:22px 0 8px}
+.aspects div{border-top:1px solid var(--fg);padding-top:8px}
+.aspects dt{font:700 15px var(--font-display)}
+.aspects dd{margin:2px 0 0;color:var(--muted);font-size:14.5px}
+.zone{margin-top:28px}
+.zone-head{display:flex;align-items:center;gap:12px;margin:0 0 12px;color:var(--z);font-size:13px}
+.zone-head::after{content:"";flex:1;height:1px;background:var(--line)}
+.zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.cell{display:flex;flex-direction:column;gap:6px;text-align:left;appearance:none;font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;cursor:pointer;min-width:0}
+.cell:hover{border-color:var(--z)}
+.cell .asp{font:600 11.5px var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--z)}
+.cell .nm{font:700 19px/1.2 var(--font-display)}
+.cell .cf{font:400 12.5px var(--font-mono);color:var(--muted);overflow-wrap:anywhere}
+.mini{margin-top:2px}
+.meter{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-top:6px}
+.meter i{display:block;height:100%;background:var(--z);transition:width .3s}
+.cell small{font:400 12px var(--font-mono);color:var(--muted)}
+.summary{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px;color:var(--muted)}
+
+/* learn */
+.picker{display:grid;gap:8px;margin-bottom:18px}
+.pick-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pick-lbl{width:78px;font:600 12px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--z)}
+.chip{appearance:none;font:700 14px var(--font-body);color:var(--z);background:transparent;border:1px solid var(--z);border-radius:999px;padding:5px 13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--z);color:var(--bg)}
+.eyebrow{font:600 12px var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--z);margin:0 0 6px}
+.lname{font:800 clamp(30px,6vw,48px)/1.05 var(--font-display);letter-spacing:-.025em;color:var(--z);margin:0 0 8px}
+.frow{display:grid;grid-template-columns:92px minmax(0,1fr);gap:4px 16px;padding:12px 0;border-top:1px solid var(--line)}
+.fl{font:600 12px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:4px}
+.fm{display:inline-block;font:600 14px var(--font-mono);background:var(--zbg);color:var(--fg);padding:3px 9px;border-radius:4px;overflow-wrap:anywhere}
+.ex{margin:6px 0 0;font-size:17px}
+.uses{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.uses li{display:grid;gap:2px;padding-left:14px;border-left:2px solid var(--z)}
+.uses em{color:var(--muted)}
+.sigs{display:flex;flex-wrap:wrap;gap:8px}
+.sig{font:600 13px var(--font-mono);border:1px solid var(--z);color:var(--z);padding:2px 10px;border-radius:999px}
+.mistake{display:grid;gap:8px}
+.mistake div{padding:10px 12px;border-radius:var(--r)}
+.mistake .w{background:var(--bad-bg);color:var(--bad)}
+.mistake .w s{text-decoration-thickness:2px}
+.mistake .r{background:var(--good-bg);color:var(--good)}
+.mistake b{font:600 11.5px var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-right:8px}
+.lnav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:28px}
+
+/* questions */
+.q{font-size:18px;line-height:1.8;margin-bottom:10px}
+.q input{width:min(17ch,100%);margin:0 6px;font-size:17px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:10px}
+.opt{appearance:none;text-align:left;font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:11px 14px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--fg)}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--good-bg);border-color:var(--good);color:var(--good);font-weight:700}
+.opt.no{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.subtabs,.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.pill{appearance:none;font:700 14px var(--font-body);color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.pill[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.filters .pill{font-size:13px;padding:4px 12px}
+.filters .lab{font:600 12px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);align-self:center;margin-right:4px}
+.words{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
+.word{appearance:none;font:inherit;font-size:18px;color:var(--fg);background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:5px 10px;cursor:pointer}
+.word:hover:not(:disabled){border-color:var(--fg)}
+.word:disabled{cursor:default}
+.word.ok{background:var(--good-bg);border:1px solid var(--good);color:var(--good);font-weight:700}
+.word.no{background:var(--bad-bg);border:1px solid var(--bad);color:var(--bad)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:44px;margin:8px 0 16px}
+.tok{appearance:none;font:600 14px var(--font-mono);color:var(--fg);background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+.tok[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tok.ok{background:var(--good-bg);color:var(--good);border-color:var(--good)}
+.tok.no{background:var(--bad-bg);color:var(--bad);border-color:var(--bad)}
+.buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.bucket{appearance:none;text-align:left;font:inherit;color:var(--fg);background:transparent;border:2px dashed var(--line);border-radius:var(--r);padding:10px;min-height:120px;cursor:pointer;display:flex;flex-direction:column;gap:8px}
+.bucket:hover{border-color:var(--fg)}
+.bucket strong{font:700 15px var(--font-display)}
+.bucket .in{display:flex;flex-wrap:wrap;gap:6px}
+.passage{font-size:18px;line-height:2.1}
+.passage select{margin:0 4px;font-size:16px}
+.passage select.ok{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+.passage select.no{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.review{display:grid;gap:10px;margin-top:12px}
+.review li{list-style:none}
+.review ul{margin:0;padding:0;display:grid;gap:10px}
+.review .it{padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+
+/* lab */
+.controls{display:grid;gap:18px 24px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:18px 0}
+.controls label,.controls .lbl{display:block;font:600 12px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{appearance:none;font:inherit;text-align:left;color:var(--z);background:transparent;border:1px solid var(--z);border-radius:var(--r);padding:7px 12px;cursor:pointer;font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--z);color:var(--bg)}
+.seg.asp button{flex:1 1 150px;display:flex;flex-direction:column;gap:2px;color:var(--fg);border-color:var(--line);background:var(--surface)}
+.seg.asp button small{font:400 12.5px var(--font-body);color:var(--muted)}
+.seg.asp button[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.seg.asp button[aria-pressed="true"] small{color:var(--bg);opacity:.8}
+.sent{display:grid;grid-template-columns:92px minmax(0,1fr);gap:4px 16px;padding:10px 0;border-top:1px solid var(--line);font-size:19px}
+.sent .fl{padding-top:6px}
+.aux{color:var(--z);font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+
+/* toolbox */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);font-size:15px;vertical-align:top}
+th{font:600 12px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.m{font-family:var(--font-mono);font-size:14px}
+.forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px}
+.forms div{border-top:1px solid var(--fg);padding-top:6px}
+.forms span{display:block;font:600 11.5px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.forms b{font:700 20px var(--font-display)}
+.inline{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.inline input{width:min(220px,100%)}
+.bar2{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin:8px 0 14px}
+.bar2 i{display:block;height:100%;background:var(--fg);transition:width .25s}
+.zbars{display:grid;gap:8px;margin:14px 0}
+.zbars div{display:grid;grid-template-columns:80px minmax(0,1fr) 54px;gap:10px;align-items:center;font-size:14px}
+.zbars .meter{margin:0}
+.bignum{font:800 clamp(40px,9vw,64px)/1 var(--font-display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+@media (max-width:560px){
+  .frow,.sent{grid-template-columns:minmax(0,1fr)}
+  .pick-lbl{width:100%}
+  .fl{padding-top:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1 class="brand">Tense Lab</h1>
+    <p class="sub">All 12 English tenses · lessons, a timeline lab, board-style practice</p>
+  </header>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab" role="tab" id="tab-map" type="button" data-go="map">Map</button>
+    <button class="tab" role="tab" id="tab-learn" type="button" data-go="learn">Learn</button>
+    <button class="tab" role="tab" id="tab-lab" type="button" data-go="lab">Timeline lab</button>
+    <button class="tab" role="tab" id="tab-practice" type="button" data-go="practice">Practice</button>
+    <button class="tab" role="tab" id="tab-quiz" type="button" data-go="quiz">Quiz</button>
+    <button class="tab" role="tab" id="tab-toolbox" type="button" data-go="toolbox">Verb toolbox</button>
+  </nav>
+  <main>
+    <section id="view-map" hidden></section>
+    <section id="view-learn" hidden></section>
+    <section id="view-lab" hidden></section>
+    <section id="view-practice" hidden></section>
+    <section id="view-quiz" hidden></section>
+    <section id="view-toolbox" hidden></section>
+  </main>
+</div>
+
+<script>
+/* ================= DATA AND PURE LOGIC ================= */
+const ZONES = { past:{name:'Past'}, pres:{name:'Present'}, fut:{name:'Future'} };
+const ASPECTS = {
+  simple:{name:'Simple', desc:'A fact, a habit or a single event.'},
+  cont:{name:'Continuous', desc:'An action in progress at a point in time.'},
+  perf:{name:'Perfect', desc:'An action completed before a point in time.'},
+  pcont:{name:'Perfect Continuous', desc:'An action going on for some time up to a point in time.'}
+};
+
+const T = [
+ { id:'past-simple', zone:'past', aspect:'simple', name:'Simple Past',
+   short:'A finished action at a definite time in the past.',
+   formula:{aff:'Subject + V2', neg:'Subject + did not + V1', q:'Did + subject + V1 …?'},
+   sample:{aff:'Meera visited the museum last Sunday.', neg:'Meera did not visit the museum last Sunday.', q:'Did Meera visit the museum last Sunday?'},
+   uses:[['A finished action at a definite time','We watched the match last night.'],['Actions that followed one another','He woke up, had a bath and left for school.'],['A past habit that no longer continues','My grandfather walked five kilometres every morning.']],
+   signals:['yesterday','last week','two days ago','in 2019','when I was ten','once upon a time'],
+   mistake:{wrong:"He didn't went to school.", right:"He didn't go to school.", why:"After did or didn't the main verb goes back to V1."},
+   tail:'yesterday',
+   check:{q:'The train ___ at 6 a.m. yesterday.', opts:['arrives','arrived','has arrived','will arrive'], a:1, why:'Yesterday names a finished time, so use the simple past.'} },
+ { id:'past-cont', zone:'past', aspect:'cont', name:'Past Continuous',
+   short:'An action that was in progress at a moment in the past.',
+   formula:{aff:'Subject + was/were + V-ing', neg:'Subject + was/were not + V-ing', q:'Was/Were + subject + V-ing …?'},
+   sample:{aff:"The students were writing the test at ten o'clock.", neg:"The students were not writing the test at ten o'clock.", q:"Were the students writing the test at ten o'clock?"},
+   uses:[['An action in progress at a particular past moment','At 8 p.m. yesterday, I was doing my homework.'],['A longer action interrupted by a shorter one','I was cooking when the lights went out.'],['Two actions going on together','Dad was reading while Mom was cooking.']],
+   signals:['while','when','at that time','this time yesterday','at 6 p.m. last night','all evening'],
+   mistake:{wrong:'She was watch TV at eight.', right:'She was watching TV at eight.', why:'After was or were the verb needs -ing.'},
+   tail:'at 5 p.m. yesterday',
+   check:{q:'At 8 p.m. last night, I ___ dinner.', opts:['cooked','was cooking','have cooked','cook'], a:1, why:'The action was in progress at a stated past moment.'} },
+ { id:'past-perf', zone:'past', aspect:'perf', name:'Past Perfect',
+   short:'The earlier of two past actions, completed before a later past moment.',
+   formula:{aff:'Subject + had + V3', neg:'Subject + had not + V3', q:'Had + subject + V3 …?'},
+   sample:{aff:'The train had left before we reached the station.', neg:'The train had not left before we reached the station.', q:'Had the train left before we reached the station?'},
+   uses:[['The earlier of two past actions','When I reached the hall, the show had begun.'],['Something finished before a past moment','By 9 p.m., she had finished her project.'],['Reported speech about earlier events','He said that he had seen the film.']],
+   signals:['before','after','by the time','already','until then','when'],
+   mistake:{wrong:'When I reached the station, the train already left.', right:'When I reached the station, the train had already left.', why:'The train left first, so the earlier action takes the past perfect.'},
+   tail:'before the bell rang',
+   check:{q:'By the time we reached, the film ___.', opts:['started','has started','had started','was starting'], a:2, why:'The film started earlier than we reached, so use had + V3.'} },
+ { id:'past-pcont', zone:'past', aspect:'pcont', name:'Past Perfect Continuous',
+   short:'An action that had been going on for some time before a past moment.',
+   formula:{aff:'Subject + had been + V-ing', neg:'Subject + had not been + V-ing', q:'Had + subject + been + V-ing …?'},
+   sample:{aff:'Ria had been waiting for an hour when the bus arrived.', neg:'Ria had not been waiting for long when the bus arrived.', q:'Had Ria been waiting for an hour when the bus arrived?'},
+   uses:[['An action that continued for some time before a past moment','They had been playing for two hours before it rained.'],['The cause of a past situation','His eyes were red because he had been crying.']],
+   signals:['for','since','how long','all day','all morning','before'],
+   mistake:{wrong:'He was tired because he has been running for an hour.', right:'He was tired because he had been running for an hour.', why:'The story is in the past, so has been moves back to had been.'},
+   tail:'for two hours before the bell rang',
+   check:{q:"Ria's hands were shaking because she ___ in the cold for two hours.", opts:['waits','has been waiting','had been waiting','will wait'], a:2, why:'A duration that ended at a past moment needs had been + V-ing.'} },
+
+ { id:'pres-simple', zone:'pres', aspect:'simple', name:'Simple Present',
+   short:'Habits, routines, facts and fixed schedules.',
+   formula:{aff:'Subject + V1 (add -s/-es for he, she, it)', neg:'Subject + do/does not + V1', q:'Do/Does + subject + V1 …?'},
+   sample:{aff:'Kabir plays chess every evening.', neg:'Kabir does not play chess every evening.', q:'Does Kabir play chess every evening?'},
+   uses:[['Habits and routines','I brush my teeth twice a day.'],['General truths and facts','Water boils at 100 °C.'],['Timetables and fixed schedules','The Mysuru Express leaves at 6:40 a.m.'],['Instructions and commentary','First, you add the salt.']],
+   signals:['always','usually','often','sometimes','never','every day','on Sundays'],
+   mistake:{wrong:'She go to school by bus.', right:'She goes to school by bus.', why:'With he, she and it, the verb takes -s or -es.'},
+   tail:'every day',
+   check:{q:'The Earth ___ around the Sun.', opts:['revolves','is revolving','revolved','has revolved'], a:0, why:'A scientific fact uses the simple present.'} },
+ { id:'pres-cont', zone:'pres', aspect:'cont', name:'Present Continuous',
+   short:'An action happening now, or a temporary or planned situation.',
+   formula:{aff:'Subject + am/is/are + V-ing', neg:'Subject + am/is/are not + V-ing', q:'Am/Is/Are + subject + V-ing …?'},
+   sample:{aff:'Neha is reading a novel right now.', neg:'Neha is not reading a novel right now.', q:'Is Neha reading a novel right now?'},
+   uses:[['An action happening now','Listen! The baby is crying.'],['A temporary situation','I am staying with my cousin this week.'],['A planned arrangement in the near future','We are visiting Hampi on Friday.'],['An annoying repeated habit, with always','He is always losing his keys.']],
+   signals:['now','right now','at the moment','currently','today','these days','Look!','Listen!'],
+   mistake:{wrong:'I am knowing the answer.', right:'I know the answer.', why:'Verbs of state (know, like, want, believe) are not normally used in the continuous.'},
+   tail:'right now',
+   check:{q:'Look! The children ___ in the garden.', opts:['play','are playing','played','have played'], a:1, why:'Look! points to an action happening now.'} },
+ { id:'pres-perf', zone:'pres', aspect:'perf', name:'Present Perfect',
+   short:'A past action that matters now, or an experience with no stated time.',
+   formula:{aff:'Subject + has/have + V3', neg:'Subject + has/have not + V3', q:'Has/Have + subject + V3 …?'},
+   sample:{aff:'Arjun has finished his homework.', neg:'Arjun has not finished his homework.', q:'Has Arjun finished his homework?'},
+   uses:[['A past action with a result now','I have lost my pen, so I cannot write.'],['Life experience, time not stated','She has visited Kerala twice.'],['An action that began in the past and continues','We have lived here since 2018.'],['A very recent action','The bell has just rung.']],
+   signals:['already','yet','just','ever','never','so far','since','for','recently','this week'],
+   mistake:{wrong:'She has left an hour ago.', right:'She left an hour ago.', why:'A finished time such as an hour ago or yesterday belongs to the simple past.'},
+   tail:'this week',
+   check:{q:'I ___ my homework already, so I can play.', opts:['finish','finished','have finished','am finishing'], a:2, why:'Already points to the present perfect: have + V3.'} },
+ { id:'pres-pcont', zone:'pres', aspect:'pcont', name:'Present Perfect Continuous',
+   short:'An action that began in the past and is still going on, with the duration in focus.',
+   formula:{aff:'Subject + has/have been + V-ing', neg:'Subject + has/have not been + V-ing', q:'Has/Have + subject + been + V-ing …?'},
+   sample:{aff:'Ishaan has been practising the guitar since morning.', neg:'Ishaan has not been practising the guitar since morning.', q:'Has Ishaan been practising the guitar since morning?'},
+   uses:[['An action that began in the past and is still going on','It has been raining since morning.'],['An action that has just stopped, with visible results','You are sweating. Have you been running?'],['Stressing how long','She has been learning French for two years.']],
+   signals:['since','for','how long','all day','all week','lately','recently'],
+   mistake:{wrong:'I am waiting here since morning.', right:'I have been waiting here since morning.', why:'Since and for with an action that is still going on need the present perfect continuous.'},
+   tail:'since morning',
+   check:{q:'They ___ for the bus for an hour.', opts:['wait','have been waiting','are waiting','waited'], a:1, why:'Still waiting, with a duration (for an hour): have been + V-ing.'} },
+
+ { id:'fut-simple', zone:'fut', aspect:'simple', name:'Simple Future',
+   short:'Decisions, promises, predictions and facts about the future.',
+   formula:{aff:'Subject + will + V1', neg:"Subject + will not (won't) + V1", q:'Will + subject + V1 …?'},
+   sample:{aff:'Tara will call you tonight.', neg:'Tara will not call you tonight.', q:'Will Tara call you tonight?'},
+   uses:[['Decisions made at the moment of speaking','The phone is ringing. I will answer it.'],['Predictions and promises','I think it will rain. I will help you.'],['Facts about the future','Tomorrow will be Tuesday.']],
+   signals:['tomorrow','next week','soon','tonight','in 2030','I think','probably','perhaps'],
+   mistake:{wrong:'If it will rain, we will stay home.', right:'If it rains, we will stay home.', why:'After if, when and as soon as, use the present tense for the future.'},
+   tail:'tomorrow',
+   check:{q:"I promise I ___ you tonight.", opts:['call','will call','am calling','called'], a:1, why:'A promise uses will + V1.'} },
+ { id:'fut-cont', zone:'fut', aspect:'cont', name:'Future Continuous',
+   short:'An action that will be in progress at a point in the future.',
+   formula:{aff:'Subject + will be + V-ing', neg:'Subject + will not be + V-ing', q:'Will + subject + be + V-ing …?'},
+   sample:{aff:'The choir will be singing at the assembly tomorrow.', neg:'The choir will not be singing at the assembly tomorrow.', q:'Will the choir be singing at the assembly tomorrow?'},
+   uses:[['An action in progress at a future point','This time tomorrow, I will be flying to Delhi.'],['An action that will be going on for a while','I will be working all evening, so call me later.'],['Politely asking about plans','Will you be using the laptop tonight?']],
+   signals:['this time tomorrow','at 5 p.m. tomorrow','all day tomorrow','at this time next week'],
+   mistake:{wrong:'At 8 p.m. tomorrow I will be sleep.', right:'At 8 p.m. tomorrow I will be sleeping.', why:'After will be, the verb takes -ing.'},
+   tail:'at 5 p.m. tomorrow',
+   check:{q:'This time next week, we ___ on a beach in Goa.', opts:['will lie','will be lying','will have lain','lie'], a:1, why:'In progress at a future time: will be + V-ing.'} },
+ { id:'fut-perf', zone:'fut', aspect:'perf', name:'Future Perfect',
+   short:'An action that will be complete before a point in the future.',
+   formula:{aff:'Subject + will have + V3', neg:'Subject + will not have + V3', q:'Will + subject + have + V3 …?'},
+   sample:{aff:'The workers will have finished the bridge by December.', neg:'The workers will not have finished the bridge by December.', q:'Will the workers have finished the bridge by December?'},
+   uses:[['An action complete before a future time','By next Monday, I will have finished the book.'],['What will already be done when something else happens','By the time you arrive, we will have eaten.']],
+   signals:['by next Monday','by 2030','by the time','by then','by the end of this year'],
+   mistake:{wrong:'By the time you arrive, we will leave.', right:'By the time you arrive, we will have left.', why:'The leaving is complete before the arrival, so use will have + V3.'},
+   tail:'by next Friday',
+   check:{q:'By the time you wake up, I ___ the cake.', opts:['bake','will bake','will have baked','am baking'], a:2, why:'The baking will be finished before you wake: will have + V3.'} },
+ { id:'fut-pcont', zone:'fut', aspect:'pcont', name:'Future Perfect Continuous',
+   short:'How long an action will have been going on by a point in the future.',
+   formula:{aff:'Subject + will have been + V-ing', neg:'Subject + will not have been + V-ing', q:'Will + subject + have been + V-ing …?'},
+   sample:{aff:'By June, Dr. Rao will have been teaching here for 25 years.', neg:'By June, Dr. Rao will not have been teaching here for 25 years.', q:'By June, will Dr. Rao have been teaching here for 25 years?'},
+   uses:[['How long an action will have continued by a future time','By December, he will have been working here for ten years.'],['An action still going on at that future time','In July, we will have been living in this city for a decade.']],
+   signals:['by next month','for … years','by then','by the time','how long'],
+   mistake:{wrong:'By December, he will be working here for ten years.', right:'By December, he will have been working here for ten years.', why:'Counting a duration up to a future time needs will have been + V-ing.'},
+   tail:'for two hours by noon',
+   check:{q:'Next month, Dad ___ in this office for 20 years.', opts:['will work','will be working','will have been working','has worked'], a:2, why:'A duration counted up to a future time: will have been + V-ing.'} }
+];
+const Tmap = {}; T.forEach(t => Tmap[t.id] = t);
+
+/* --- sentence builder for the Timeline lab --- */
+const SUBJECTS = [
+  {n:'I', lc:'I', third:false, be:'am', was:'was', have:'have'},
+  {n:'She', lc:'she', third:true, be:'is', was:'was', have:'has'},
+  {n:'They', lc:'they', third:false, be:'are', was:'were', have:'have'}
+];
+const VERBS = [
+  {b:'write', s:'writes', p:'wrote', pp:'written', g:'writing', o:'a letter'},
+  {b:'play', s:'plays', p:'played', pp:'played', g:'playing', o:'cricket'},
+  {b:'eat', s:'eats', p:'ate', pp:'eaten', g:'eating', o:'lunch'},
+  {b:'study', s:'studies', p:'studied', pp:'studied', g:'studying', o:'science'},
+  {b:'go', s:'goes', p:'went', pp:'gone', g:'going', o:'to school'},
+  {b:'read', s:'reads', p:'read', pp:'read', g:'reading', o:'a novel'}
+];
+const capFirst = s => s.charAt(0).toUpperCase() + s.slice(1);
+function forms(id, S, V){
+  const t = Tmap[id], P3 = S.third, be = S.be, was = S.was, hv = S.have, n = S.n, l = S.lc;
+  let A, N, Q;
+  switch(id){
+    case 'pres-simple': A=[n, P3?V.s:V.b]; N=[n,'~'+(P3?'does not':'do not'),V.b]; Q=['~'+(P3?'Does':'Do'),l,V.b]; break;
+    case 'pres-cont':   A=[n,'~'+be,V.g]; N=[n,'~'+be+' not',V.g]; Q=['~'+capFirst(be),l,V.g]; break;
+    case 'pres-perf':   A=[n,'~'+hv,V.pp]; N=[n,'~'+hv+' not',V.pp]; Q=['~'+capFirst(hv),l,V.pp]; break;
+    case 'pres-pcont':  A=[n,'~'+hv,'been',V.g]; N=[n,'~'+hv+' not','been',V.g]; Q=['~'+capFirst(hv),l,'been',V.g]; break;
+    case 'past-simple': A=[n,V.p]; N=[n,'~did not',V.b]; Q=['~Did',l,V.b]; break;
+    case 'past-cont':   A=[n,'~'+was,V.g]; N=[n,'~'+was+' not',V.g]; Q=['~'+capFirst(was),l,V.g]; break;
+    case 'past-perf':   A=[n,'~had',V.pp]; N=[n,'~had not',V.pp]; Q=['~Had',l,V.pp]; break;
+    case 'past-pcont':  A=[n,'~had','been',V.g]; N=[n,'~had not','been',V.g]; Q=['~Had',l,'been',V.g]; break;
+    case 'fut-simple':  A=[n,'~will',V.b]; N=[n,'~will not',V.b]; Q=['~Will',l,V.b]; break;
+    case 'fut-cont':    A=[n,'~will','be',V.g]; N=[n,'~will not','be',V.g]; Q=['~Will',l,'be',V.g]; break;
+    case 'fut-perf':    A=[n,'~will','have',V.pp]; N=[n,'~will not','have',V.pp]; Q=['~Will',l,'have',V.pp]; break;
+    case 'fut-pcont':   A=[n,'~will','have','been',V.g]; N=[n,'~will not','have','been',V.g]; Q=['~Will',l,'have','been',V.g]; break;
+    default: throw new Error('unknown tense '+id);
+  }
+  const end = [V.o, t.tail];
+  return { aff:A.concat(end), neg:N.concat(end), q:Q.concat(end) };
+}
+function plainSentence(tokens, isQ){
+  const s = tokens.map(w => w.replace('~','')).filter(Boolean).join(' ');
+  return capFirst(s) + (isQ ? '?' : '.');
+}
+function htmlSentence(tokens, isQ){
+  const parts = tokens.filter(Boolean).map(w => w.charAt(0)==='~' ? '<b class="aux">'+w.slice(1)+'</b>' : w);
+  let s = parts.join(' ');
+  return s + (isQ ? '?' : '.');
+}
+
+/* --- timeline drawing (returns an SVG string) --- */
+function tlSvg(t, mini){
+  const R = {past:160, pres:300, fut:440}[t.zone], y = 60, k = mini ? 2.2 : 1, r = 8*k;
+  const cl = x => Math.max(95, Math.min(505, x));
+  let s = '';
+  s += '<line class="axis" x1="16" y1="'+y+'" x2="576" y2="'+y+'" stroke-width="'+(mini?5:2)+'"/>';
+  s += '<path class="axis-head" d="M576 '+(y-6*k)+'l'+(10*k)+' '+(6*k)+'-'+(10*k)+' '+(6*k)+'z"/>';
+  const tick = mini ? 34 : 18;
+  s += '<line class="now" x1="300" y1="'+(y-tick)+'" x2="300" y2="'+(y+tick)+'" stroke-width="'+(mini?5:2)+'"/>';
+  const dot = x => '<circle class="mark" cx="'+x+'" cy="'+y+'" r="'+r+'"/>';
+  const ring = x => '<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(r*1.25)+'" stroke-width="'+(2.5*k)+'"/>';
+  const bar = (x1,x2) => '<rect class="bar" x="'+x1+'" y="'+(y-7*k)+'" width="'+(x2-x1)+'" height="'+(14*k)+'" rx="'+(7*k)+'" stroke-width="'+(2*k)+'"/>';
+  const lab = (x,yy,txt,cls) => mini ? '' : '<text class="'+(cls||'')+'" x="'+cl(x)+'" y="'+yy+'" text-anchor="middle">'+txt+'</text>';
+  const ringLabel = {past:'a later past moment', pres:'the result matters now', fut:'a future deadline'}[t.zone];
+  if(!mini){
+    s += '<text class="lbl-now" x="300" y="'+(y+56)+'" text-anchor="middle">NOW</text>';
+    s += '<text x="20" y="'+(y+56)+'">past</text><text x="572" y="'+(y+56)+'" text-anchor="end">future</text>';
+  }
+  if(t.aspect === 'simple'){
+    if(t.zone === 'pres'){
+      [180,240,300,360,420].forEach(x => { s += dot(x); });
+      s += lab(300, y-24, 'repeated, or always true', 'lbl-z');
+    } else {
+      s += dot(R);
+      s += lab(R, y-24, t.zone==='past' ? 'a single finished event' : 'a single future event', 'lbl-z');
+    }
+  } else if(t.aspect === 'cont'){
+    s += bar(R-70, R+70) + dot(R);
+    s += lab(R, y-24, 'in progress at this time', 'lbl-z');
+  } else if(t.aspect === 'perf'){
+    const x0 = R-90;
+    s += '<line class="conn" x1="'+(x0+r)+'" y1="'+y+'" x2="'+(R-r*1.25)+'" y2="'+y+'" stroke-width="'+(2*k)+'" stroke-dasharray="'+(5*k)+' '+(4*k)+'"/>';
+    s += dot(x0) + ring(R);
+    s += lab(x0, y-24, 'action completed', 'lbl-z');
+    s += lab(R, y+34, ringLabel, '');
+  } else {
+    s += bar(R-140, R) + ring(R);
+    s += lab(R-70, y-24, 'going on for some time', 'lbl-z');
+    s += lab(R, y+34, ringLabel, '');
+  }
+  const vb = mini ? '0 14 600 92' : '0 0 600 128';
+  return '<svg class="tl'+(mini?' mini':'')+'" viewBox="'+vb+'" role="img" aria-label="'+t.name+' on a timeline" xmlns="http://www.w3.org/2000/svg">'+s+'</svg>';
+}
+
+/* --- spelling helpers for the toolbox --- */
+const DBL = ['begin','forget','prefer','occur','admit','permit','refer','regret','control'];
+function sForm(v){
+  if(v==='be') return 'is'; if(v==='have') return 'has';
+  if(/(s|x|z|ch|sh|o)$/.test(v)) return v+'es';
+  if(/[^aeiou]y$/.test(v)) return v.slice(0,-1)+'ies';
+  return v+'s';
+}
+function cvc(v){ return DBL.indexOf(v) > -1 || /^[^aeiou]*[aeiou][^aeiouwxy]$/.test(v); }
+function ingForm(v){
+  if(v==='be') return 'being';
+  if(/ie$/.test(v)) return v.slice(0,-2)+'ying';
+  if(/[^aeiou]e$/.test(v) && !/(ee|ye|oe)$/.test(v)) return v.slice(0,-1)+'ing';
+  if(cvc(v)) return v+v.slice(-1)+'ing';
+  return v+'ing';
+}
+function edForm(v){
+  if(/e$/.test(v)) return v+'d';
+  if(/[^aeiou]y$/.test(v)) return v.slice(0,-1)+'ied';
+  if(cvc(v)) return v+v.slice(-1)+'ed';
+  return v+'ed';
+}
+const IRREG = [
+ ['be','was/were','been'],['begin','began','begun'],['break','broke','broken'],['bring','brought','brought'],['build','built','built'],
+ ['buy','bought','bought'],['catch','caught','caught'],['choose','chose','chosen'],['come','came','come'],['do','did','done'],
+ ['draw','drew','drawn'],['drink','drank','drunk'],['drive','drove','driven'],['eat','ate','eaten'],['fall','fell','fallen'],
+ ['feel','felt','felt'],['find','found','found'],['fly','flew','flown'],['forget','forgot','forgotten'],['get','got','got'],
+ ['give','gave','given'],['go','went','gone'],['grow','grew','grown'],['have','had','had'],['hear','heard','heard'],
+ ['keep','kept','kept'],['know','knew','known'],['leave','left','left'],['lose','lost','lost'],['make','made','made'],
+ ['meet','met','met'],['pay','paid','paid'],['read','read','read'],['ride','rode','ridden'],['ring','rang','rung'],
+ ['rise','rose','risen'],['run','ran','run'],['say','said','said'],['see','saw','seen'],['sell','sold','sold'],
+ ['send','sent','sent'],['sing','sang','sung'],['sit','sat','sat'],['sleep','slept','slept'],['speak','spoke','spoken'],
+ ['swim','swam','swum'],['take','took','taken'],['teach','taught','taught'],['tell','told','told'],['think','thought','thought'],
+ ['throw','threw','thrown'],['understand','understood','understood'],['wake','woke','woken'],['wear','wore','worn'],['win','won','won'],['write','wrote','written']
+];
+function verbForms(base){
+  const b = base.trim().toLowerCase();
+  const ir = IRREG.find(x => x[0] === b);
+  return { base:b, s:sForm(b), past: ir ? ir[1] : edForm(b), pp: ir ? ir[2] : edForm(b), ing:ingForm(b), irregular: !!ir };
+}
+function norm(s){
+  return String(s).toLowerCase().replace(/[‘’`]/g,"'").replace(/[.,!?;:]/g,'').replace(/\s+/g,' ').trim();
+}
+
+/* --- practice banks --- */
+const MCQ = [
+ {t:'pres-simple', q:'My mother ___ tea every morning.', opts:['make','makes','is making','made'], a:1, why:'A routine with she/he/it: V1 + s.'},
+ {t:'pres-simple', q:'The sun ___ in the west.', opts:['set','sets','is setting','has set'], a:1, why:'A fact uses the simple present, and the sun takes -s.'},
+ {t:'pres-simple', q:'___ your sister like spicy food?', opts:['Do','Does','Is','Has'], a:1, why:'Questions with she in the simple present start with Does.'},
+ {t:'pres-simple', q:'The train to Mysuru ___ at 6:40 every morning.', opts:['leaves','is leaving','left','has left'], a:0, why:'A timetable uses the simple present.'},
+ {t:'pres-cont', q:'Please be quiet. The baby ___.', opts:['sleeps','is sleeping','slept','has slept'], a:1, why:'The action is happening now.'},
+ {t:'pres-cont', q:'Right now, my brother ___ a video game.', opts:['plays','is playing','played','has played'], a:1, why:'Right now points to the present continuous.'},
+ {t:'pres-perf', q:'Maya ___ in Pune since 2020.', opts:['lives','lived','has lived','is living'], a:2, why:'Since with a situation that continues: present perfect.'},
+ {t:'pres-perf', q:'Have you ___ the new novel yet?', opts:['read','reading','reads','been read'], a:0, why:'Have you + V3. The V3 of read is read.'},
+ {t:'pres-perf', q:'I ___ never tasted sushi.', opts:['do','am','have','had'], a:2, why:'Never + experience: have + V3.'},
+ {t:'pres-perf', q:'They ___ the match. The crowd is celebrating.', opts:['win','won','have won','will win'], a:2, why:'A past action with a result visible now.'},
+ {t:'pres-pcont', q:'My eyes hurt because I ___ at the screen all day.', opts:['look','looked','am looking','have been looking'], a:3, why:'A duration up to now with a visible result.'},
+ {t:'pres-pcont', q:'She ___ the guitar for two years.', opts:['learns','has been learning','learned','is learned'], a:1, why:'For two years, and still learning: has been + V-ing.'},
+ {t:'past-simple', q:'We ___ to the zoo last Saturday.', opts:['go','went','have gone','will go'], a:1, why:'Last Saturday is a finished time: simple past.'},
+ {t:'past-simple', q:'She ___ the door and walked in.', opts:['opens','opened','has opened','will open'], a:1, why:'A sequence of finished past actions.'},
+ {t:'past-simple', q:'I ___ not know the answer.', opts:['did','do','was','had'], a:0, why:'Past negative: did not + V1.'},
+ {t:'past-simple', q:'He ___ for Delhi an hour ago.', opts:['leaves','has left','left','had left'], a:2, why:'Ago marks a finished time: simple past.'},
+ {t:'past-cont', q:'While Dad ___ the news, Mom cooked dinner.', opts:['watches','watched','was watching','has watched'], a:2, why:'Two actions in progress together in the past.'},
+ {t:'past-cont', q:'This time yesterday, I ___ my bag for the trip.', opts:['pack','packed','was packing','have packed'], a:2, why:'This time yesterday points to an action in progress.'},
+ {t:'past-cont', q:'She ___ TV when the lights went out.', opts:['watched','was watching','has watched','watches'], a:1, why:'A longer action interrupted by a shorter one.'},
+ {t:'past-perf', q:'The bell ___ before I reached the school.', opts:['rang','had rung','has rung','was ringing'], a:1, why:'The ringing came first: had + V3.'},
+ {t:'past-perf', q:'She said she ___ the report already.', opts:['finishes','has finished','had finished','finishing'], a:2, why:'Reported speech about an earlier action.'},
+ {t:'past-pcont', q:'Her hands were shaking because she ___ in the cold for two hours.', opts:['waits','has been waiting','had been waiting','will wait'], a:2, why:'A duration before a past moment.'},
+ {t:'fut-simple', q:'Tomorrow is a holiday, so I ___ late.', opts:['sleep','will sleep','slept','have slept'], a:1, why:'A decision about the future: will + V1.'},
+ {t:'fut-simple', q:'I think India ___ the match.', opts:['wins','won','will win','has won'], a:2, why:'I think introduces a prediction: will + V1.'},
+ {t:'fut-simple', q:'If you ___ hard, you will pass.', opts:['work','will work','worked','are worked'], a:0, why:'After if, use the present tense for the future.'},
+ {t:'fut-cont', q:'At 7 p.m. tomorrow, we ___ dinner at my uncle\'s house.', opts:['has','will be having','had','have had'], a:1, why:'In progress at a stated future time.'},
+ {t:'fut-cont', q:"Don't call me at 9. I ___ in the exam hall.", opts:['will sit','sit','will be sitting','have sat'], a:2, why:'Will be + V-ing shows an action in progress at 9.'},
+ {t:'fut-perf', q:'By the time the guests come, we ___ all the food.', opts:['cook','will cook','will have cooked','are cooking'], a:2, why:'Complete before a future time: will have + V3.'},
+ {t:'fut-perf', q:'By the end of this month, I ___ the whole book.', opts:['will read','read','will have read','am reading'], a:2, why:'By the end of marks a deadline: will have + V3.'},
+ {t:'fut-pcont', q:'By June, he ___ for the civil services for three years.', opts:['will study','will be studying','will have been studying','has studied'], a:2, why:'A duration up to a future time.'}
+];
+const MCQ_ALL = T.map(t => ({t:t.id, q:t.check.q, opts:t.check.opts, a:t.check.a, why:t.check.why})).concat(MCQ);
+
+const FILL = [
+ {t:'pres-simple', q:'My brother ___ (play) cricket every Sunday.', ans:['plays'], hint:'A habit: simple present, and he takes -s.'},
+ {t:'pres-simple', q:'Water ___ (boil) at 100 °C.', ans:['boils'], hint:'A scientific fact uses the simple present.'},
+ {t:'pres-simple', q:'The library ___ (not / open) on Mondays.', ans:['does not open',"doesn't open"], hint:'Negative simple present: does not + V1.'},
+ {t:'pres-cont', q:'Listen! Someone ___ (knock) at the door.', ans:['is knocking'], hint:'Happening now (Listen!): am/is/are + V-ing.'},
+ {t:'pres-cont', q:'I ___ (prepare) for my board exams this year.', ans:['am preparing'], hint:'A temporary, ongoing situation: present continuous.'},
+ {t:'pres-perf', q:'We ___ (finish) the project already.', ans:['have finished'], hint:'Already points to the present perfect: have + V3.'},
+ {t:'pres-perf', q:'She ___ (not / see) that film yet.', ans:['has not seen',"hasn't seen"], hint:'Yet in a negative sentence: has not + V3.'},
+ {t:'pres-perf', q:'Maya ___ (live) in Pune since 2018.', ans:['has lived','has been living'], hint:'Since with a continuing situation: present perfect.'},
+ {t:'pres-pcont', q:'It ___ (rain) since morning.', ans:['has been raining'], hint:'Since + still going on: has been + V-ing.'},
+ {t:'pres-pcont', q:'Ravi ___ (study) for three hours, and he is still at it.', ans:['has been studying'], hint:'Still going on, with a duration: has been + V-ing.'},
+ {t:'past-simple', q:'Gandhiji ___ (lead) the Dandi March in 1930.', ans:['led'], hint:'A finished event with a date: simple past. Lead is irregular.'},
+ {t:'past-simple', q:'I ___ (not / go) to school yesterday.', ans:['did not go',"didn't go"], hint:'Past negative: did not + V1.'},
+ {t:'past-simple', q:'We ___ (buy) this house in 2015.', ans:['bought'], hint:'Buy is irregular: bought.'},
+ {t:'past-cont', q:'At 9 p.m. yesterday, Anita ___ (watch) a movie.', ans:['was watching'], hint:'In progress at a past moment: was/were + V-ing.'},
+ {t:'past-cont', q:'The children ___ (play) when it started to rain.', ans:['were playing'], hint:'The longer action, interrupted by a shorter one.'},
+ {t:'past-perf', q:'The patient ___ (die) before the doctor arrived.', ans:['had died'], hint:'The earlier past action: had + V3.'},
+ {t:'past-perf', q:'When she called, I ___ (already / eat) dinner.', ans:['had already eaten','had eaten'], hint:'Eating came first: had + V3.'},
+ {t:'past-pcont', q:'He was exhausted because he ___ (run) for an hour.', ans:['had been running'], hint:'A duration before a past moment: had been + V-ing.'},
+ {t:'fut-simple', q:"Don't worry, I ___ (help) you.", ans:['will help',"'ll help"], hint:'A promise: will + V1.'},
+ {t:'fut-simple', q:'If it rains tomorrow, we ___ (stay) at home.', ans:['will stay'], hint:'Main clause of a future condition: will + V1.'},
+ {t:'fut-cont', q:'At this time tomorrow, I ___ (fly) to Mumbai.', ans:['will be flying'], hint:'In progress at a future time: will be + V-ing.'},
+ {t:'fut-perf', q:'By next March, she ___ (complete) her course.', ans:['will have completed'], hint:'By + a future time: will have + V3.'},
+ {t:'fut-perf', q:'They ___ (leave) before you reach there.', ans:['will have left'], hint:'Leaving is complete first: will have + V3.'},
+ {t:'fut-pcont', q:'By 2030, Dr. Rao ___ (teach) here for 25 years.', ans:['will have been teaching'], hint:'A duration up to a future time: will have been + V-ing.'}
+];
+
+const TRANS = [
+ {t:'past-cont', q:'She writes a letter.', ask:'Change to the past continuous.', ans:['she was writing a letter']},
+ {t:'pres-perf', q:'They play football.', ask:'Change to the present perfect.', ans:['they have played football']},
+ {t:'fut-simple', q:'I eat an apple.', ask:'Change to the simple future.', ans:['i will eat an apple',"i'll eat an apple"]},
+ {t:'pres-cont', q:'He reads the newspaper.', ask:'Change to the present continuous.', ans:['he is reading the newspaper',"he's reading the newspaper"]},
+ {t:'past-perf', q:'We completed the project.', ask:'Change to the past perfect.', ans:['we had completed the project',"we'd completed the project"]},
+ {t:'fut-cont', q:'The students sing a song.', ask:'Change to the future continuous.', ans:['the students will be singing a song']},
+ {t:'pres-simple', q:'She cooks dinner.', ask:'Make it negative (simple present).', ans:['she does not cook dinner',"she doesn't cook dinner"]},
+ {t:'pres-pcont', q:'Ravi studies Maths.', ask:'Change to the present perfect continuous.', ans:['ravi has been studying maths',"ravi's been studying maths"]},
+ {t:'past-simple', q:'I wrote a poem.', ask:'Make it a question (simple past).', ans:['did i write a poem']},
+ {t:'fut-perf', q:'They will finish the work.', ask:'Change to the future perfect.', ans:['they will have finished the work',"they'll have finished the work"]},
+ {t:'past-simple', q:'He teaches English.', ask:'Change to the simple past.', ans:['he taught english']},
+ {t:'past-pcont', q:'Meena sings in the choir.', ask:'Change to the past perfect continuous.', ans:['meena had been singing in the choir']}
+];
+
+[
+ 'She was writing a letter.','They have played football.','I will eat an apple.','He is reading the newspaper.','We had completed the project.',
+ 'The students will be singing a song.','She does not cook dinner.','Ravi has been studying Maths.','Did I write a poem?',
+ 'They will have finished the work.','He taught English.','Meena had been singing in the choir.'
+].forEach((d, i) => { TRANS[i].disp = d; });
+
+const ERR = [
+ {t:'pres-simple', s:'She go to school by bus every day.', bad:[1], fixed:'She goes to school by bus every day.', why:'With she, the verb takes -es.'},
+ {t:'pres-cont', s:'I am knowing the answer to this question.', bad:[1,2], fixed:'I know the answer to this question.', why:'Know is a verb of state. It is not used in the continuous.'},
+ {t:'past-simple', s:"He didn't went to the party last night.", bad:[2], fixed:"He didn't go to the party last night.", why:"After didn't the verb goes back to V1."},
+ {t:'pres-perf', s:'We have visited Agra last year.', bad:[1,2], fixed:'We visited Agra last year.', why:'Last year is a finished time. Use the simple past.'},
+ {t:'past-perf', s:'When I reached the station, the train already left.', bad:[7,8], fixed:'When I reached the station, the train had already left.', why:'The train left first, so use the past perfect.'},
+ {t:'fut-simple', s:'If it will rain tomorrow, we will cancel the picnic.', bad:[2,3], fixed:'If it rains tomorrow, we will cancel the picnic.', why:'After if, the present tense is used for the future.'},
+ {t:'pres-pcont', s:'She is living in Mumbai since 2018.', bad:[1,2], fixed:'She has been living in Mumbai since 2018.', why:'Since needs the present perfect continuous.'},
+ {t:'past-cont', s:"The students was writing the test at ten o'clock.", bad:[2], fixed:"The students were writing the test at ten o'clock.", why:'Students is plural, so use were.'},
+ {t:'pres-cont', s:'Look! It rains heavily outside.', bad:[2], fixed:'Look! It is raining heavily outside.', why:'Look! points to something happening now.'},
+ {t:'fut-perf', s:'He will have went home by the time you arrive.', bad:[3], fixed:'He will have gone home by the time you arrive.', why:'Will have is followed by V3, and the V3 of go is gone.'},
+ {t:'pres-simple', s:"My father don't like spicy food.", bad:[2], fixed:"My father doesn't like spicy food.", why:'With a singular subject, use doesn\'t.'},
+ {t:'past-cont', s:'They were played football when it started raining.', bad:[2], fixed:'They were playing football when it started raining.', why:'After were the verb needs -ing.'}
+];
+
+const SORT = [
+ {title:'Present tenses', buckets:[
+   {id:'pres-simple', name:'Simple Present', words:['always','every day','rarely']},
+   {id:'pres-cont', name:'Present Continuous', words:['now','at the moment','Look!']},
+   {id:'pres-perf', name:'Present Perfect', words:['already','just','so far']}]},
+ {title:'Past tenses', buckets:[
+   {id:'past-simple', name:'Simple Past', words:['yesterday','last night','two days ago']},
+   {id:'past-cont', name:'Past Continuous', words:['while','at that time','this time yesterday']},
+   {id:'past-perf', name:'Past Perfect', words:['before the bell rang','by the time we arrived','until then']}]},
+ {title:'Future tenses', buckets:[
+   {id:'fut-simple', name:'Simple Future', words:['tomorrow','next week','soon']},
+   {id:'fut-cont', name:'Future Continuous', words:['this time tomorrow','at this time next week','all day tomorrow']},
+   {id:'fut-perf', name:'Future Perfect', words:['by next Monday','by 2030','by the end of this year']}]}
+];
+
+const PASSAGE = [
+ 'Our school ', {o:['organises','organised','is organising'], a:0, t:'pres-simple', why:'A yearly event: simple present.'},
+ ' a fair every year. Last Saturday, the fair ', {o:['opened','opens','had opened'], a:0, t:'past-simple', why:'Last Saturday is a finished time.'},
+ ' at nine. By the time I reached the ground, the first show ', {o:['begins','had begun','was beginning'], a:1, t:'past-perf', why:'The show began before I reached: had + V3.'},
+ '. At four o\'clock, we ', {o:['were watching','watch','have watched'], a:0, t:'past-cont', why:'In progress at a stated past time.'},
+ ' the magic show when it suddenly ', {o:['began','begins','has begun'], a:0, t:'past-simple', why:'A shorter action that interrupted: simple past.'},
+ ' to drizzle. Everyone ran under the big tent. So far, the fair ', {o:['raises','has raised','raised'], a:1, t:'pres-perf', why:'So far points to the present perfect.'},
+ ' over fifty thousand rupees for charity. Right now, I ', {o:['write','am writing','wrote'], a:1, t:'pres-cont', why:'Right now: present continuous.'},
+ ' this report for the school magazine. By next March, the committee ', {o:['plans','will have planned','planned'], a:1, t:'fut-perf', why:'By next March: will have + V3.'},
+ ' the next fair, and I ', {o:['will join','joined','have joined'], a:0, t:'fut-simple', why:'A decision about the future: will + V1.'},
+ ' it as a volunteer.'
+];
+</script>
+
+<script>
+/* ================= INTERFACE ================= */
+(function(){
+'use strict';
+const $ = (s, r) => (r || document).querySelector(s);
+function h(tag, props){
+  const e = document.createElement(tag);
+  const p = props || {};
+  Object.keys(p).forEach(k => {
+    const v = p[k];
+    if(k === 'class') e.className = v;
+    else if(k === 'html') e.innerHTML = v;
+    else if(k.slice(0,2) === 'on') e.addEventListener(k.slice(2), v);
+    else if(v === true) e.setAttribute(k, '');
+    else if(v !== false && v != null) e.setAttribute(k, v);
+  });
+  for(let i = 2; i < arguments.length; i++){
+    const kids = [].concat(arguments[i]);
+    kids.forEach(c => { if(c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(String(c))); });
+  }
+  return e;
+}
+function shuffle(a){ for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
+function zoneOf(id){ return id.split('-')[0]; }
+
+/* --- saved progress (per viewer, optional) --- */
+let state = { stats:{}, viewed:{}, cur:'pres-simple' };
+try { const raw = JSON.parse(localStorage.getItem('tenselab.v1')); if(raw && typeof raw === 'object') state = Object.assign(state, raw); } catch(e) {}
+function save(){ try { localStorage.setItem('tenselab.v1', JSON.stringify(state)); } catch(e) {} }
+function record(id, ok){
+  const s = state.stats[id] || (state.stats[id] = {c:0, n:0});
+  s.n++; if(ok) s.c++; save();
+}
+function totals(){
+  let n = 0, c = 0, tried = 0;
+  T.forEach(t => { const s = state.stats[t.id]; if(s && s.n){ tried++; n += s.n; c += s.c; } });
+  return {n, c, tried};
+}
+
+/* --- navigation --- */
+const VIEWS = ['map','learn','lab','practice','quiz','toolbox'];
+const inits = {}, built = {};
+let current = null;
+function show(v){
+  if(VIEWS.indexOf(v) < 0) v = 'map';
+  VIEWS.forEach(n => {
+    $('#view-' + n).hidden = (n !== v);
+    $('#tab-' + n).setAttribute('aria-selected', String(n === v));
+  });
+  if(!built[v] && inits[v]){ built[v] = true; inits[v](); }
+  if(v === 'map') renderMap();
+  if(v === 'learn') renderLearn();
+  if(v === 'lab') renderLab();
+  if(current !== v) window.scrollTo(0, 0);
+  current = v;
+}
+function go(v){ if(location.hash === '#' + v) show(v); else location.hash = v; }
+function openLesson(id){ state.cur = id; save(); go('learn'); }
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => go(b.getAttribute('data-go'))));
+window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+
+/* --- shared question widgets --- */
+function mcqNode(it, finish){
+  const fb = h('div', {class:'fb', hidden:true, 'aria-live':'polite'});
+  const box = h('div', {class:'opts'});
+  const btns = [];
+  let answered = false;
+  shuffle(it.opts.map((o, i) => ({o, i}))).forEach(x => {
+    const b = h('button', {type:'button', class:'opt'}, x.o);
+    b._i = x.i;
+    b.addEventListener('click', () => {
+      if(answered) return; answered = true;
+      const ok = x.i === it.a;
+      btns.forEach(bb => { bb.disabled = true; });
+      b.classList.add(ok ? 'ok' : 'no');
+      if(!ok) btns.filter(bb => bb._i === it.a)[0].classList.add('ok');
+      fb.className = 'fb ' + (ok ? 'ok' : 'no');
+      fb.textContent = (ok ? 'Correct. ' : 'Not quite. The answer is "' + it.opts[it.a] + '". ') + it.why;
+      fb.hidden = false;
+      if(finish) finish(ok);
+    });
+    btns.push(b); box.append(b);
+  });
+  return h('div', {}, h('p', {class:'q'}, it.q.replace('___', '_______')), box, fb);
+}
+function textNode(it, finish, withAsk){
+  let done = false;
+  const inp = h('input', {type:'text', id:'answer-input', autocomplete:'off', autocapitalize:'none', spellcheck:'false', 'aria-label':'Your answer'});
+  const fb = h('div', {class:'fb', hidden:true, 'aria-live':'polite'});
+  function check(){
+    if(done) return;
+    const v = norm(inp.value);
+    if(!v) return;
+    done = true; inp.disabled = true; btn.disabled = true;
+    const ok = it.ans.some(a => norm(a) === v);
+    fb.className = 'fb ' + (ok ? 'ok' : 'no');
+    const best = withAsk ? it.disp : it.ans[0];
+    fb.textContent = ok ? 'Correct.' + (it.hint ? ' ' + it.hint : '') : 'Not quite. Answer: ' + best + (it.hint ? ' ' + it.hint : '');
+    fb.hidden = false;
+    finish(ok);
+  }
+  const btn = h('button', {type:'button', class:'btn', onclick:check}, 'Check');
+  inp.addEventListener('keydown', e => { if(e.key === 'Enter') check(); });
+  let body;
+  if(withAsk){
+    body = [h('p', {class:'q'}, h('b', {}, it.q)), h('p', {}, it.ask), h('div', {class:'row'}, inp)];
+    inp.style.width = 'min(520px,100%)';
+  } else {
+    const parts = it.q.split('___');
+    body = [h('p', {class:'q'}, parts[0], inp, parts[1])];
+  }
+  return h('div', {}, body, h('div', {class:'row'}, btn), fb);
+}
+function errNode(it, finish){
+  let done = false;
+  const words = it.s.split(' ');
+  const fb = h('div', {class:'fb', hidden:true, 'aria-live':'polite'});
+  const wrap = h('div', {class:'words'});
+  const btns = words.map((w, i) => {
+    const b = h('button', {type:'button', class:'word'}, w);
+    b.addEventListener('click', () => {
+      if(done) return; done = true;
+      const ok = it.bad.indexOf(i) > -1;
+      btns.forEach(bb => { bb.disabled = true; });
+      it.bad.forEach(j => btns[j].classList.add('ok'));
+      if(!ok) b.classList.add('no');
+      fb.className = 'fb ' + (ok ? 'ok' : 'no');
+      fb.textContent = (ok ? 'Correct. ' : 'Not quite. The error is in the highlighted words. ') + 'Corrected: ' + it.fixed + ' ' + it.why;
+      fb.hidden = false;
+      finish(ok);
+    });
+    wrap.append(b); return b;
+  });
+  return h('div', {}, h('p', {}, 'Tap the word (or words) that make the sentence wrong.'), wrap, fb);
+}
+function drill(el, items, build){
+  el.replaceChildren();
+  if(!items.length){ el.append(h('p', {class:'meta'}, 'No questions for this filter.')); return; }
+  const order = shuffle(items.slice());
+  let i = 0, score = 0;
+  const meta = h('p', {class:'meta'});
+  const body = h('div', {class:'panel'});
+  const nextBtn = h('button', {type:'button', class:'btn', onclick:() => { i++; step(); }}, 'Next');
+  el.append(meta, body);
+  function line(){ meta.textContent = 'Question ' + (i + 1) + ' of ' + order.length + ' · score ' + score; }
+  function step(){
+    if(i >= order.length){
+      meta.textContent = 'Round complete';
+      body.replaceChildren(
+        h('p', {class:'meta'}, 'Your score'),
+        h('div', {class:'bignum'}, score + '/' + order.length),
+        h('p', {}, score === order.length ? 'A perfect round.' : 'Open the Learn tab for any tense you want to revisit.'),
+        h('div', {class:'row'}, h('button', {type:'button', class:'btn', onclick:() => drill(el, items, build)}, 'New round'))
+      );
+      return;
+    }
+    line();
+    nextBtn.hidden = true;
+    nextBtn.textContent = i === order.length - 1 ? 'Finish' : 'Next';
+    const it = order[i];
+    body.replaceChildren(build(it, ok => {
+      if(ok) score++;
+      record(it.t, ok); line();
+      nextBtn.hidden = false; nextBtn.focus();
+    }), h('div', {class:'row'}, nextBtn));
+  }
+  step();
+}
+
+/* ===== MAP ===== */
+function renderMap(){
+  const el = $('#view-map'); el.replaceChildren();
+  el.append(
+    h('div', {class:'intro'},
+      h('h2', {}, 'Twelve tenses, one pattern'),
+      h('p', {}, 'Every tense is a time (past, present or future) combined with an aspect. Learn the four aspects once and all twelve tenses follow. Tap any tense to open its lesson.')),
+    h('dl', {class:'aspects'}, Object.keys(ASPECTS).map(k => h('div', {}, h('dt', {}, ASPECTS[k].name), h('dd', {}, ASPECTS[k].desc))))
+  );
+  ['past','pres','fut'].forEach(z => {
+    const cells = T.filter(t => t.zone === z).map(t => {
+      const s = state.stats[t.id];
+      const pct = s && s.n ? Math.round(100 * s.c / s.n) : 0;
+      return h('button', {type:'button', class:'cell', onclick:() => openLesson(t.id)},
+        h('span', {class:'asp'}, ASPECTS[t.aspect].name),
+        h('span', {class:'nm'}, t.name),
+        h('span', {class:'cf'}, t.formula.aff),
+        h('div', {class:'mini', html:tlSvg(t, true)}),
+        h('div', {class:'meter'}, h('i', {style:'width:' + pct + '%'})),
+        h('small', {}, s && s.n ? s.c + ' of ' + s.n + ' correct' : 'Not practised yet'));
+    });
+    el.append(h('section', {class:'zone', 'data-zone':z}, h('h3', {class:'zone-head'}, ZONES[z].name), h('div', {class:'zone-grid'}, cells)));
+  });
+  const tot = totals();
+  const reset = h('button', {type:'button', class:'btn ghost'}, 'Reset progress');
+  let armed = false;
+  reset.addEventListener('click', () => {
+    if(!armed){ armed = true; reset.textContent = 'Press again to erase all progress'; return; }
+    state.stats = {}; state.viewed = {}; save(); renderMap();
+  });
+  el.append(h('div', {class:'summary'},
+    h('span', {}, tot.n ? 'Practised ' + tot.tried + ' of 12 tenses · ' + tot.c + ' of ' + tot.n + ' answers correct' : 'Your progress appears here once you answer questions.'),
+    tot.n || Object.keys(state.viewed).length ? reset : null));
+}
+
+/* ===== LEARN ===== */
+function renderLearn(){
+  const el = $('#view-learn'); el.replaceChildren();
+  const t = Tmap[state.cur] || T[0];
+  state.viewed[t.id] = 1; save();
+  const picker = h('div', {class:'picker'}, ['past','pres','fut'].map(z =>
+    h('div', {class:'pick-row', 'data-zone':z}, h('span', {class:'pick-lbl'}, ZONES[z].name),
+      T.filter(x => x.zone === z).map(x => h('button', {type:'button', class:'chip', 'aria-pressed':String(x.id === t.id), onclick:() => { state.cur = x.id; save(); renderLearn(); window.scrollTo(0, 0); }}, ASPECTS[x.aspect].name)))));
+  const idx = T.indexOf(t);
+  const prev = T[idx - 1], next = T[idx + 1];
+  const go1 = x => () => { state.cur = x.id; save(); renderLearn(); window.scrollTo(0, 0); };
+  const formulaRows = [['aff','Positive'],['neg','Negative'],['q','Question']].map(p =>
+    h('div', {class:'frow'}, h('span', {class:'fl'}, p[1]), h('div', {}, h('code', {class:'fm'}, t.formula[p[0]]), h('p', {class:'ex'}, t.sample[p[0]]))));
+  const panel = h('article', {class:'panel', 'data-zone':t.zone},
+    h('p', {class:'eyebrow'}, ZONES[t.zone].name + ' time · ' + ASPECTS[t.aspect].name),
+    h('h2', {class:'lname'}, t.name),
+    h('p', {class:'lead'}, t.short),
+    h('div', {class:'tlwrap', html:tlSvg(t, false)}),
+    h('h3', {}, 'How to build it'), formulaRows,
+    h('h3', {}, 'When to use it'),
+    h('ul', {class:'uses'}, t.uses.map(u => h('li', {}, h('span', {}, u[0]), h('em', {}, u[1])))),
+    h('h3', {}, 'Signal words'),
+    h('div', {class:'sigs'}, t.signals.map(s => h('span', {class:'sig'}, s))),
+    h('h3', {}, 'Common mistake'),
+    h('div', {class:'mistake'},
+      h('div', {class:'w'}, h('b', {}, 'Wrong'), h('s', {}, t.mistake.wrong)),
+      h('div', {class:'r'}, h('b', {}, 'Right'), t.mistake.right),
+      h('p', {}, t.mistake.why)),
+    h('h3', {}, 'Quick check'),
+    mcqNode(t.check, ok => record(t.id, ok)),
+    h('div', {class:'lnav'},
+      prev ? h('button', {type:'button', class:'btn ghost', onclick:go1(prev)}, '← ' + prev.name) : h('span'),
+      next ? h('button', {type:'button', class:'btn', onclick:go1(next)}, next.name + ' →') : h('span'))
+  );
+  el.append(picker, panel);
+}
+
+/* ===== TIMELINE LAB ===== */
+const lab = {subj:1, verb:0, zone:'pres', aspect:'simple'};
+inits.lab = function(){
+  const el = $('#view-lab');
+  el.append(
+    h('div', {class:'intro'}, h('h2', {}, 'Timeline lab'),
+      h('p', {}, 'Choose when the action happens and how it happens. The lab names the tense, draws it on a timeline and builds the positive, negative and question forms.')),
+    h('div', {class:'controls'},
+      h('div', {}, h('label', {for:'lab-subj'}, 'Subject'), h('select', {id:'lab-subj', onchange:e => { lab.subj = +e.target.value; renderLab(); }}, SUBJECTS.map((s, i) => h('option', {value:i, selected:i === lab.subj}, s.n)))),
+      h('div', {}, h('label', {for:'lab-verb'}, 'Verb'), h('select', {id:'lab-verb', onchange:e => { lab.verb = +e.target.value; renderLab(); }}, VERBS.map((v, i) => h('option', {value:i}, v.b)))),
+      h('div', {}, h('span', {class:'lbl'}, 'When does it happen?'), h('div', {class:'seg', id:'lab-zone'})),
+      h('div', {}, h('span', {class:'lbl'}, 'How does it happen?'), h('div', {class:'seg asp', id:'lab-aspect'}))
+    ),
+    h('div', {class:'panel', id:'lab-out'})
+  );
+};
+function renderLab(){
+  if(!$('#lab-out')) return;
+  const zoneBox = $('#lab-zone'), aspBox = $('#lab-aspect');
+  zoneBox.replaceChildren(); aspBox.replaceChildren();
+  ['past','pres','fut'].forEach(z => {
+    const b = h('button', {type:'button', 'data-zone':z, 'aria-pressed':String(lab.zone === z), onclick:() => { lab.zone = z; renderLab(); }}, ZONES[z].name);
+    zoneBox.append(b);
+  });
+  Object.keys(ASPECTS).forEach(a => {
+    aspBox.append(h('button', {type:'button', 'aria-pressed':String(lab.aspect === a), onclick:() => { lab.aspect = a; renderLab(); }}, h('span', {}, ASPECTS[a].name), h('small', {}, ASPECTS[a].desc)));
+  });
+  const id = lab.zone + '-' + lab.aspect, t = Tmap[id];
+  const f = forms(id, SUBJECTS[lab.subj], VERBS[lab.verb]);
+  const out = $('#lab-out'); out.replaceChildren();
+  out.setAttribute('data-zone', lab.zone);
+  out.append(
+    h('p', {class:'eyebrow'}, 'This is the'),
+    h('h2', {class:'lname'}, t.name),
+    h('p', {class:'lead'}, t.short),
+    h('div', {class:'tlwrap', html:tlSvg(t, false)}),
+    h('h3', {}, 'The three forms'),
+    h('div', {class:'sent'}, h('span', {class:'fl'}, 'Positive'), h('span', {html:htmlSentence(f.aff, false)})),
+    h('div', {class:'sent'}, h('span', {class:'fl'}, 'Negative'), h('span', {html:htmlSentence(f.neg, false)})),
+    h('div', {class:'sent'}, h('span', {class:'fl'}, 'Question'), h('span', {html:htmlSentence(f.q, true)})),
+    h('p', {class:'meta'}, 'Underlined words are the helping verbs. Formula: ' + t.formula.aff),
+    h('div', {class:'row'},
+      h('button', {type:'button', class:'btn', onclick:() => openLesson(id)}, 'Open the full lesson'),
+      h('button', {type:'button', class:'btn ghost', onclick:() => {
+        lab.zone = ['past','pres','fut'][Math.floor(Math.random() * 3)];
+        lab.aspect = Object.keys(ASPECTS)[Math.floor(Math.random() * 4)];
+        lab.verb = Math.floor(Math.random() * VERBS.length);
+        $('#lab-verb').value = String(lab.verb);
+        renderLab();
+      }}, 'Surprise me')));
+}
+
+/* ===== PRACTICE ===== */
+const prac = {mode:'fill', zone:'all'};
+const MODES = [['fill','Fill the blank'],['choose','Choose'],['error','Spot the error'],['sort','Signal sort'],['transform','Transform'],['passage','Passage']];
+inits.practice = function(){
+  const el = $('#view-practice');
+  el.append(
+    h('div', {class:'intro'}, h('h2', {}, 'Practice'),
+      h('p', {}, 'Six kinds of question, in the style of board papers. Each answer is recorded on the Map.')),
+    h('div', {class:'subtabs', id:'prac-modes'}),
+    h('div', {class:'filters', id:'prac-filter'}),
+    h('div', {id:'prac-body'}));
+  renderPractice();
+};
+function renderPractice(){
+  const modes = $('#prac-modes'), flt = $('#prac-filter'), body = $('#prac-body');
+  modes.replaceChildren(); flt.replaceChildren();
+  MODES.forEach(m => modes.append(h('button', {type:'button', class:'pill', 'aria-pressed':String(prac.mode === m[0]), onclick:() => { prac.mode = m[0]; renderPractice(); }}, m[1])));
+  const filtered = ['fill','choose','error','transform'].indexOf(prac.mode) > -1;
+  flt.hidden = !filtered;
+  if(filtered){
+    flt.append(h('span', {class:'lab'}, 'Tenses'));
+    [['all','All'],['past','Past'],['pres','Present'],['fut','Future']].forEach(z => flt.append(h('button', {type:'button', class:'pill', 'aria-pressed':String(prac.zone === z[0]), onclick:() => { prac.zone = z[0]; renderPractice(); }}, z[1])));
+  }
+  const pick = arr => arr.filter(it => prac.zone === 'all' || zoneOf(it.t) === prac.zone);
+  if(prac.mode === 'fill') drill(body, pick(FILL), (it, fin) => textNode(it, fin, false));
+  else if(prac.mode === 'choose') drill(body, pick(MCQ_ALL), (it, fin) => mcqNode(it, fin));
+  else if(prac.mode === 'error') drill(body, pick(ERR), errNode);
+  else if(prac.mode === 'transform') drill(body, pick(TRANS), (it, fin) => textNode(it, fin, true));
+  else if(prac.mode === 'sort') sortGame(body);
+  else passageGame(body);
+}
+
+function sortGame(el){
+  let round = 0, sel = null, pool = [], checked = false, score = 0, total = 0;
+  function start(){
+    const R = SORT[round];
+    pool = shuffle(R.buckets.reduce((acc, b) => acc.concat(b.words.map(w => ({w:w, b:b.id, at:null, res:null}))), []));
+    sel = null; checked = false; draw();
+  }
+  function draw(){
+    el.replaceChildren();
+    const R = SORT[round];
+    el.append(h('p', {class:'meta'}, 'Round ' + (round + 1) + ' of ' + SORT.length + ' · ' + R.title));
+    const panel = h('div', {class:'panel'});
+    panel.append(h('p', {}, 'Tap a signal word, then tap the tense it usually belongs to. Signal words are clues, so context can change them.'));
+    const poolEl = h('div', {class:'pool'});
+    pool.filter(x => x.at === null).forEach(x => {
+      poolEl.append(h('button', {type:'button', class:'tok', 'aria-pressed':String(sel === x), onclick:() => { sel = (sel === x) ? null : x; draw(); }}, x.w));
+    });
+    const buckets = h('div', {class:'buckets'});
+    R.buckets.forEach(b => {
+      const inner = h('div', {class:'in'});
+      pool.filter(x => x.at === b.id).forEach(x => {
+        const cls = 'tok' + (checked ? (x.res ? ' ok' : ' no') : '');
+        const chip = h('span', {class:cls, role:'button', tabindex:checked ? '-1' : '0'}, x.w);
+        chip.addEventListener('click', e => { e.stopPropagation(); if(checked) return; x.at = null; draw(); });
+        chip.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); e.stopPropagation(); if(!checked){ x.at = null; draw(); } } });
+        inner.append(chip);
+      });
+      const bk = h('button', {type:'button', class:'bucket', 'data-zone':zoneOf(b.id)}, h('strong', {}, b.name), inner);
+      bk.addEventListener('click', () => { if(checked || !sel) return; sel.at = b.id; sel = null; draw(); });
+      buckets.append(bk);
+    });
+    const left = pool.filter(x => x.at === null).length;
+    const row = h('div', {class:'row'});
+    if(!checked){
+      row.append(h('button', {type:'button', class:'btn', disabled:left > 0, onclick:() => {
+        checked = true;
+        let good = 0;
+        pool.forEach(x => { x.res = (x.at === x.b); if(x.res) good++; record(x.b, x.res); });
+        score += good; total += pool.length; draw();
+      }}, 'Check'));
+      if(left > 0) row.append(h('span', {class:'meta'}, left + ' left to place'));
+    } else {
+      const good = pool.filter(x => x.res).length;
+      panel.append(h('div', {class:'fb ' + (good === pool.length ? 'ok' : 'no')}, good + ' of ' + pool.length + ' correct.' + (good < pool.length ? ' Green words were placed correctly, red ones belong in another tense.' : '')));
+      row.append(h('button', {type:'button', class:'btn', onclick:() => { round++; if(round >= SORT.length){ finish(); } else start(); }}, round === SORT.length - 1 ? 'Finish' : 'Next round'));
+    }
+    panel.append(poolEl, buckets, row);
+    el.append(panel);
+  }
+  function finish(){
+    el.replaceChildren(h('div', {class:'panel'},
+      h('p', {class:'meta'}, 'Signal sort complete'),
+      h('div', {class:'bignum'}, score + '/' + total),
+      h('div', {class:'row'}, h('button', {type:'button', class:'btn', onclick:() => { round = 0; score = 0; total = 0; start(); }}, 'Play again'))));
+  }
+  start();
+}
+
+function passageGame(el){
+  el.replaceChildren();
+  const sels = [];
+  const para = h('p', {class:'passage'});
+  PASSAGE.forEach(p => {
+    if(typeof p === 'string'){ para.append(p); return; }
+    const s = h('select', {'aria-label':'Choose the correct form'}, h('option', {value:''}, 'choose…'), shuffle(p.o.map((o, i) => ({o:o, i:i}))).map(x => h('option', {value:x.i}, x.o)));
+    s._p = p; sels.push(s); para.append(s);
+  });
+  const out = h('div', {});
+  const check = h('button', {type:'button', class:'btn'}, 'Check answers');
+  check.addEventListener('click', () => {
+    if(sels.some(s => s.value === '')){ out.replaceChildren(h('div', {class:'fb no'}, 'Choose an answer for every blank first.')); return; }
+    let good = 0; const wrong = [];
+    sels.forEach(s => {
+      const ok = +s.value === s._p.a;
+      s.classList.remove('ok','no'); s.classList.add(ok ? 'ok' : 'no'); s.disabled = true;
+      record(s._p.t, ok);
+      if(ok) good++; else wrong.push(s._p);
+    });
+    check.disabled = true;
+    out.replaceChildren(
+      h('div', {class:'fb ' + (good === sels.length ? 'ok' : 'no')}, good + ' of ' + sels.length + ' correct.'),
+      wrong.length ? h('ul', {class:'review'}, wrong.map(p => h('li', {}, h('div', {class:'it'}, h('b', {}, p.o[p.a]), ' — ' + p.why)))) : null,
+      h('div', {class:'row'}, h('button', {type:'button', class:'btn ghost', onclick:() => passageGame(el)}, 'Try again')));
+  });
+  el.append(h('div', {class:'panel'}, h('h3', {style:'margin-top:0'}, 'A day at the school fair'), h('p', {}, 'Choose the correct form of the verb for each blank.'), para, h('div', {class:'row'}, check), out));
+}
+
+/* ===== QUIZ ===== */
+inits.quiz = function(){ quizMenu(); };
+const quizCfg = {n:10, scope:'all'};
+function quizMenu(){
+  const el = $('#view-quiz'); el.replaceChildren();
+  const nSel = h('div', {class:'seg'}), zSel = h('div', {class:'seg'});
+  function draw(){
+    nSel.replaceChildren(); zSel.replaceChildren();
+    [10,15,20].forEach(n => nSel.append(h('button', {type:'button', class:'pill', 'aria-pressed':String(quizCfg.n === n), onclick:() => { quizCfg.n = n; draw(); }}, n + ' questions')));
+    [['all','All tenses'],['past','Past'],['pres','Present'],['fut','Future']].forEach(z => zSel.append(h('button', {type:'button', class:'pill', 'aria-pressed':String(quizCfg.scope === z[0]), onclick:() => { quizCfg.scope = z[0]; draw(); }}, z[1])));
+  }
+  draw();
+  el.append(h('div', {class:'intro'}, h('h2', {}, 'Quiz'), h('p', {}, 'A mixed test with a score, a breakdown by time and a review of every miss.')),
+    h('div', {class:'panel'},
+      h('span', {class:'lbl', style:'font:600 12px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)'}, 'Length'), h('div', {style:'margin:8px 0 18px'}, nSel),
+      h('span', {class:'lbl', style:'font:600 12px var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)'}, 'Scope'), h('div', {style:'margin:8px 0 18px'}, zSel),
+      h('button', {type:'button', class:'btn', onclick:() => quizRun(buildQuiz())}, 'Start quiz')));
+}
+function buildQuiz(){
+  const pool = MCQ_ALL.filter(it => quizCfg.scope === 'all' || zoneOf(it.t) === quizCfg.scope);
+  const groups = {};
+  shuffle(pool.slice()).forEach(it => { (groups[it.t] = groups[it.t] || []).push(it); });
+  const keys = shuffle(Object.keys(groups));
+  const out = [];
+  for(let r = 0; out.length < quizCfg.n && r < 20; r++){
+    keys.forEach(k => { if(groups[k][r] && out.length < quizCfg.n) out.push(groups[k][r]); });
+  }
+  return shuffle(out);
+}
+function quizRun(items){
+  const el = $('#view-quiz'); el.replaceChildren();
+  let i = 0, good = 0; const missed = [], zs = {past:[0,0], pres:[0,0], fut:[0,0]};
+  const bar = h('i', {style:'width:0%'}), meta = h('p', {class:'meta'}), body = h('div', {class:'panel'});
+  const nextBtn = h('button', {type:'button', class:'btn', onclick:() => { i++; step(); }}, 'Next');
+  el.append(meta, h('div', {class:'bar2'}, bar), body);
+  function step(){
+    if(i >= items.length) return end();
+    meta.textContent = 'Question ' + (i + 1) + ' of ' + items.length + ' · score ' + good;
+    bar.style.width = Math.round(100 * i / items.length) + '%';
+    nextBtn.hidden = true; nextBtn.textContent = i === items.length - 1 ? 'See results' : 'Next';
+    const it = items[i];
+    body.replaceChildren(mcqNode(it, ok => {
+      const z = zoneOf(it.t); zs[z][1]++; if(ok){ good++; zs[z][0]++; } else missed.push(it);
+      record(it.t, ok); meta.textContent = 'Question ' + (i + 1) + ' of ' + items.length + ' · score ' + good;
+      nextBtn.hidden = false; nextBtn.focus();
+    }), h('div', {class:'row'}, nextBtn));
+  }
+  function end(){
+    bar.style.width = '100%';
+    const pct = Math.round(100 * good / items.length);
+    const msg = pct >= 90 ? 'Excellent. You are ready for the paper.' : pct >= 70 ? 'Good work. Revise the tenses you missed.' : 'Keep going. Open the lessons for the tenses you missed.';
+    meta.textContent = 'Quiz complete';
+    const zb = h('div', {class:'zbars'}, ['past','pres','fut'].filter(z => zs[z][1]).map(z =>
+      h('div', {'data-zone':z}, h('span', {}, ZONES[z].name), h('div', {class:'meter'}, h('i', {style:'width:' + Math.round(100 * zs[z][0] / zs[z][1]) + '%'})), h('span', {}, zs[z][0] + '/' + zs[z][1]))));
+    const review = missed.length ? h('div', {}, h('h3', {}, 'Review your misses'), h('ul', {class:'review'}, missed.map(it =>
+      h('li', {}, h('div', {class:'it'}, h('p', {}, it.q.replace('___', '_______')), h('p', {}, h('b', {}, 'Answer: '), it.opts[it.a], ' — ', it.why), h('button', {type:'button', class:'btn ghost', onclick:() => openLesson(it.t)}, 'Open ' + Tmap[it.t].name)))))) : null;
+    body.replaceChildren(
+      h('div', {class:'bignum'}, good + '/' + items.length), h('p', {}, msg), zb, review,
+      h('div', {class:'row'},
+        missed.length ? h('button', {type:'button', class:'btn', onclick:() => quizRun(shuffle(missed.slice()))}, 'Retry missed') : null,
+        h('button', {type:'button', class:'btn ghost', onclick:quizMenu}, 'New quiz')));
+  }
+  step();
+}
+
+/* ===== VERB TOOLBOX ===== */
+inits.toolbox = function(){
+  const el = $('#view-toolbox');
+  const out = h('div', {id:'vt-out', 'aria-live':'polite'});
+  const inp = h('input', {type:'text', id:'vt-input', autocomplete:'off', autocapitalize:'none', spellcheck:'false', placeholder:'e.g. study, stop, go', 'aria-label':'A verb'});
+  function run(){
+    const v = inp.value.trim().toLowerCase();
+    if(!/^[a-z]+$/.test(v)){ out.replaceChildren(h('p', {class:'meta'}, 'Type one verb, letters only.')); return; }
+    const f = verbForms(v);
+    out.replaceChildren(
+      h('div', {class:'forms'}, [['V1', f.base],['he / she / it', f.s],['V2 (past)', f.past],['V3 (participle)', f.pp],['V-ing', f.ing]].map(p => h('div', {}, h('span', {}, p[0]), h('b', {}, p[1])))),
+      h('p', {class:'meta', style:'margin-top:10px'}, f.irregular ? 'Irregular verb, taken from the table below.' : 'Regular verb, built with the spelling rules. Check unusual verbs in a dictionary.'));
+  }
+  inp.addEventListener('keydown', e => { if(e.key === 'Enter') run(); });
+  const tbl = (head, rows) => h('div', {class:'scroll'}, h('table', {}, h('thead', {}, h('tr', {}, head.map(x => h('th', {}, x)))), h('tbody', {}, rows.map(r => h('tr', {}, r.map((c, i) => h('td', {class:i ? 'm' : ''}, c)))))));
+  const rules = h('div', {class:'cards'},
+    h('div', {class:'panel'}, h('h3', {style:'margin-top:0'}, 'Adding -s / -es'), tbl(['Rule','Example'], [
+      ['most verbs: add -s','play → plays'],['ends in s, x, z, ch, sh, o: add -es','teach → teaches, go → goes'],['consonant + y: change y to -ies','study → studies']])),
+    h('div', {class:'panel'}, h('h3', {style:'margin-top:0'}, 'Adding -ing'), tbl(['Rule','Example'], [
+      ['most verbs: add -ing','play → playing'],['silent e: drop the e','make → making'],['one syllable, consonant-vowel-consonant: double','run → running'],['ends in ie: change to ying','lie → lying']])),
+    h('div', {class:'panel'}, h('h3', {style:'margin-top:0'}, 'Adding -ed'), tbl(['Rule','Example'], [
+      ['most verbs: add -ed','walk → walked'],['ends in e: add -d','live → lived'],['consonant + y: change to -ied','carry → carried'],['one syllable, consonant-vowel-consonant: double','plan → planned']])));
+  const search = h('input', {type:'text', id:'irr-search', placeholder:'Filter the list', autocomplete:'off', 'aria-label':'Filter irregular verbs'});
+  const tbody = h('tbody');
+  function fillTable(){
+    const q = search.value.trim().toLowerCase();
+    tbody.replaceChildren();
+    IRREG.filter(r => !q || r.join(' ').indexOf(q) > -1).forEach(r => tbody.append(h('tr', {}, r.map((c, i) => h('td', {class:'m'}, c)))));
+  }
+  search.addEventListener('input', fillTable); fillTable();
+  /* irregular drill */
+  const drillBox = h('div');
+  function newDrill(){
+    const row = IRREG[Math.floor(Math.random() * IRREG.length)];
+    const a2 = h('input', {type:'text', id:'ir-v2', autocomplete:'off', autocapitalize:'none', spellcheck:'false', 'aria-label':'V2'});
+    const a3 = h('input', {type:'text', id:'ir-v3', autocomplete:'off', autocapitalize:'none', spellcheck:'false', 'aria-label':'V3'});
+    const fb = h('div', {class:'fb', hidden:true, 'aria-live':'polite'});
+    let done = false;
+    const okFor = (val, ans) => ans.split('/').some(x => x === norm(val));
+    const check = h('button', {type:'button', class:'btn'}, 'Check');
+    function go2(){
+      if(done || !a2.value.trim() || !a3.value.trim()) return;
+      done = true; a2.disabled = a3.disabled = true; check.disabled = true;
+      const ok = okFor(a2.value, row[1]) && okFor(a3.value, row[2]);
+      fb.className = 'fb ' + (ok ? 'ok' : 'no');
+      fb.textContent = ok ? 'Correct.' : 'Not quite. ' + row[0] + ' → ' + row[1] + ' → ' + row[2];
+      fb.hidden = false;
+    }
+    check.addEventListener('click', go2);
+    [a2, a3].forEach(i => i.addEventListener('keydown', e => { if(e.key === 'Enter') go2(); }));
+    drillBox.replaceChildren(
+      h('p', {class:'q'}, 'V1: ', h('b', {}, row[0])),
+      h('div', {class:'inline'}, h('span', {}, 'V2'), a2, h('span', {}, 'V3'), a3, check, h('button', {type:'button', class:'btn ghost', onclick:newDrill}, 'Another verb')),
+      fb);
+  }
+  newDrill();
+  el.append(
+    h('div', {class:'intro'}, h('h2', {}, 'Verb toolbox'), h('p', {}, 'Every tense is built from V1, V2, V3 or V-ing. Get the forms right and the tenses fall into place.')),
+    h('div', {class:'panel'}, h('h3', {style:'margin-top:0'}, 'Find the forms of a verb'), h('div', {class:'inline'}, inp, h('button', {type:'button', class:'btn', onclick:run}, 'Show forms')), out),
+    h('h3', {}, 'Spelling rules'), rules,
+    h('h3', {}, 'Irregular verb drill'), h('div', {class:'panel'}, drillBox),
+    h('h3', {}, 'Irregular verbs, V1 · V2 · V3'),
+    h('div', {class:'panel'}, h('div', {class:'inline', style:'margin-bottom:10px'}, search), h('div', {class:'scroll'}, h('table', {}, h('thead', {}, h('tr', {}, ['V1','V2','V3'].map(x => h('th', {}, x)))), tbody))));
+  inp.value = 'study'; run();
+};
+
+show(location.hash.slice(1) || 'map');
+})();
+</script>
+
+</body></html>
